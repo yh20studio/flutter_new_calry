@@ -1,113 +1,174 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_webservice/auth/Login.dart';
+import 'package:flutter_webservice/class.dart';
+import 'package:flutter_webservice/httpFunction.dart';
+import 'package:flutter_webservice/detail/ArchivesDetail.dart';
+import 'package:flutter_webservice/list/ArchivesList.dart';
+import 'package:flutter_webservice/input/ArchivesInput.dart';
+
+import 'package:flutter_webservice/auth/SignUp.dart';
+import 'package:flutter_webservice/auth/MemberInfo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Webservice',
+      initialRoute: '/',
+      routes: {
+        '/index': (context) => Index(),
+        '/archives/input': (context) => ArchivesInput(),
+        '/archives/list': (context) => ArchivesList(),
+        '/archives/detail': (context) => ArchivesDetail(),
+      },
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        brightness: Brightness.light,
+        dialogBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: Colors.white,
+        bottomAppBarColor: Colors.white,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: Colors.white,
+        ),
+        primaryColor: Colors.blueAccent,
+        accentColor: Colors.white,
+        canvasColor: Colors.black,
+        fontFamily: 'font',
+        textTheme: TextTheme(
+          headline1: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'font',
+            color: Colors.white,
+          ),
+          headline2: TextStyle(
+            fontSize: 16.0,
+            height: 2,
+            color: Colors.black,
+            fontFamily: 'font',
+          ),
+          subtitle1: TextStyle(
+            fontSize: 16.0,
+            fontFamily: 'font',
+          ),
+          subtitle2: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'font',
+          ),
+          bodyText1: TextStyle(
+            fontSize: 15.0,
+            height: 2,
+            fontFamily: 'font',
+          ),
+          bodyText2: TextStyle(fontSize: 17.0, fontFamily: 'Sans serif'),
+        ),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: Colors.white,
+        bottomAppBarColor: Colors.black,
+        bottomNavigationBarTheme:
+            BottomNavigationBarThemeData(backgroundColor: Colors.black),
+        backgroundColor: Colors.black,
+        canvasColor: Colors.white,
+        // 위젯을 위한 전경색상
+        primaryColor: Colors.black,
+        // 사용자와 상호작용하는 앨리먼트들의 기본 색상
+        accentColor: Colors.white,
+        snackBarTheme: SnackBarThemeData(backgroundColor: Colors.black),
+
+        // 사용할 폰트
+        fontFamily: 'font',
+        textTheme: TextTheme(
+          headline1: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'font',
+            color: Colors.white,
+          ),
+          headline2: TextStyle(
+            fontSize: 16.0,
+            height: 2,
+            color: Colors.white,
+            fontFamily: 'font',
+          ),
+          subtitle1: TextStyle(
+            fontSize: 16.0,
+            fontFamily: 'font',
+          ),
+          subtitle2: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'font',
+          ),
+          bodyText1: TextStyle(
+            fontSize: 15.0,
+            height: 2,
+            fontFamily: 'font',
+          ),
+          bodyText2: TextStyle(fontSize: 17.0, fontFamily: 'Sans serif'),
+        ),
+
+        // additional settings go here
+      ),
+      home: Index(title: 'Flutter Webservice'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class Index extends StatefulWidget {
+  Index({Key? key, this.title}) : super(key: key);
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  final String? title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _IndexState createState() => _IndexState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class _IndexState extends State<Index> {
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+  TextEditingController _urlController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    var _height = MediaQuery.of(context).size.height;
+    var _width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Theme.of(context).bottomAppBarColor,
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(widget.title!),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          child: SingleChildScrollView(
+              child: Column(
+        children: [
+          TextButton(child: Text('Archives 리스트'), onPressed: _toArchivesList),
+          IconButton(
+              icon: Icon(
+                Icons.add,
+              ),
+              onPressed: _awaitReturnValueFromArchivesInput),
+        ],
+      ))),
     );
+  }
+
+  void _awaitReturnValueFromArchivesInput() async {
+    var awaitResult = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ArchivesInput()));
+    if (awaitResult != 'success') {
+      setState(() {});
+    }
+  }
+
+  void _toArchivesList() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => ArchivesList()));
   }
 }
