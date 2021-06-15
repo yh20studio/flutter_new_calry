@@ -143,6 +143,9 @@ class _IndexState extends State<Index> {
       backgroundColor: Theme.of(context).bottomAppBarColor,
       appBar: AppBar(
         title: Text(widget.title!),
+        automaticallyImplyLeading: false,
+        leading:
+            IconButton(icon: Icon(Icons.person), onPressed: _awaitReturnAuth),
       ),
       body: Center(
           child: SingleChildScrollView(
@@ -170,5 +173,23 @@ class _IndexState extends State<Index> {
   void _toArchivesList() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ArchivesList()));
+  }
+
+  void _awaitReturnAuth() async {
+    try {
+      var httpGetMyInfo = await getMyInfo();
+      print(httpGetMyInfo);
+      var awaitResult = await Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MemberInfo(member: httpGetMyInfo)));
+      if (awaitResult == 'success') {}
+    } catch (e) {
+      print(e);
+      //TODO: error 401 and refreshToken refreshTokenExpiresIn
+      var awaitResult = await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Login()));
+      if (awaitResult == 'success') {}
+    }
   }
 }

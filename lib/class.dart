@@ -16,3 +16,20 @@ class Archives {
         author: json['author']);
   }
 }
+
+class Member {
+  final int? id;
+  final String? name;
+  final String? email;
+  final String? picture;
+
+  Member({this.id, this.name, this.email, this.picture});
+
+  factory Member.fromJson(Map<String, dynamic> json) {
+    return Member(
+        id: json['id'],
+        name: json['name'],
+        email: json['email'],
+        picture: json['picture']);
+  }
+}
