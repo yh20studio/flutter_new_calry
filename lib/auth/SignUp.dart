@@ -54,7 +54,7 @@ class _SignUpstate extends State<SignUp> {
                 title: 'Name',
                 width: _width,
                 context: context),
-            TextButton(child: Text("Sign Up"), onPressed: _httpPostSignUp),
+            FlatButton(child: Text("Sign Up"), onPressed: _httpPostSignUp),
           ],
         ))));
   }

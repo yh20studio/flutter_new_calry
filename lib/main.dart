@@ -9,6 +9,7 @@ import 'package:flutter_webservice/input/ArchivesInput.dart';
 import 'package:flutter_webservice/auth/SignUp.dart';
 import 'package:flutter_webservice/auth/MemberInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -151,7 +152,7 @@ class _IndexState extends State<Index> {
           child: SingleChildScrollView(
               child: Column(
         children: [
-          TextButton(child: Text('Archives 리스트'), onPressed: _toArchivesList),
+          FlatButton(onPressed: _toArchivesList, child: Text('Archives 리스트')),
           IconButton(
               icon: Icon(
                 Icons.add,
@@ -186,10 +187,19 @@ class _IndexState extends State<Index> {
       if (awaitResult == 'success') {}
     } catch (e) {
       print(e);
-      //TODO: error 401 and refreshToken refreshTokenExpiresIn
-      var awaitResult = await Navigator.push(
-          context, MaterialPageRoute(builder: (context) => Login()));
-      if (awaitResult == 'success') {}
+      var result = await authenticationUser();
+      if (result == 'success') {
+        var httpGetMyInfo = await getMyInfo();
+        var awaitResult = await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MemberInfo(member: httpGetMyInfo)));
+        if (awaitResult == 'success') {}
+      } else if (result == 'fail') {
+        var awaitResult = await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => Login()));
+        if (awaitResult == 'success') {}
+      }
     }
   }
 }

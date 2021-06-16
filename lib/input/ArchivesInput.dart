@@ -94,7 +94,6 @@ class _ArchivesInputstate extends State<ArchivesInput> {
 
   void _httpPostArchives() async {
     Archives archives = Archives(
-        id: 0,
         title: _titleController.text,
         content: _contentController.text,
         url: _urlController.text,

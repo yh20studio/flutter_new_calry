@@ -44,7 +44,7 @@ class _ArchivesDetailstate extends State<ArchivesDetail> {
             ),
             IconButton(
               icon: Icon(
-                Icons.cancel_rounded,
+                Icons.delete,
               ),
               onPressed: _httpDeleteArchives,
             ),

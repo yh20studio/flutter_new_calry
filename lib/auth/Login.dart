@@ -45,8 +45,8 @@ class _Loginstate extends State<Login> {
                 title: 'Password',
                 width: _width,
                 context: context),
-            TextButton(child: Text("Login"), onPressed: _httpPostLogin),
-            TextButton(child: Text("Sign Up"), onPressed: _awaitFromSignUp),
+            FlatButton(child: Text("Login"), onPressed: _httpPostLogin),
+            FlatButton(child: Text("Sign Up"), onPressed: _awaitFromSignUp),
           ],
         ))));
   }
@@ -92,6 +92,8 @@ class _Loginstate extends State<Login> {
     prefs.setInt(
         'accessTokenExpiresIn', jsonDecode(httpResult)['accessTokenExpiresIn']);
     prefs.setString('refreshToken', jsonDecode(httpResult)['refreshToken']);
+    prefs.setInt('refreshTokenExpiresIn',
+        jsonDecode(httpResult)['refreshTokenExpiresIn']);
     Navigator.pop(context, 'success');
   }
 

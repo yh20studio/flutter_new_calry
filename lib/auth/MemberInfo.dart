@@ -36,7 +36,7 @@ class _MemberInfostate extends State<MemberInfo> {
           children: [
             Text(member!.email!),
             Text(member!.name!),
-            TextButton(onPressed: _httpPostLogout, child: Text('Logout'))
+            FlatButton(onPressed: _httpPostLogout, child: Text('Logout'))
           ],
         ))));
   }
