@@ -3,6 +3,7 @@ import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_webservice/dialog.dart';
 
 class MemberInfo extends StatefulWidget {
   MemberInfo({Key? key, this.member}) : super(key: key);
@@ -36,26 +37,42 @@ class _MemberInfostate extends State<MemberInfo> {
           children: [
             Text(member!.email!),
             Text(member!.name!),
-            FlatButton(onPressed: _httpPostLogout, child: Text('Logout'))
+            SizedBox(
+              height: 10,
+            ),
+            TextButton(onPressed: _httpPostLogout, child: Text('Logout'))
           ],
         ))));
   }
 
   void _httpPostLogout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var result = await _awaitTwoChoiceDialog("로그아웃 하시겠습니까?");
+    if (result == true) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var httpResult = await postLogout(
-        prefs.getString('grantType'),
-        prefs.getString('accessToken'),
-        prefs.getInt('accessTokenExpiresIn'),
-        prefs.getString('refreshToken'));
-    if (httpResult.statusCode == 200) {
-      prefs.remove('grantType');
-      prefs.remove('accessToken');
-      prefs.remove('accessTokenExpiresIn');
-      prefs.remove('refreshToken');
+      var httpResult = await postLogout(
+          prefs.getString('grantType'),
+          prefs.getString('accessToken'),
+          prefs.getInt('accessTokenExpiresIn'),
+          prefs.getString('refreshToken'));
+      if (httpResult.statusCode == 200) {
+        prefs.remove('grantType');
+        prefs.remove('accessToken');
+        prefs.remove('accessTokenExpiresIn');
+        prefs.remove('refreshToken');
+      }
+
+      Navigator.pop(context, 'Logout');
     }
+  }
 
-    Navigator.pop(context, 'Logout');
+  Future<bool> _awaitTwoChoiceDialog(String message) async {
+    var dialogResult = await twoChoiceDialog(context, message);
+
+    if (dialogResult == 'ok') {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

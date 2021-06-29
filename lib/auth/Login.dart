@@ -3,6 +3,7 @@ import 'package:flutter_webservice/auth/SignUp.dart';
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'package:flutter_webservice/auth/SignUp.dart';
+import 'package:flutter_webservice/dialog.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,7 +30,7 @@ class _Loginstate extends State<Login> {
     return Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
         appBar: AppBar(
-          title: Text("Sign Up"),
+          title: Text("Login"),
         ),
         body: Center(
             child: SingleChildScrollView(
@@ -45,8 +46,14 @@ class _Loginstate extends State<Login> {
                 title: 'Password',
                 width: _width,
                 context: context),
-            FlatButton(child: Text("Login"), onPressed: _httpPostLogin),
-            FlatButton(child: Text("Sign Up"), onPressed: _awaitFromSignUp),
+            SizedBox(
+              height: 10,
+            ),
+            TextButton(child: Text("Login"), onPressed: _httpPostLogin),
+            SizedBox(
+              height: 10,
+            ),
+            TextButton(child: Text("Sign Up"), onPressed: _awaitFromSignUp),
           ],
         ))));
   }
@@ -69,8 +76,8 @@ class _Loginstate extends State<Login> {
           decoration: BoxDecoration(color: Colors.transparent),
           child: TextFormField(
             style: TextStyle(fontSize: 30),
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
+            obscureText: controller == _passwordController ? true : false,
+            keyboardType: TextInputType.emailAddress,
             controller: controller,
             decoration: InputDecoration(
                 disabledBorder:
@@ -83,18 +90,33 @@ class _Loginstate extends State<Login> {
   }
 
   void _httpPostLogin() async {
-    var httpResult =
-        await postLogin(_emailController.text, _passwordController.text);
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('grantType', jsonDecode(httpResult)['grantType']);
-    prefs.setString('accessToken', jsonDecode(httpResult)['accessToken']);
-    prefs.setInt(
-        'accessTokenExpiresIn', jsonDecode(httpResult)['accessTokenExpiresIn']);
-    prefs.setString('refreshToken', jsonDecode(httpResult)['refreshToken']);
-    prefs.setInt('refreshTokenExpiresIn',
-        jsonDecode(httpResult)['refreshTokenExpiresIn']);
-    Navigator.pop(context, 'success');
+    if (_emailController.text == "") {
+      _awaitDialog("이메일을 입력해주세요.");
+    } else if (_passwordController.text == "") {
+      _awaitDialog("비밀번호를 입력해주세요.");
+    } else {
+      try {
+        var httpResult =
+            await postLogin(_emailController.text, _passwordController.text);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('grantType', jsonDecode(httpResult)['grantType']);
+        prefs.setString('accessToken', jsonDecode(httpResult)['accessToken']);
+        prefs.setInt('accessTokenExpiresIn',
+            jsonDecode(httpResult)['accessTokenExpiresIn']);
+        prefs.setString('refreshToken', jsonDecode(httpResult)['refreshToken']);
+        prefs.setInt('refreshTokenExpiresIn',
+            jsonDecode(httpResult)['refreshTokenExpiresIn']);
+        Navigator.pop(context, 'success');
+      } on Exception catch (exception) {
+        print(exception);
+        if (exception.toString() == "Exception: Email is not registered") {
+          _awaitDialog("가입되지 않은 이메일입니다.");
+        } else if (exception.toString() ==
+            "Exception: Password does not match stored value") {
+          _awaitDialog("비밀번호가 틀렸습니다.");
+        }
+      }
+    }
   }
 
   void _awaitFromSignUp() async {
@@ -103,6 +125,16 @@ class _Loginstate extends State<Login> {
     if (awaitResult == 'delete') {
       setState(() {
         print('reload');
+      });
+    }
+  }
+
+  void _awaitDialog(String message) async {
+    var dialogResult = await alertDialog(context, message);
+
+    if (dialogResult == 'ok') {
+      setState(() {
+        _passwordController.clear();
       });
     }
   }

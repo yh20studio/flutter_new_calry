@@ -16,33 +16,37 @@ Future getJWT() async {
 Future<String> authenticationUser() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   DateTime now = DateTime.now();
-  DateTime refreshTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(
-      prefs.getInt('refreshTokenExpiresIn')!);
-  if (refreshTokenExpiresIn.isAfter(now)) {
-    try {
-      var httpPostReissue = await postReissue(
-          prefs.getString('grantType'),
-          prefs.getString('accessToken'),
-          prefs.getInt('accessTokenExpiresIn'),
-          prefs.getString('refreshToken'));
+  if (prefs.getInt('refreshTokenExpiresIn') == null) {
+    return 'fail';
+  } else {
+    DateTime refreshTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(
+        prefs.getInt('refreshTokenExpiresIn')!);
+    if (refreshTokenExpiresIn.isAfter(now)) {
+      try {
+        var httpPostReissue = await postReissue(
+            prefs.getString('grantType'),
+            prefs.getString('accessToken'),
+            prefs.getInt('accessTokenExpiresIn'),
+            prefs.getString('refreshToken'));
 
-      prefs.setString('grantType', jsonDecode(httpPostReissue)['grantType']);
-      prefs.setString(
-          'accessToken', jsonDecode(httpPostReissue)['accessToken']);
-      prefs.setInt('accessTokenExpiresIn',
-          jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
-      prefs.setString(
-          'refreshToken', jsonDecode(httpPostReissue)['refreshToken']);
-      prefs.setInt('refreshTokenExpiresIn',
-          jsonDecode(httpPostReissue)['refreshTokenExpiresIn']);
+        prefs.setString('grantType', jsonDecode(httpPostReissue)['grantType']);
+        prefs.setString(
+            'accessToken', jsonDecode(httpPostReissue)['accessToken']);
+        prefs.setInt('accessTokenExpiresIn',
+            jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
+        prefs.setString(
+            'refreshToken', jsonDecode(httpPostReissue)['refreshToken']);
+        prefs.setInt('refreshTokenExpiresIn',
+            jsonDecode(httpPostReissue)['refreshTokenExpiresIn']);
 
-      return 'success';
-    } catch (e) {
-      print(e);
+        return 'success';
+      } catch (e) {
+        print(e);
+        return 'fail';
+      }
+    } else {
       return 'fail';
     }
-  } else {
-    return 'fail';
   }
 }
 //GET METHOD
@@ -148,7 +152,7 @@ Future postLogin(String email, String password) async {
   if (response.statusCode == 200) {
     return response.body;
   } else {
-    throw Exception("error: status code ${response.statusCode}");
+    throw Exception(jsonDecode(response.body)["message"]);
   }
 }
 
