@@ -94,10 +94,10 @@ class _ArchivesInputstate extends State<ArchivesInput> {
 
   void _httpPostArchives() async {
     Archives archives = Archives(
-        title: _titleController.text,
-        content: _contentController.text,
-        url: _urlController.text,
-        author: '2young');
+      title: _titleController.text,
+      content: _contentController.text,
+      url: _urlController.text,
+    );
     var httpResult = await postArchives(archives);
     print((jsonDecode(httpResult)));
     Navigator.pop(context, 'success');

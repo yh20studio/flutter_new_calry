@@ -54,7 +54,7 @@ Future<String> authenticationUser() async {
 Future<List<Archives>> getArchives() async {
   String jwt = await getJWT();
   http.Response response = await http.get(
-    Uri.parse(serverIP + 'archives/get'),
+    Uri.parse(serverIP + 'archives'),
     headers: {
       HttpHeaders.authorizationHeader: "Bearer $jwt",
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
@@ -98,7 +98,7 @@ Member parseMember(String responseBody) {
 Future postArchives(Archives archives) async {
   String jwt = await getJWT();
   http.Response response = await http.post(
-    Uri.parse(serverIP + 'archives/post'),
+    Uri.parse(serverIP + 'archives'),
     headers: {
       HttpHeaders.authorizationHeader: "Bearer $jwt",
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
@@ -108,8 +108,7 @@ Future postArchives(Archives archives) async {
       {
         "title": archives.title,
         "content": archives.content,
-        "url": archives.url,
-        "author": archives.author
+        "url": archives.url
       },
     ),
   );
@@ -210,7 +209,7 @@ Future postReissue(String? grantType, String? accessToken,
 
 Future<String> deleteArchives(Archives archives) async {
   String jwt = await getJWT();
-  final url = Uri.parse(serverIP + 'archives/delete/${archives.id}');
+  final url = Uri.parse(serverIP + 'archives/${archives.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{
     HttpHeaders.authorizationHeader: "Bearer $jwt",
@@ -230,7 +229,7 @@ Future<String> deleteArchives(Archives archives) async {
 Future<http.Response> updateArchives(Archives archives) async {
   String jwt = await getJWT();
   return http.put(
-    Uri.parse(serverIP + 'archives/put/${archives.id}'),
+    Uri.parse(serverIP + 'archives/${archives.id}'),
     headers: {
       HttpHeaders.authorizationHeader: "Bearer $jwt",
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",

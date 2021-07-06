@@ -35,16 +35,24 @@ class _ArchivesListstate extends State<ArchivesList> {
                         print('Error');
                         return Text('Error');
                       } else {
-                        return Wrap(
-                            spacing: 8.0, // gap between adjacent chips
-                            runSpacing: 4.0, // gap between lines
-                            children: List.generate(
-                                snapshot.data!.length,
-                                (i) => listViewArchives(
-                                    index: i,
-                                    archives: snapshot.data![i],
-                                    width: _width,
-                                    context: context)).toList());
+                        if (snapshot.data!.length == 0) {
+                          return Container(
+                            child: Center(
+                              child: Text("추가한 Archives가 없습니다."),
+                            ),
+                          );
+                        } else {
+                          return Wrap(
+                              spacing: 8.0, // gap between adjacent chips
+                              runSpacing: 4.0, // gap between lines
+                              children: List.generate(
+                                  snapshot.data!.length,
+                                  (i) => listViewArchives(
+                                      index: i,
+                                      archives: snapshot.data![i],
+                                      width: _width,
+                                      context: context)).toList());
+                        }
                       }
                     }))
           ],
@@ -65,7 +73,6 @@ class _ArchivesListstate extends State<ArchivesList> {
               Text(archives.title!),
               Text(archives.content!),
               Text(archives.url!),
-              Text(archives.author!),
             ])));
   }
 

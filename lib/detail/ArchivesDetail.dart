@@ -35,7 +35,6 @@ class _ArchivesDetailstate extends State<ArchivesDetail> {
             Text(archives!.title!),
             Text(archives!.content!),
             Text(archives!.url!),
-            Text(archives!.author!),
             IconButton(
               icon: Icon(
                 Icons.edit,
