@@ -88,6 +88,11 @@ List<Archives> parseArchives(String responseBody) {
   return parsed.map<Archives>((json) => Archives.fromJson(json)).toList();
 }
 
+Archives parseArchive(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+  return Archives.fromJson(parsed);
+}
+
 Member parseMember(String responseBody) {
   final parsed = jsonDecode(responseBody);
   return Member.fromJson(parsed);
@@ -226,9 +231,9 @@ Future<String> deleteArchives(Archives archives) async {
 
 //PUT
 
-Future<http.Response> updateArchives(Archives archives) async {
+Future<Archives> updateArchives(Archives archives) async {
   String jwt = await getJWT();
-  return http.put(
+  http.Response response = await http.put(
     Uri.parse(serverIP + 'archives/${archives.id}'),
     headers: {
       HttpHeaders.authorizationHeader: "Bearer $jwt",
@@ -240,4 +245,9 @@ Future<http.Response> updateArchives(Archives archives) async {
       "url": archives.url,
     }),
   );
+  if (response.statusCode == 200) {
+    return compute(parseArchive, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
 }

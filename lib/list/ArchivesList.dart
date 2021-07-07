@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'package:flutter_webservice/detail/ArchivesDetail.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:flutter/foundation.dart';
+import 'dart:io';
 
 class ArchivesList extends StatefulWidget {
   ArchivesList({Key? key}) : super(key: key);
@@ -72,7 +76,6 @@ class _ArchivesListstate extends State<ArchivesList> {
             child: Column(children: [
               Text(archives.title!),
               Text(archives.content!),
-              Text(archives.url!),
             ])));
   }
 
@@ -84,6 +87,10 @@ class _ArchivesListstate extends State<ArchivesList> {
                   archives: archives,
                 )));
     if (awaitResult == 'delete') {
+      setState(() {
+        print('reload');
+      });
+    } else if (awaitResult == 'update') {
       setState(() {
         print('reload');
       });
