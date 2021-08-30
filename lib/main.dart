@@ -3,8 +3,11 @@ import 'package:flutter_webservice/auth/Login.dart';
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'package:flutter_webservice/detail/ArchivesDetail.dart';
+import 'package:flutter_webservice/detail/RoutinesMemosDetail.dart';
 import 'package:flutter_webservice/list/ArchivesList.dart';
+import 'package:flutter_webservice/list/CustomRoutinesList.dart';
 import 'package:flutter_webservice/input/ArchivesInput.dart';
+import 'package:flutter_webservice/input/CustomRoutinesInput.dart';
 
 import 'package:flutter_webservice/auth/SignUp.dart';
 import 'package:flutter_webservice/auth/MemberInfo.dart';
@@ -26,6 +29,9 @@ class MyApp extends StatelessWidget {
         '/archives/input': (context) => ArchivesInput(),
         '/archives/list': (context) => ArchivesList(),
         '/archives/detail': (context) => ArchivesDetail(),
+        '/customRoutines/input': (context) => CustomRoutinesInput(),
+        '/customRoutines/list': (context) => CustomRoutinesList(),
+        '/routines/memo/detail': (context) => RoutinesMemosDetail(),
       },
       theme: ThemeData(
         brightness: Brightness.light,
@@ -143,7 +149,7 @@ class _IndexState extends State<Index> {
     return Scaffold(
       backgroundColor: Theme.of(context).bottomAppBarColor,
       appBar: AppBar(
-        title: Text(widget.title!),
+        title: Text("Buy the Time"),
         automaticallyImplyLeading: false,
         leading:
             IconButton(icon: Icon(Icons.person), onPressed: _awaitReturnAuth),
@@ -152,12 +158,18 @@ class _IndexState extends State<Index> {
           child: SingleChildScrollView(
               child: Column(
         children: [
-          FlatButton(onPressed: _toArchivesList, child: Text('Archives 리스트')),
+          TextButton(onPressed: _toArchivesList, child: Text('Archives 리스트')),
+          TextButton(
+              onPressed: _toCustomRoutinesList,
+              child: Text('Custom Routines 리스트')),
           IconButton(
               icon: Icon(
                 Icons.add,
               ),
               onPressed: _awaitReturnValueFromArchivesInput),
+          TextButton(
+              child: Text("Custom 루틴 추가"),
+              onPressed: _awaitReturnValueFromCustomRoutinesInput),
         ],
       ))),
     );
@@ -171,9 +183,22 @@ class _IndexState extends State<Index> {
     }
   }
 
+  void _awaitReturnValueFromCustomRoutinesInput() async {
+    var awaitResult = await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CustomRoutinesInput()));
+    if (awaitResult != 'success') {
+      setState(() {});
+    }
+  }
+
   void _toArchivesList() {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => ArchivesList()));
+  }
+
+  void _toCustomRoutinesList() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CustomRoutinesList()));
   }
 
   void _awaitReturnAuth() async {

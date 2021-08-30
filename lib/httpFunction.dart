@@ -67,6 +67,22 @@ Future<List<Archives>> getArchives() async {
   }
 }
 
+Future<List<CustomRoutines>> getCustomRoutines() async {
+  String jwt = await getJWT();
+  http.Response response = await http.get(
+    Uri.parse(serverIP + 'customRoutines'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
+    },
+  );
+  if (response.statusCode == 200) {
+    return compute(parseCustomRoutines, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
 Future<Member> getMyInfo() async {
   String jwt = await getJWT();
   http.Response response = await http.get(
@@ -88,14 +104,36 @@ List<Archives> parseArchives(String responseBody) {
   return parsed.map<Archives>((json) => Archives.fromJson(json)).toList();
 }
 
+List<CustomRoutines> parseCustomRoutines(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  return parsed
+      .map<CustomRoutines>((json) => CustomRoutines.fromJson(json))
+      .toList();
+}
+
 Archives parseArchive(String responseBody) {
   final parsed = jsonDecode(responseBody);
   return Archives.fromJson(parsed);
 }
 
+CustomRoutines parseCustomRoutine(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+  return CustomRoutines.fromJson(parsed);
+}
+
+Routines parseRoutine(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+  return Routines.fromJson(parsed);
+}
+
 Member parseMember(String responseBody) {
   final parsed = jsonDecode(responseBody);
   return Member.fromJson(parsed);
+}
+
+Memos parseMemo(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+  return Memos.fromJson(parsed);
 }
 
 //POST METHOD
@@ -119,6 +157,77 @@ Future postArchives(Archives archives) async {
   );
   if (response.statusCode == 200) {
     return response.body;
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future postCustomRoutines(CustomRoutines customRoutines) async {
+  String jwt = await getJWT();
+  http.Response response = await http.post(
+    Uri.parse(serverIP + 'customRoutines'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
+    },
+    body: jsonEncode(
+      {
+        "title": customRoutines.title,
+        "icon": customRoutines.icon,
+        "duration": customRoutines.duration
+      },
+    ),
+  );
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future postRoutines(Routines routines) async {
+  String jwt = await getJWT();
+  http.Response response = await http.post(
+    Uri.parse(serverIP + 'routines'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
+    },
+    body: jsonEncode(
+      {
+        "title": routines.title,
+        "icon": routines.icon,
+        "duration": routines.duration
+      },
+    ),
+  );
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<Memos> postRoutinesMemos(Memos memos) async {
+  String jwt = await getJWT();
+  http.Response response = await http.post(
+    Uri.parse(serverIP + 'routines/memos'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
+    },
+    body: jsonEncode(
+      {
+        "routines_id": memos.routines_id,
+        "content": memos.content,
+      },
+    ),
+  );
+  if (response.statusCode == 200) {
+    return compute(parseMemo, response.body);
   } else {
     throw Exception("error: status code ${response.statusCode}");
   }
@@ -229,6 +338,57 @@ Future<String> deleteArchives(Archives archives) async {
   }
 }
 
+Future<String> deleteCustomRoutines(CustomRoutines customRoutines) async {
+  String jwt = await getJWT();
+  final url = Uri.parse(serverIP + 'customRoutines/${customRoutines.id}');
+  final request = http.Request("DELETE", url);
+  request.headers.addAll(<String, String>{
+    HttpHeaders.authorizationHeader: "Bearer $jwt",
+    HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+  });
+
+  final response = await request.send();
+  if (response.statusCode == 200) {
+    return await response.stream.bytesToString();
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<String> deleteRoutines(Routines routines) async {
+  String jwt = await getJWT();
+  final url = Uri.parse(serverIP + 'routines/${routines.id}');
+  final request = http.Request("DELETE", url);
+  request.headers.addAll(<String, String>{
+    HttpHeaders.authorizationHeader: "Bearer $jwt",
+    HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+  });
+
+  final response = await request.send();
+  if (response.statusCode == 200) {
+    return await response.stream.bytesToString();
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<String> deleteRoutinesMemos(Memos memos) async {
+  String jwt = await getJWT();
+  final url = Uri.parse(serverIP + 'routines/memos/${memos.id}');
+  final request = http.Request("DELETE", url);
+  request.headers.addAll(<String, String>{
+    HttpHeaders.authorizationHeader: "Bearer $jwt",
+    HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+  });
+
+  final response = await request.send();
+  if (response.statusCode == 200) {
+    return await response.stream.bytesToString();
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
 //PUT
 
 Future<Archives> updateArchives(Archives archives) async {
@@ -247,6 +407,68 @@ Future<Archives> updateArchives(Archives archives) async {
   );
   if (response.statusCode == 200) {
     return compute(parseArchive, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<CustomRoutines> updateCustomRoutines(
+    CustomRoutines customRoutines) async {
+  String jwt = await getJWT();
+  http.Response response = await http.put(
+    Uri.parse(serverIP + 'customRoutines/${customRoutines.id}'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+    },
+    body: jsonEncode({
+      "icon": customRoutines.icon,
+      "title": customRoutines.title,
+      "duration": customRoutines.duration,
+    }),
+  );
+  if (response.statusCode == 200) {
+    return compute(parseCustomRoutine, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<Routines> updateRoutines(Routines routines) async {
+  String jwt = await getJWT();
+  http.Response response = await http.put(
+    Uri.parse(serverIP + 'routines/${routines.id}'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+    },
+    body: jsonEncode({
+      "icon": routines.icon,
+      "title": routines.title,
+      "duration": routines.duration,
+    }),
+  );
+  if (response.statusCode == 200) {
+    return compute(parseRoutine, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<Memos> updateRoutinesMemos(Memos memos) async {
+  String jwt = await getJWT();
+  http.Response response = await http.put(
+    Uri.parse(serverIP + 'routines/memos/${memos.id}'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+    },
+    body: jsonEncode({
+      "content": memos.content,
+    }),
+  );
+  if (response.statusCode == 200) {
+    return compute(parseMemo, response.body);
   } else {
     throw Exception("error: status code ${response.statusCode}");
   }

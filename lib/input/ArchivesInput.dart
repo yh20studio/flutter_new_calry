@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/detail/ArchivesDetail.dart';
+import 'package:flutter_webservice/widgets/TextInputFormWidget.dart';
 
 class ArchivesInput extends StatefulWidget {
   ArchivesInput({Key? key, this.archives}) : super(key: key);
@@ -37,17 +37,17 @@ class _ArchivesInputstate extends State<ArchivesInput> {
             child: SingleChildScrollView(
                 child: Column(
           children: [
-            testInputForm(
+            textInputForm(
                 controller: _titleController,
                 title: 'Title',
                 width: _width,
                 context: context),
-            testInputForm(
+            textInputForm(
                 controller: _contentController,
                 title: 'Content',
                 width: _width,
                 context: context),
-            testInputForm(
+            textInputForm(
                 controller: _urlController,
                 title: 'Url',
                 width: _width,
@@ -59,37 +59,6 @@ class _ArchivesInputstate extends State<ArchivesInput> {
                 onPressed: _httpPostArchives),
           ],
         ))));
-  }
-
-  Widget testInputForm(
-      {required TextEditingController controller,
-      required String title,
-      required double width,
-      required BuildContext context}) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          child: Text(title, style: Theme.of(context).textTheme.headline2),
-        ),
-        Container(
-          width: width * 0.8,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(color: Colors.transparent),
-          child: TextFormField(
-            style: TextStyle(fontSize: 30),
-            keyboardType: TextInputType.multiline,
-            maxLines: null,
-            controller: controller,
-            decoration: InputDecoration(
-                disabledBorder:
-                    UnderlineInputBorder(borderSide: BorderSide.none),
-                contentPadding: EdgeInsets.only(top: 0.0)),
-          ),
-        ),
-      ],
-    );
   }
 
   void _httpPostArchives() async {
