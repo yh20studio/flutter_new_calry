@@ -4,11 +4,15 @@ import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'package:flutter_webservice/detail/ArchivesDetail.dart';
 import 'package:flutter_webservice/detail/RoutinesMemosDetail.dart';
+import 'package:flutter_webservice/input/RoutinesGroupsInput.dart';
 import 'package:flutter_webservice/list/ArchivesList.dart';
 import 'package:flutter_webservice/list/CustomRoutinesList.dart';
 import 'package:flutter_webservice/input/ArchivesInput.dart';
 import 'package:flutter_webservice/input/CustomRoutinesInput.dart';
-
+import 'package:flutter_webservice/home/RoutineHome.dart';
+import 'package:flutter_webservice/home/CalendarNewHome.dart';
+import 'package:flutter_webservice/home/MyPageHome.dart';
+import 'functions.dart';
 import 'package:flutter_webservice/auth/SignUp.dart';
 import 'package:flutter_webservice/auth/MemberInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +26,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+          child: child!,
+        );
+      },
       title: 'Flutter Webservice',
       initialRoute: '/',
       routes: {
@@ -32,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/customRoutines/input': (context) => CustomRoutinesInput(),
         '/customRoutines/list': (context) => CustomRoutinesList(),
         '/routines/memo/detail': (context) => RoutinesMemosDetail(),
+        '/routinesGroups/input': (context) => RoutinesGroupsInput(),
       },
       theme: ThemeData(
         brightness: Brightness.light,
@@ -58,10 +69,7 @@ class MyApp extends StatelessWidget {
             color: Colors.black,
             fontFamily: 'font',
           ),
-          subtitle1: TextStyle(
-            fontSize: 16.0,
-            fontFamily: 'font',
-          ),
+          subtitle1: TextStyle(fontSize: 13, fontFamily: 'font', color: Colors.white),
           subtitle2: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
@@ -79,8 +87,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.white,
         bottomAppBarColor: Colors.black,
-        bottomNavigationBarTheme:
-            BottomNavigationBarThemeData(backgroundColor: Colors.black),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Colors.black),
         backgroundColor: Colors.black,
         canvasColor: Colors.white,
         // 위젯을 위한 전경색상
@@ -104,10 +111,7 @@ class MyApp extends StatelessWidget {
             color: Colors.white,
             fontFamily: 'font',
           ),
-          subtitle1: TextStyle(
-            fontSize: 16.0,
-            fontFamily: 'font',
-          ),
+          subtitle1: TextStyle(fontSize: 13, fontFamily: 'font', color: Colors.white),
           subtitle2: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
@@ -138,93 +142,43 @@ class Index extends StatefulWidget {
 }
 
 class _IndexState extends State<Index> {
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _contentController = TextEditingController();
-  TextEditingController _urlController = TextEditingController();
+  int _currentIndex = 0;
+  final key = GlobalKey();
+
+  void _onTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var _height = MediaQuery.of(context).size.height;
     var _width = MediaQuery.of(context).size.width;
+    double bodyHeight = _height - MediaQuery.of(context).padding.top - 80;
     return Scaffold(
-      backgroundColor: Theme.of(context).bottomAppBarColor,
-      appBar: AppBar(
-        title: Text("Buy the Time"),
-        automaticallyImplyLeading: false,
-        leading:
-            IconButton(icon: Icon(Icons.person), onPressed: _awaitReturnAuth),
-      ),
-      body: Center(
-          child: SingleChildScrollView(
-              child: Column(
-        children: [
-          TextButton(onPressed: _toArchivesList, child: Text('Archives 리스트')),
-          TextButton(
-              onPressed: _toCustomRoutinesList,
-              child: Text('Custom Routines 리스트')),
-          IconButton(
-              icon: Icon(
-                Icons.add,
-              ),
-              onPressed: _awaitReturnValueFromArchivesInput),
-          TextButton(
-              child: Text("Custom 루틴 추가"),
-              onPressed: _awaitReturnValueFromCustomRoutinesInput),
-        ],
-      ))),
+      backgroundColor: MyFunction.parseColor("#EFFBFB"),
+      bottomNavigationBar: SizedBox(
+          height: 80,
+          child: Center(
+              child: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  key: key,
+                  onTap: _onTap,
+                  currentIndex: _currentIndex,
+                  selectedIconTheme: IconThemeData(color: Colors.black),
+                  unselectedIconTheme: IconThemeData(color: Colors.black),
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  selectedFontSize: 0,
+                  unselectedFontSize: 0,
+                  iconSize: 25,
+                  items: [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
+              ]))),
+      body: SafeArea(child: IndexedStack(index: _currentIndex, children: <Widget>[RoutineHome(), CalendarNewHome(bodyHeight: bodyHeight), MyPageHome()])),
     );
-  }
-
-  void _awaitReturnValueFromArchivesInput() async {
-    var awaitResult = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ArchivesInput()));
-    if (awaitResult != 'success') {
-      setState(() {});
-    }
-  }
-
-  void _awaitReturnValueFromCustomRoutinesInput() async {
-    var awaitResult = await Navigator.push(context,
-        MaterialPageRoute(builder: (context) => CustomRoutinesInput()));
-    if (awaitResult != 'success') {
-      setState(() {});
-    }
-  }
-
-  void _toArchivesList() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => ArchivesList()));
-  }
-
-  void _toCustomRoutinesList() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CustomRoutinesList()));
-  }
-
-  void _awaitReturnAuth() async {
-    try {
-      var httpGetMyInfo = await getMyInfo();
-      print(httpGetMyInfo);
-      var awaitResult = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MemberInfo(member: httpGetMyInfo)));
-      if (awaitResult == 'success') {}
-    } catch (e) {
-      print(e);
-      var result = await authenticationUser();
-      if (result == 'success') {
-        var httpGetMyInfo = await getMyInfo();
-        var awaitResult = await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MemberInfo(member: httpGetMyInfo)));
-        if (awaitResult == 'success') {}
-      } else if (result == 'fail') {
-        var awaitResult = await Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Login()));
-        if (awaitResult == 'success') {}
-      }
-    }
   }
 }

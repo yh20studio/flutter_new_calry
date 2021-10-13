@@ -2,24 +2,26 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 
 import 'package:flutter_webservice/class.dart';
+import 'package:flutter_webservice/dialog/RoutinesListInputDialog.dart';
 import 'package:flutter_webservice/dialog/DurationChoiceDialog.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'package:flutter_webservice/widgets/TextInputFormWidget.dart';
 
-class CustomRoutinesInput extends StatefulWidget {
-  CustomRoutinesInput({Key? key, this.routines}) : super(key: key);
+class RoutinesGroupsInput extends StatefulWidget {
+  RoutinesGroupsInput({Key? key, this.routines}) : super(key: key);
 
   final Routines? routines;
 
   @override
-  _CustomRoutinesInputstate createState() => _CustomRoutinesInputstate();
+  _RoutinesGroupsInputstate createState() => _RoutinesGroupsInputstate();
 }
 
-class _CustomRoutinesInputstate extends State<CustomRoutinesInput> {
-  TextEditingController _iconController = TextEditingController();
+class _RoutinesGroupsInputstate extends State<RoutinesGroupsInput> {
   TextEditingController _titleController = TextEditingController();
 
   TimeDuration timeDuration = TimeDuration(hour: 0, min: 0, sec: 0);
+
+  List<Routines> routinesList = [];
 
   @override
   void initState() {
@@ -40,15 +42,13 @@ class _CustomRoutinesInputstate extends State<CustomRoutinesInput> {
                 child: Column(
           children: [
             textInputForm(
-                controller: _iconController,
-                title: 'Icon',
-                width: _width,
-                context: context),
-            textInputForm(
                 controller: _titleController,
                 title: 'Title',
                 width: _width,
                 context: context),
+            TextButton(
+                onPressed: () => __awaitRoutinesListInputDialog(),
+                child: Text("루틴 추가")),
             durationInputForm(
                 timeDuration: timeDuration,
                 title: 'Duration',
@@ -61,7 +61,7 @@ class _CustomRoutinesInputstate extends State<CustomRoutinesInput> {
                 icon: Icon(
                   Icons.add,
                 ),
-                onPressed: _httpPostCustomRoutines),
+                onPressed: _httpPostRoutinesGroups),
           ],
         ))));
   }
@@ -108,15 +108,24 @@ class _CustomRoutinesInputstate extends State<CustomRoutinesInput> {
         ));
   }
 
-  void _httpPostCustomRoutines() async {
-    CustomRoutines customRoutines = CustomRoutines(
-      icon: _iconController.text,
+  void __awaitRoutinesListInputDialog() async {
+    var dialogResult = await routinesListInputDialog(context, routinesList);
+
+    setState(() {
+      print("update");
+      routinesList = dialogResult;
+    });
+  }
+
+  void _httpPostRoutinesGroups() async {
+    RoutinesGroups routinesGroups = RoutinesGroups(
       title: _titleController.text,
+      routinesList: routinesList,
       duration: (timeDuration.hour!) * 3600 +
           (timeDuration.min!) * 60 +
           (timeDuration.sec!),
     );
-    var httpResult = await postCustomRoutines(customRoutines);
+    var httpResult = await postRoutinesGroups(routinesGroups);
     print((jsonDecode(httpResult)));
     Navigator.pop(context, 'success');
   }

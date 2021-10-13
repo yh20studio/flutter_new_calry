@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/dialog.dart';
+import 'package:flutter_webservice/dialog/DurationChoiceDialog.dart';
 import 'package:flutter_webservice/input/RoutinesMemosInput.dart';
 import 'package:flutter_webservice/input/RoutinesUpdate.dart';
 import 'package:flutter_webservice/detail/RoutinesMemosDetail.dart';

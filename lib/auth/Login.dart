@@ -3,7 +3,7 @@ import 'package:flutter_webservice/auth/SignUp.dart';
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'package:flutter_webservice/auth/SignUp.dart';
-import 'package:flutter_webservice/dialog.dart';
+import 'package:flutter_webservice/dialog/AlertDialog.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,16 +36,8 @@ class _Loginstate extends State<Login> {
             child: SingleChildScrollView(
                 child: Column(
           children: [
-            authTestInputForm(
-                controller: _emailController,
-                title: 'Email',
-                width: _width,
-                context: context),
-            authTestInputForm(
-                controller: _passwordController,
-                title: 'Password',
-                width: _width,
-                context: context),
+            authTestInputForm(controller: _emailController, title: 'Email', width: _width, context: context),
+            authTestInputForm(controller: _passwordController, title: 'Password', width: _width, context: context),
             SizedBox(
               height: 10,
             ),
@@ -58,11 +50,7 @@ class _Loginstate extends State<Login> {
         ))));
   }
 
-  Widget authTestInputForm(
-      {required TextEditingController controller,
-      required String title,
-      required double width,
-      required BuildContext context}) {
+  Widget authTestInputForm({required TextEditingController controller, required String title, required double width, required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -75,14 +63,11 @@ class _Loginstate extends State<Login> {
           alignment: Alignment.center,
           decoration: BoxDecoration(color: Colors.transparent),
           child: TextFormField(
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(fontSize: 30, color: Colors.black),
             obscureText: controller == _passwordController ? true : false,
             keyboardType: TextInputType.emailAddress,
             controller: controller,
-            decoration: InputDecoration(
-                disabledBorder:
-                    UnderlineInputBorder(borderSide: BorderSide.none),
-                contentPadding: EdgeInsets.only(top: 0.0)),
+            decoration: InputDecoration(disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none), contentPadding: EdgeInsets.only(top: 0.0)),
           ),
         ),
       ],
@@ -96,23 +81,26 @@ class _Loginstate extends State<Login> {
       _awaitDialog("비밀번호를 입력해주세요.");
     } else {
       try {
-        var httpResult =
-            await postLogin(_emailController.text, _passwordController.text);
+        var httpResult = await postLogin(_emailController.text, _passwordController.text);
         SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        // token 저장
         prefs.setString('grantType', jsonDecode(httpResult)['grantType']);
         prefs.setString('accessToken', jsonDecode(httpResult)['accessToken']);
-        prefs.setInt('accessTokenExpiresIn',
-            jsonDecode(httpResult)['accessTokenExpiresIn']);
+        prefs.setInt('accessTokenExpiresIn', jsonDecode(httpResult)['accessTokenExpiresIn']);
         prefs.setString('refreshToken', jsonDecode(httpResult)['refreshToken']);
-        prefs.setInt('refreshTokenExpiresIn',
-            jsonDecode(httpResult)['refreshTokenExpiresIn']);
+        prefs.setInt('refreshTokenExpiresIn', jsonDecode(httpResult)['refreshTokenExpiresIn']);
+
+        var labelResult = await getLabels();
+        // Labels 저장
+        final String encodedData = Labels.encode(labelResult);
+        await prefs.setString('labels', encodedData);
         Navigator.pop(context, 'success');
       } on Exception catch (exception) {
         print(exception);
         if (exception.toString() == "Exception: Email is not registered") {
           _awaitDialog("가입되지 않은 이메일입니다.");
-        } else if (exception.toString() ==
-            "Exception: Password does not match stored value") {
+        } else if (exception.toString() == "Exception: Password does not match stored value") {
           _awaitDialog("비밀번호가 틀렸습니다.");
         }
       }
@@ -120,8 +108,7 @@ class _Loginstate extends State<Login> {
   }
 
   void _awaitFromSignUp() async {
-    var awaitResult = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => SignUp()));
+    var awaitResult = await Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
     if (awaitResult == 'delete') {
       setState(() {
         print('reload');

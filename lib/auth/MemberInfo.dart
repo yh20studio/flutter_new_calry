@@ -3,7 +3,7 @@ import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_webservice/dialog.dart';
+import 'package:flutter_webservice/dialog/TwoChoiceDialog.dart';
 
 class MemberInfo extends StatefulWidget {
   MemberInfo({Key? key, this.member}) : super(key: key);

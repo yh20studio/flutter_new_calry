@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/dialog.dart';
+import 'package:flutter_webservice/dialog/AlertDialog.dart';
 import 'package:flutter_webservice/input/RoutinesMemosInput.dart';
 import 'package:flutter_webservice/input/RoutinesUpdate.dart';
 import 'package:url_launcher/url_launcher.dart';

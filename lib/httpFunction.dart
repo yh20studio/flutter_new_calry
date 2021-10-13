@@ -19,25 +19,17 @@ Future<String> authenticationUser() async {
   if (prefs.getInt('refreshTokenExpiresIn') == null) {
     return 'fail';
   } else {
-    DateTime refreshTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(
-        prefs.getInt('refreshTokenExpiresIn')!);
+    DateTime refreshTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(prefs.getInt('refreshTokenExpiresIn')!);
     if (refreshTokenExpiresIn.isAfter(now)) {
       try {
         var httpPostReissue = await postReissue(
-            prefs.getString('grantType'),
-            prefs.getString('accessToken'),
-            prefs.getInt('accessTokenExpiresIn'),
-            prefs.getString('refreshToken'));
+            prefs.getString('grantType'), prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'), prefs.getString('refreshToken'));
 
         prefs.setString('grantType', jsonDecode(httpPostReissue)['grantType']);
-        prefs.setString(
-            'accessToken', jsonDecode(httpPostReissue)['accessToken']);
-        prefs.setInt('accessTokenExpiresIn',
-            jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
-        prefs.setString(
-            'refreshToken', jsonDecode(httpPostReissue)['refreshToken']);
-        prefs.setInt('refreshTokenExpiresIn',
-            jsonDecode(httpPostReissue)['refreshTokenExpiresIn']);
+        prefs.setString('accessToken', jsonDecode(httpPostReissue)['accessToken']);
+        prefs.setInt('accessTokenExpiresIn', jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
+        prefs.setString('refreshToken', jsonDecode(httpPostReissue)['refreshToken']);
+        prefs.setInt('refreshTokenExpiresIn', jsonDecode(httpPostReissue)['refreshTokenExpiresIn']);
 
         return 'success';
       } catch (e) {
@@ -51,14 +43,79 @@ Future<String> authenticationUser() async {
 }
 //GET METHOD
 
+Future<List<Day>> getCalendar() async {
+  String jwt = await getJWT();
+  DateTime now = DateTime.now();
+  String nowString = '${now.year}-${now.month}-${now.day}';
+  http.Response response = await http.get(
+    Uri.parse(serverIP + 'schedules/calendar/$nowString'),
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
+  );
+  if (response.statusCode == 200) {
+    return compute(parseDays, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<WeekSchedulesCalendar> getWholeSchedules() async {
+  String jwt = await getJWT();
+  http.Response response = await http.get(
+    Uri.parse(serverIP + 'schedules/whole'),
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
+  );
+  if (response.statusCode == 200) {
+    return compute(parseWeekSchedulesCalendar, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<WeekSchedules> getPartSchedules(String updateStart, String updateEnd) async {
+  String jwt = await getJWT();
+
+  http.Response response = await http.get(
+    Uri.parse(serverIP + 'schedules/part/${updateStart}/${updateEnd}'),
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
+  );
+  if (response.statusCode == 200) {
+    return compute(parseWeekSchedules, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<List<Labels>> getLabels() async {
+  String jwt = await getJWT();
+  http.Response response = await http.get(
+    Uri.parse(serverIP + 'labels'),
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
+  );
+  if (response.statusCode == 200) {
+    return compute(parseLabels, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<List<Archives>> getRoutinesCategory() async {
+  String jwt = await getJWT();
+  http.Response response = await http.get(
+    Uri.parse(serverIP + 'category'),
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
+  );
+  if (response.statusCode == 200) {
+    return compute(parseArchives, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
 Future<List<Archives>> getArchives() async {
   String jwt = await getJWT();
   http.Response response = await http.get(
     Uri.parse(serverIP + 'archives'),
-    headers: {
-      HttpHeaders.authorizationHeader: "Bearer $jwt",
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
-    },
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
   );
   if (response.statusCode == 200) {
     return compute(parseArchives, response.body);
@@ -71,10 +128,7 @@ Future<List<CustomRoutines>> getCustomRoutines() async {
   String jwt = await getJWT();
   http.Response response = await http.get(
     Uri.parse(serverIP + 'customRoutines'),
-    headers: {
-      HttpHeaders.authorizationHeader: "Bearer $jwt",
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
-    },
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
   );
   if (response.statusCode == 200) {
     return compute(parseCustomRoutines, response.body);
@@ -87,16 +141,18 @@ Future<Member> getMyInfo() async {
   String jwt = await getJWT();
   http.Response response = await http.get(
     Uri.parse(serverIP + 'user/info'),
-    headers: {
-      HttpHeaders.authorizationHeader: "Bearer $jwt",
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"
-    },
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
   );
   if (response.statusCode == 200) {
     return compute(parseMember, response.body);
   } else {
     throw Exception("error: status code ${response.statusCode}");
   }
+}
+
+List<RoutinesCategory> parseCategory(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  return parsed.map<RoutinesCategory>((json) => RoutinesCategory.fromJson(json)).toList();
 }
 
 List<Archives> parseArchives(String responseBody) {
@@ -106,9 +162,32 @@ List<Archives> parseArchives(String responseBody) {
 
 List<CustomRoutines> parseCustomRoutines(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-  return parsed
-      .map<CustomRoutines>((json) => CustomRoutines.fromJson(json))
-      .toList();
+  return parsed.map<CustomRoutines>((json) => CustomRoutines.fromJson(json)).toList();
+}
+
+List<Day> parseDays(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  return parsed.map<Day>((json) => Day.fromJson(json)).toList();
+}
+
+List<Labels> parseLabels(String responseBody) {
+  final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
+  return parsed.map<Labels>((json) => Labels.fromJson(json)).toList();
+}
+
+WeekSchedulesCalendar parseWeekSchedulesCalendar(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+  return WeekSchedulesCalendar.fromJson(parsed);
+}
+
+WeekSchedules parseWeekSchedules(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+  return WeekSchedules.fromJson(parsed);
+}
+
+Schedule parseSchedule(String responseBody) {
+  final parsed = jsonDecode(responseBody);
+  return Schedule.fromJson(parsed);
 }
 
 Archives parseArchive(String responseBody) {
@@ -148,11 +227,7 @@ Future postArchives(Archives archives) async {
       HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
     },
     body: jsonEncode(
-      {
-        "title": archives.title,
-        "content": archives.content,
-        "url": archives.url
-      },
+      {"title": archives.title, "content": archives.content, "url": archives.url},
     ),
   );
   if (response.statusCode == 200) {
@@ -172,11 +247,27 @@ Future postCustomRoutines(CustomRoutines customRoutines) async {
       HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
     },
     body: jsonEncode(
-      {
-        "title": customRoutines.title,
-        "icon": customRoutines.icon,
-        "duration": customRoutines.duration
-      },
+      {"title": customRoutines.title, "icon": customRoutines.icon, "duration": customRoutines.duration},
+    ),
+  );
+  if (response.statusCode == 200) {
+    return response.body;
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future postRoutinesGroups(RoutinesGroups routinesGroups) async {
+  String jwt = await getJWT();
+  http.Response response = await http.post(
+    Uri.parse(serverIP + 'routinesGroups'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+      HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
+    },
+    body: jsonEncode(
+      {"title": routinesGroups.title, "routinesList": routinesGroups.routinesList, "duration": routinesGroups.duration},
     ),
   );
   if (response.statusCode == 200) {
@@ -196,11 +287,7 @@ Future postRoutines(Routines routines) async {
       HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
     },
     body: jsonEncode(
-      {
-        "title": routines.title,
-        "icon": routines.icon,
-        "duration": routines.duration
-      },
+      {"title": routines.title, "icon": routines.icon, "duration": routines.duration},
     ),
   );
   if (response.statusCode == 200) {
@@ -233,13 +320,37 @@ Future<Memos> postRoutinesMemos(Memos memos) async {
   }
 }
 
-Future postSignUp(String email, String password, String name) async {
+Future<Schedule> postSchedules(Schedule schedule) async {
+  String jwt = await getJWT();
+
   http.Response response = await http.post(
-    Uri.parse(serverIP + 'auth/signup'),
+    Uri.parse(serverIP + 'schedules'),
     headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
     },
+    body: jsonEncode(
+      {
+        "title": schedule.title,
+        "content": schedule.content,
+        "start_date": schedule.startDate!.toIso8601String(),
+        "end_date": schedule.endDate!.toIso8601String(),
+        "labels": schedule.labels
+      },
+    ),
+  );
+  if (response.statusCode == 200) {
+    return compute(parseSchedule, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future postSignUp(String email, String password, String name) async {
+  http.Response response = await http.post(
+    Uri.parse(serverIP + 'auth/signup'),
+    headers: {HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8", HttpHeaders.acceptHeader: "application/json; charset=UTF-8"},
     body: jsonEncode(
       {"email": email, "password": password, "name": name},
     ),
@@ -254,10 +365,7 @@ Future postSignUp(String email, String password, String name) async {
 Future postLogin(String email, String password) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'auth/login'),
-    headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
-    },
+    headers: {HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8", HttpHeaders.acceptHeader: "application/json; charset=UTF-8"},
     body: jsonEncode(
       {"email": email, "password": password},
     ),
@@ -269,8 +377,7 @@ Future postLogin(String email, String password) async {
   }
 }
 
-Future postLogout(String? grantType, String? accessToken,
-    int? accessTokenExpiresIn, String? refreshToken) async {
+Future postLogout(String? grantType, String? accessToken, int? accessTokenExpiresIn, String? refreshToken) async {
   String jwt = await getJWT();
   http.Response response = await http.post(
     Uri.parse(serverIP + 'auth/logout'),
@@ -295,14 +402,10 @@ Future postLogout(String? grantType, String? accessToken,
   }
 }
 
-Future postReissue(String? grantType, String? accessToken,
-    int? accessTokenExpiresIn, String? refreshToken) async {
+Future postReissue(String? grantType, String? accessToken, int? accessTokenExpiresIn, String? refreshToken) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'auth/reissue'),
-    headers: {
-      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-      HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
-    },
+    headers: {HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8", HttpHeaders.acceptHeader: "application/json; charset=UTF-8"},
     body: jsonEncode(
       {
         "grantType": grantType,
@@ -389,6 +492,23 @@ Future<String> deleteRoutinesMemos(Memos memos) async {
   }
 }
 
+Future<String> deleteSchedules(Schedule schedules) async {
+  String jwt = await getJWT();
+  final url = Uri.parse(serverIP + 'schedules/${schedules.id}');
+  final request = http.Request("DELETE", url);
+  request.headers.addAll(<String, String>{
+    HttpHeaders.authorizationHeader: "Bearer $jwt",
+    HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+  });
+
+  final response = await request.send();
+  if (response.statusCode == 200) {
+    return await response.stream.bytesToString();
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
 //PUT
 
 Future<Archives> updateArchives(Archives archives) async {
@@ -412,8 +532,7 @@ Future<Archives> updateArchives(Archives archives) async {
   }
 }
 
-Future<CustomRoutines> updateCustomRoutines(
-    CustomRoutines customRoutines) async {
+Future<CustomRoutines> updateCustomRoutines(CustomRoutines customRoutines) async {
   String jwt = await getJWT();
   http.Response response = await http.put(
     Uri.parse(serverIP + 'customRoutines/${customRoutines.id}'),
@@ -469,6 +588,52 @@ Future<Memos> updateRoutinesMemos(Memos memos) async {
   );
   if (response.statusCode == 200) {
     return compute(parseMemo, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<List<Labels>> updateLabels(List<Labels> labelsList) async {
+  String jwt = await getJWT();
+  List jsonList = [];
+  labelsList.map((item) => jsonList.add(item.toJson())).toList();
+
+  http.Response response = await http.put(
+    Uri.parse(serverIP + 'labels'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+    },
+    body: jsonEncode({
+      "labels_list": jsonList,
+    }),
+  );
+  if (response.statusCode == 200) {
+    return compute(parseLabels, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
+  }
+}
+
+Future<Schedule> updateSchedules(Schedule schedules) async {
+  String jwt = await getJWT();
+
+  http.Response response = await http.put(
+    Uri.parse(serverIP + 'schedules/${schedules.id}'),
+    headers: {
+      HttpHeaders.authorizationHeader: "Bearer $jwt",
+      HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
+    },
+    body: jsonEncode({
+      "title": schedules.title,
+      "content": schedules.content,
+      "start_date": schedules.startDate!.toIso8601String(),
+      "end_date": schedules.endDate!.toIso8601String(),
+      "labels": schedules.labels
+    }),
+  );
+  if (response.statusCode == 200) {
+    return compute(parseSchedule, response.body);
   } else {
     throw Exception("error: status code ${response.statusCode}");
   }

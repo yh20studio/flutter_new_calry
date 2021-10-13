@@ -34,36 +34,16 @@ class _SignUpstate extends State<SignUp> {
             child: SingleChildScrollView(
                 child: Column(
           children: [
-            authTestInputForm(
-                controller: _emailController,
-                title: 'Email',
-                width: _width,
-                context: context),
-            authTestInputForm(
-                controller: _passwordController,
-                title: 'Password',
-                width: _width,
-                context: context),
-            authTestInputForm(
-                controller: _passwordConfirmController,
-                title: 'Password Confirm',
-                width: _width,
-                context: context),
-            authTestInputForm(
-                controller: _nameController,
-                title: 'Name',
-                width: _width,
-                context: context),
-            FlatButton(child: Text("Sign Up"), onPressed: _httpPostSignUp),
+            authTestInputForm(controller: _emailController, title: 'Email', width: _width, context: context),
+            authTestInputForm(controller: _passwordController, title: 'Password', width: _width, context: context),
+            authTestInputForm(controller: _passwordConfirmController, title: 'Password Confirm', width: _width, context: context),
+            authTestInputForm(controller: _nameController, title: 'Name', width: _width, context: context),
+            TextButton(child: Text("Sign Up"), onPressed: _httpPostSignUp),
           ],
         ))));
   }
 
-  Widget authTestInputForm(
-      {required TextEditingController controller,
-      required String title,
-      required double width,
-      required BuildContext context}) {
+  Widget authTestInputForm({required TextEditingController controller, required String title, required double width, required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -76,14 +56,11 @@ class _SignUpstate extends State<SignUp> {
           alignment: Alignment.center,
           decoration: BoxDecoration(color: Colors.transparent),
           child: TextFormField(
-            style: TextStyle(fontSize: 30),
+            style: TextStyle(fontSize: 30, color: Colors.black),
             keyboardType: TextInputType.multiline,
             maxLines: null,
             controller: controller,
-            decoration: InputDecoration(
-                disabledBorder:
-                    UnderlineInputBorder(borderSide: BorderSide.none),
-                contentPadding: EdgeInsets.only(top: 0.0)),
+            decoration: InputDecoration(disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none), contentPadding: EdgeInsets.only(top: 0.0)),
           ),
         ),
       ],
@@ -91,8 +68,7 @@ class _SignUpstate extends State<SignUp> {
   }
 
   void _httpPostSignUp() async {
-    var httpResult = await postSignUp(
-        _emailController.text, _passwordController.text, _nameController.text);
+    var httpResult = await postSignUp(_emailController.text, _passwordController.text, _nameController.text);
 
     Navigator.pop(context, 'success');
   }

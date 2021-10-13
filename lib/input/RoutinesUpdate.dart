@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/dialog.dart';
+import 'package:flutter_webservice/dialog/DurationChoiceDialog.dart';
 import 'package:flutter_webservice/widgets/TextInputFormWidget.dart';
 
 class RoutinesUpdate extends StatefulWidget {
