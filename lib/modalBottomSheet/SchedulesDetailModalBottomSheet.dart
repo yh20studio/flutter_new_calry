@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webservice/detail/SchedulesDetail.dart';
 import 'package:flutter_webservice/class.dart';
 
-schedulesDetailModalBottomSheet(Schedule schedules, BuildContext context) async {
+schedulesDetailModalBottomSheet(Schedules schedules, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(
       context: context,
       isScrollControlled: true,

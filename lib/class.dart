@@ -168,8 +168,8 @@ class Date {
 
 class WeekSchedulesCalendar {
   final Map<DateTime, List<dynamic>>? weekSchedules;
-  final Map<int, Schedule>? schedules;
-  final Map<DateTime, Schedule>? holidays;
+  final Map<int, Schedules>? schedules;
+  final Map<DateTime, Schedules>? holidays;
 
   WeekSchedulesCalendar({this.schedules, this.weekSchedules, this.holidays});
 
@@ -180,16 +180,16 @@ class WeekSchedulesCalendar {
       map.putIfAbsent(DateTime.parse(key), () => value);
     });
 
-    List<Schedule>? schedulesList = json['schedules'].map<Schedule>((json) => Schedule.fromJson(json)).toList();
-    Map<int, Schedule> schedulesMap = {};
+    List<Schedules>? schedulesList = json['schedules'].map<Schedules>((json) => Schedules.fromJson(json)).toList();
+    Map<int, Schedules> schedulesMap = {};
     schedulesList!.forEach((element) {
       schedulesMap.putIfAbsent(element.id!, () => element);
     });
 
     Map<String, dynamic>? holidaysMap = json['holidays'];
-    Map<DateTime, Schedule> map2 = {};
+    Map<DateTime, Schedules> map2 = {};
     holidaysMap!.forEach((key, value) {
-      map2.putIfAbsent(DateTime.parse(key), () => Schedule.fromJson(value));
+      map2.putIfAbsent(DateTime.parse(key), () => Schedules.fromJson(value));
     });
 
     return WeekSchedulesCalendar(schedules: schedulesMap, weekSchedules: map, holidays: map2);
@@ -228,7 +228,7 @@ class DayCalendar {
 class Day {
   final DateTime? date;
   final bool? holiday;
-  final List<Schedule>? schedules;
+  final List<Schedules>? schedules;
 
   Day({this.date, this.holiday, this.schedules});
 
@@ -236,12 +236,12 @@ class Day {
     return Day(
       date: DateTime.utc(json['date'][0], json['date'][1], json['date'][2]),
       holiday: json['holiday'],
-      schedules: json['schedules'].map<Schedule>((json) => Schedule.fromJson(json)).toList(),
+      schedules: json['schedules'].map<Schedules>((json) => Schedules.fromJson(json)).toList(),
     );
   }
 }
 
-class Schedule {
+class Schedules {
   final int? id;
   final String? title;
   final String? content;
@@ -249,15 +249,36 @@ class Schedule {
   final DateTime? endDate;
   final Labels? labels;
 
-  Schedule({this.id, this.title, this.content, this.startDate, this.endDate, this.labels});
+  Schedules({this.id, this.title, this.content, this.startDate, this.endDate, this.labels});
 
-  factory Schedule.fromJson(Map<String, dynamic> json) {
-    return Schedule(
+  factory Schedules.fromJson(Map<String, dynamic> json) {
+    return Schedules(
         id: json['id'],
         title: json['title'],
         content: json['content'],
-        startDate: DateTime.utc(json['start_date'][0], json['start_date'][1], json['start_date'][2]),
-        endDate: DateTime.utc(json['end_date'][0], json['end_date'][1], json['end_date'][2]),
+        startDate: DateTime.utc(json['start_date'][0], json['start_date'][1], json['start_date'][2], json['start_date'][3], json['start_date'][4]),
+        endDate: DateTime.utc(json['end_date'][0], json['end_date'][1], json['end_date'][2], json['start_date'][3], json['start_date'][4]),
+        labels: Labels.fromJson(json['labels']));
+  }
+}
+
+class QuickSchedules {
+  final int? id;
+  final String? title;
+  final String? content;
+  final TimeOfDay? startTime;
+  final TimeOfDay? endTime;
+  final Labels? labels;
+
+  QuickSchedules({this.id, this.title, this.content, this.startTime, this.endTime, this.labels});
+
+  factory QuickSchedules.fromJson(Map<String, dynamic> json) {
+    return QuickSchedules(
+        id: json['id'],
+        title: json['title'],
+        content: json['content'],
+        startTime: json['start_time'] == null ? null : TimeOfDay(hour: json['start_time'][0], minute: json['start_time'][1]),
+        endTime: json['end_time'] == null ? null : TimeOfDay(hour: json['end_time'][0], minute: json['end_time'][1]),
         labels: Labels.fromJson(json['labels']));
   }
 }

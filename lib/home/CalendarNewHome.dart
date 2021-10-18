@@ -24,8 +24,8 @@ class CalendarNewHome extends StatefulWidget {
 class _CalendarNewHomestate extends State<CalendarNewHome> {
   DateTime _dateTime = DateTime.now();
   final PageController pageController = new PageController(initialPage: 3001);
-  Map<int, Schedule> schedulesMap = {};
-  Map<DateTime, Schedule> holidaysMap = {};
+  Map<int, Schedules> schedulesMap = {};
+  Map<DateTime, Schedules> holidaysMap = {};
 
   //calendar
   Map<int, DateTime> dateTimeMap = {};
@@ -34,10 +34,14 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
   int left_cnt = 0;
   bool isJumptoPage = false;
 
+  Future<List<QuickSchedules>>? futureQuickSchedulesList;
+  List<QuickSchedules>? quickSchedulesList;
+
   @override
   void initState() {
     super.initState();
     futureWeekSchedulesCalendar = getWholeSchedules();
+    futureQuickSchedulesList = getQuickSchedules();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setState(() => _getThreeCalendar());
     });
@@ -80,88 +84,104 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
             Expanded(
                 child: FutureBuilder<WeekSchedulesCalendar>(
                     future: futureWeekSchedulesCalendar,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (!snapshot.hasData) {
+                    builder: (BuildContext context, AsyncSnapshot snapshotWeekSchedulesCalendar) {
+                      if (!snapshotWeekSchedulesCalendar.hasData) {
                         print('no data');
                         return Container();
-                      } else if (snapshot.hasError) {
+                      } else if (snapshotWeekSchedulesCalendar.hasError) {
                         print('Error');
                         return Text('Error');
                       } else {
-                        weekScheduleCalendar = snapshot.data!.weekSchedules;
-                        schedulesMap = snapshot.data!.schedules;
-                        holidaysMap = snapshot.data!.holidays;
-                        return PageView.builder(
-                            scrollDirection: Axis.horizontal,
-                            controller: pageController,
-                            onPageChanged: (i) {
-                              // next Month
+                        weekScheduleCalendar = snapshotWeekSchedulesCalendar.data!.weekSchedules;
+                        schedulesMap = snapshotWeekSchedulesCalendar.data!.schedules;
+                        holidaysMap = snapshotWeekSchedulesCalendar.data!.holidays;
+                        return FutureBuilder<List<QuickSchedules>>(
+                            future: futureQuickSchedulesList,
+                            builder: (BuildContext context, AsyncSnapshot snapshotQuickSchedules) {
+                              if (!snapshotQuickSchedules.hasData) {
+                                print('no data');
+                                return Container();
+                              } else if (snapshotQuickSchedules.hasError) {
+                                print('Error');
+                                return Text('Error');
+                              } else {
+                                quickSchedulesList = snapshotQuickSchedules.data!;
+                                return PageView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    controller: pageController,
+                                    onPageChanged: (i) {
+                                      // next Month
 
-                              if (pageController.page! < i) {
-                                setState(() {
-                                  DateTime _nextMonth = _getNextMonth(_dateTime);
-                                  DateTime _next2Month = _getNextMonth(_nextMonth);
-                                  if (!dateTimeMap.containsKey(i + 1)) {
-                                    dateTimeMap[i + 1] = _next2Month;
-                                  }
-                                  _dateTime = _nextMonth;
-                                });
+                                      if (pageController.page! < i) {
+                                        setState(() {
+                                          DateTime _nextMonth = _getNextMonth(_dateTime);
+                                          DateTime _next2Month = _getNextMonth(_nextMonth);
+                                          if (!dateTimeMap.containsKey(i + 1)) {
+                                            dateTimeMap[i + 1] = _next2Month;
+                                          }
+                                          _dateTime = _nextMonth;
+                                        });
+                                      }
+                                      // prev Month
+                                      else if (pageController.page! > i) {
+                                        setState(() {
+                                          DateTime _prevMonth = _getPrevMonth(_dateTime);
+                                          DateTime _prev2Month = _getPrevMonth(_prevMonth);
+                                          if (!dateTimeMap.containsKey(i - 1)) {
+                                            dateTimeMap[i - 1] = _prev2Month;
+                                          }
+                                          _dateTime = _prevMonth;
+                                        });
+                                      } else {}
+                                    },
+                                    itemBuilder: (context, index) {
+                                      DateTime dateTime = dateTimeMap[index]!;
+                                      List<Calendar> sequentialDates =
+                                          CustomCalendar().getMonthCalendar(dateTime.month, dateTime.year, startWeekDay: StartWeekDay.sunday);
+                                      List weekDateCalendar =
+                                          List.generate(sequentialDates.length ~/ 7, (i) => List.generate(7, (j) => sequentialDates[i * 7 + j]));
+                                      List<GlobalKey> keyList = List.generate(weekDateCalendar.length, (index) => GlobalKey()).toList();
+                                      return Container(
+                                          child: ConstrainedBox(
+                                              constraints: BoxConstraints(
+                                                minHeight: widget.bodyHeight! - 50 - 20,
+                                              ),
+                                              child: ListView.builder(
+                                                  physics: new ClampingScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: weekDateCalendar.length,
+                                                  itemBuilder: (context, i) {
+                                                    return Container(
+                                                        child: ConstrainedBox(
+                                                            key: keyList[i],
+                                                            constraints: BoxConstraints(
+                                                                minHeight: (widget.bodyHeight! - 50 - 20) / (weekDateCalendar.length),
+                                                                maxHeight: widget.bodyHeight!),
+                                                            child: Stack(
+                                                              children: [
+                                                                listViewCalendar(
+                                                                    dates: weekDateCalendar[i],
+                                                                    schedules: schedulesMap,
+                                                                    weekSchedule: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
+                                                                        ? []
+                                                                        : weekScheduleCalendar[weekDateCalendar[i][0].date]!,
+                                                                    width: _width,
+                                                                    context: context),
+                                                                Positioned.fill(
+                                                                  child: listViewOverlapCalendar(
+                                                                      dates: weekDateCalendar[i],
+                                                                      schedules: schedulesMap,
+                                                                      weekSchedule: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
+                                                                          ? []
+                                                                          : weekScheduleCalendar[weekDateCalendar[i][0].date]!,
+                                                                      quickSchedulesList: quickSchedulesList!,
+                                                                      context: context),
+                                                                )
+                                                              ],
+                                                            )));
+                                                  })));
+                                    });
                               }
-                              // prev Month
-                              else if (pageController.page! > i) {
-                                setState(() {
-                                  DateTime _prevMonth = _getPrevMonth(_dateTime);
-                                  DateTime _prev2Month = _getPrevMonth(_prevMonth);
-                                  if (!dateTimeMap.containsKey(i - 1)) {
-                                    dateTimeMap[i - 1] = _prev2Month;
-                                  }
-                                  _dateTime = _prevMonth;
-                                });
-                              } else {}
-                            },
-                            itemBuilder: (context, index) {
-                              DateTime dateTime = dateTimeMap[index]!;
-                              List<Calendar> sequentialDates =
-                                  CustomCalendar().getMonthCalendar(dateTime.month, dateTime.year, startWeekDay: StartWeekDay.sunday);
-                              List weekDateCalendar = List.generate(sequentialDates.length ~/ 7, (i) => List.generate(7, (j) => sequentialDates[i * 7 + j]));
-                              List<GlobalKey> keyList = List.generate(weekDateCalendar.length, (index) => GlobalKey()).toList();
-                              return Container(
-                                  child: ConstrainedBox(
-                                      constraints: BoxConstraints(
-                                        minHeight: widget.bodyHeight! - 50 - 20,
-                                      ),
-                                      child: ListView.builder(
-                                          physics: new ClampingScrollPhysics(),
-                                          shrinkWrap: true,
-                                          itemCount: weekDateCalendar.length,
-                                          itemBuilder: (context, i) {
-                                            return Container(
-                                                child: ConstrainedBox(
-                                                    key: keyList[i],
-                                                    constraints: BoxConstraints(
-                                                        minHeight: (widget.bodyHeight! - 50 - 20) / (weekDateCalendar.length), maxHeight: widget.bodyHeight!),
-                                                    child: Stack(
-                                                      children: [
-                                                        listViewCalendar(
-                                                            dates: weekDateCalendar[i],
-                                                            schedules: schedulesMap,
-                                                            weekSchedule: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
-                                                                ? []
-                                                                : weekScheduleCalendar[weekDateCalendar[i][0].date]!,
-                                                            width: _width,
-                                                            context: context),
-                                                        Positioned.fill(
-                                                          child: listViewOverlapCalendar(
-                                                              dates: weekDateCalendar[i],
-                                                              schedules: schedulesMap,
-                                                              weekSchedule: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
-                                                                  ? []
-                                                                  : weekScheduleCalendar[weekDateCalendar[i][0].date]!,
-                                                              context: context),
-                                                        )
-                                                      ],
-                                                    )));
-                                          })));
                             });
                       }
                     })),
@@ -222,15 +242,15 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
     }
   }
 
-  void _awaitReturnValueFromDaySchedulesList(DateTime date, List<Schedule> dayScheduleList) async {
-    var awaitResult = await daySchedulesListModalBottomSheet(date, dayScheduleList, context);
+  void _awaitReturnValueFromDaySchedulesList(DateTime date, List<Schedules> dayScheduleList, List<QuickSchedules> quickSchedulesList) async {
+    var awaitResult = await daySchedulesListModalBottomSheet(date, dayScheduleList, quickSchedulesList, context);
 
     if (awaitResult != null && awaitResult[0] != '') {
       String action = awaitResult[0];
-      Schedule schedule = awaitResult[1];
+      Schedules schedules = awaitResult[1];
 
-      DateTime start = schedule.startDate!.subtract(Duration(days: schedule.startDate!.weekday == 7 ? 0 : schedule.startDate!.weekday));
-      DateTime end = schedule.endDate!.add(Duration(days: schedule.endDate!.weekday == 7 ? 6 : 6 - schedule.endDate!.weekday));
+      DateTime start = schedules.startDate!.subtract(Duration(days: schedules.startDate!.weekday == 7 ? 0 : schedules.startDate!.weekday));
+      DateTime end = schedules.endDate!.add(Duration(days: schedules.endDate!.weekday == 7 ? 6 : 6 - schedules.endDate!.weekday));
       String updateStart = start.toIso8601String();
       String updateEnd = end.toIso8601String();
       updateStart = updateStart.substring(0, updateStart.length - 1);
@@ -240,14 +260,14 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
       Map<DateTime, List<dynamic>>? weekSchedules = (await getPartSchedules(updateStart, updateEnd)).weekSchedules;
       if (action == 'input' || action == 'update') {
         setState(() {
-          schedulesMap[schedule.id!] = schedule;
+          schedulesMap[schedules.id!] = schedules;
           weekSchedules!.forEach((key, value) {
             weekScheduleCalendar[key] = value;
           });
         });
       } else if (action == 'delete') {
         setState(() {
-          schedulesMap.remove(schedule.id!);
+          schedulesMap.remove(schedules.id!);
           while (start.isBefore(end)) {
             weekScheduleCalendar.remove(start);
             start = start.add(Duration(days: 7));
@@ -262,7 +282,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
 
   Widget listViewCalendar(
       {required List<Calendar> dates,
-      required Map<int, Schedule> schedules,
+      required Map<int, Schedules> schedules,
       required List weekSchedule,
       required double width,
       required BuildContext context}) {
@@ -320,7 +340,11 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
   }
 
   Widget listViewOverlapCalendar(
-      {required List<Calendar> dates, required Map<int, Schedule> schedules, required List weekSchedule, required BuildContext context}) {
+      {required List<Calendar> dates,
+      required Map<int, Schedules> schedules,
+      required List weekSchedule,
+      required List<QuickSchedules> quickSchedulesList,
+      required BuildContext context}) {
     return Container(
         decoration: BoxDecoration(border: Border(top: BorderSide(width: 0.5, color: Colors.black))),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
@@ -333,7 +357,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                       (i) => Expanded(
                           child: InkWell(
                               onTap: () {
-                                List<Schedule> dayScheduleList = [];
+                                List<Schedules> dayScheduleList = [];
                                 for (int index = 0; index < weekSchedule.length; index++) {
                                   int gap = 0;
                                   for (int j = 0; j < weekSchedule[index].length; j++) {
@@ -353,7 +377,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                                   }
                                 }
 
-                                _awaitReturnValueFromDaySchedulesList(dates[i].date!, dayScheduleList);
+                                _awaitReturnValueFromDaySchedulesList(dates[i].date!, dayScheduleList, quickSchedulesList);
                               },
                               child: Column(children: [])))).toList()))
         ]));

@@ -3,27 +3,23 @@ import 'dart:convert';
 
 import 'package:flutter_webservice/class.dart';
 import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/modalBottomSheet/CalendarModalBottomSheet.dart';
+import 'package:flutter_webservice/modalBottomSheet/TimeModalBottomSheet.dart';
 import 'package:flutter_webservice/modalBottomSheet/LabelsModalBottomSheet.dart';
 
 import 'package:flutter_webservice/widgets/TextInputFormWidget.dart';
-import 'package:flutter_webservice/widgets/DateWidget.dart';
+import 'package:flutter_webservice/widgets/TimeWidget.dart';
 import 'package:flutter_webservice/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_webservice/modalBottomSheet/TimeModalBottomSheet.dart';
-import 'package:flutter_webservice/widgets/TimeWidget.dart';
 
-class SchedulesInput extends StatefulWidget {
-  SchedulesInput({Key? key, this.selectedDate}) : super(key: key);
-  final DateTime? selectedDate;
+class QuickSchedulesInput extends StatefulWidget {
+  QuickSchedulesInput({Key? key}) : super(key: key);
+
   @override
-  _SchedulesInputstate createState() => _SchedulesInputstate();
+  _QuickSchedulesInputstate createState() => _QuickSchedulesInputstate();
 }
 
-class _SchedulesInputstate extends State<SchedulesInput> {
+class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
   DateTime now = DateTime.now();
-  DateTime? startDate;
-  DateTime? endDate;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
   TextEditingController _titleController = TextEditingController();
@@ -31,15 +27,13 @@ class _SchedulesInputstate extends State<SchedulesInput> {
   Labels labels = Labels(title: "레드", label_colors: LabelColors(code: "#ff7b7b"));
   List<Labels> labelsList = [];
 
-  bool isSetTime = false;
-
   SharedPreferences? prefs;
+
+  bool isSetTime = false;
 
   @override
   void initState() {
     awaitHttpFunctionGetLabels();
-    startDate = widget.selectedDate!;
-    endDate = widget.selectedDate!;
     startTime = TimeOfDay(hour: now.hour, minute: now.minute);
     endTime = TimeOfDay(hour: now.hour, minute: now.minute);
     super.initState();
@@ -68,7 +62,7 @@ class _SchedulesInputstate extends State<SchedulesInput> {
           children: [
             IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
             TextButton(
-              onPressed: _httpPostSchedules,
+              onPressed: _httpPostQuickSchedules,
               child: Text("저장"),
             ),
           ],
@@ -76,7 +70,6 @@ class _SchedulesInputstate extends State<SchedulesInput> {
         SizedBox(
           height: 10,
         ),
-        dateTimeInputForm(start: startDate!, end: endDate!, title: '일정', width: _width, context: context),
         Container(
           padding: EdgeInsets.all(10),
           child: Text("시간 설정", style: Theme.of(context).textTheme.headline2),
@@ -87,6 +80,7 @@ class _SchedulesInputstate extends State<SchedulesInput> {
             onChanged: (value) {
               setState(() {
                 isSetTime = value;
+                print(isSetTime);
               });
             },
             activeTrackColor: Colors.yellow,
@@ -101,17 +95,14 @@ class _SchedulesInputstate extends State<SchedulesInput> {
     )));
   }
 
-  Widget dateTimeInputForm({required DateTime start, required DateTime end, required String title, required double width, required BuildContext context}) {
+  Widget timeInputForm({required TimeOfDay start, required TimeOfDay end, required double width, required BuildContext context}) {
     return InkWell(
         onTap: () {
           void _calendarModalBottomSheet() async {
-            var result = await calendarTwoChoiceModalBottomSheet(start, end, context);
+            var result = await timeTwoChoiceModalBottomSheet(start, end, context);
             setState(() {
-              print(result[0].toString());
-              print(result[0].toIso8601String());
-              print(result[0].toLocal());
-              startDate = result[0];
-              endDate = result[1];
+              startTime = result[0];
+              endTime = result[1];
             });
           }
 
@@ -122,19 +113,15 @@ class _SchedulesInputstate extends State<SchedulesInput> {
           children: [
             Container(
               padding: EdgeInsets.all(10),
-              child: Text(title, style: Theme.of(context).textTheme.headline2),
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  monthDayWeekdayDateWidget(datetime: start, context: context),
+                  meridiemHourMinuteTimeWidget(timeOfDay: start, context: context),
                   Text(
                     " ~ ",
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
-                  monthDayWeekdayDateWidget(datetime: end, context: context),
+                  meridiemHourMinuteTimeWidget(timeOfDay: end, context: context),
                 ],
               ),
             ),
@@ -177,54 +164,14 @@ class _SchedulesInputstate extends State<SchedulesInput> {
                 ))));
   }
 
-  Widget timeInputForm({required TimeOfDay start, required TimeOfDay end, required double width, required BuildContext context}) {
-    return InkWell(
-        onTap: () {
-          void _calendarModalBottomSheet() async {
-            var result = await timeTwoChoiceModalBottomSheet(start, end, context);
-            setState(() {
-              startTime = result[0];
-              endTime = result[1];
-            });
-          }
-
-          _calendarModalBottomSheet();
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  meridiemHourMinuteTimeWidget(timeOfDay: start, context: context),
-                  Text(
-                    " ~ ",
-                    style: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  meridiemHourMinuteTimeWidget(timeOfDay: end, context: context),
-                ],
-              ),
-            ),
-          ],
-        ));
-  }
-
-  void _httpPostSchedules() async {
-    DateTime startDateTime;
-    DateTime endDateTime;
-    if (isSetTime == true) {
-      startDateTime = DateTime.utc(startDate!.year, startDate!.month, startDate!.day, startTime!.hour, startTime!.minute);
-      endDateTime = DateTime.utc(startDate!.year, endDate!.month, endDate!.day, endTime!.hour, endTime!.minute);
-    } else {
-      startDateTime = DateTime.utc(startDate!.year, startDate!.month, startDate!.day);
-      endDateTime = DateTime.utc(startDate!.year, endDate!.month, endDate!.day);
-    }
-
-    Schedules schedules =
-        Schedules(startDate: startDateTime, endDate: endDateTime, title: _titleController.text, content: _contentController.text, labels: labels);
-    var httpResult = await postSchedules(schedules);
+  void _httpPostQuickSchedules() async {
+    QuickSchedules quickSchedules = QuickSchedules(
+        startTime: isSetTime ? startTime : null,
+        endTime: isSetTime ? endTime : null,
+        title: _titleController.text,
+        content: _contentController.text,
+        labels: labels);
+    var httpResult = await postQuickSchedules(quickSchedules);
     Navigator.pop(context, httpResult);
   }
 }

@@ -19,10 +19,12 @@ import 'package:flutter_webservice/widgets/TextInputFormWidget.dart';
 import 'package:flutter_webservice/widgets/DateWidget.dart';
 import 'package:flutter_webservice/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_webservice/modalBottomSheet/TimeModalBottomSheet.dart';
+import 'package:flutter_webservice/widgets/TimeWidget.dart';
 
 class SchedulesDetail extends StatefulWidget {
   SchedulesDetail({Key? key, this.schedules}) : super(key: key);
-  final Schedule? schedules;
+  final Schedules? schedules;
 
   @override
   _SchedulesDetailstate createState() => _SchedulesDetailstate();
@@ -31,19 +33,33 @@ class SchedulesDetail extends StatefulWidget {
 class _SchedulesDetailstate extends State<SchedulesDetail> {
   DateTime? startDate;
   DateTime? endDate;
+  TimeOfDay? startTime;
+  TimeOfDay? endTime;
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
   Labels? labels;
 
   List<Labels> labelsList = [];
 
+  bool? isSetTime;
+
   SharedPreferences? prefs;
 
   @override
   void initState() {
     awaitHttpFunctionGetLabels();
-    startDate = widget.schedules!.startDate;
-    endDate = widget.schedules!.endDate;
+    startDate = DateTime(widget.schedules!.startDate!.year, widget.schedules!.startDate!.month, widget.schedules!.startDate!.day);
+    endDate = DateTime(widget.schedules!.endDate!.year, widget.schedules!.endDate!.month, widget.schedules!.endDate!.day);
+
+    startTime = TimeOfDay(hour: widget.schedules!.startDate!.hour, minute: widget.schedules!.startDate!.minute);
+    endTime = TimeOfDay(hour: widget.schedules!.endDate!.hour, minute: widget.schedules!.endDate!.minute);
+
+    if (startTime == endTime && startTime == TimeOfDay(hour: 0, minute: 0)) {
+      isSetTime = false;
+    } else {
+      isSetTime = true;
+    }
+
     _titleController.text = widget.schedules!.title!;
     _contentController.text = widget.schedules!.content!;
     labels = widget.schedules!.labels!;
@@ -87,6 +103,23 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
           height: 10,
         ),
         dateTimeInputForm(start: startDate!, end: endDate!, title: '일정', width: _width, context: context),
+        Container(
+          padding: EdgeInsets.all(10),
+          child: Text("시간 설정", style: Theme.of(context).textTheme.headline2),
+        ),
+        Center(
+          child: Switch(
+            value: isSetTime!,
+            onChanged: (value) {
+              setState(() {
+                isSetTime = value;
+              });
+            },
+            activeTrackColor: Colors.yellow,
+            activeColor: Colors.orangeAccent,
+          ),
+        ),
+        isSetTime! ? timeInputForm(start: startTime!, end: endTime!, width: _width, context: context) : SizedBox(),
         textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
         textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
         SizedBox(
@@ -173,12 +206,60 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
                 ))));
   }
 
+  Widget timeInputForm({required TimeOfDay start, required TimeOfDay end, required double width, required BuildContext context}) {
+    return InkWell(
+        onTap: () {
+          void _calendarModalBottomSheet() async {
+            var result = await timeTwoChoiceModalBottomSheet(start, end, context);
+            setState(() {
+              startTime = result[0];
+              endTime = result[1];
+            });
+          }
+
+          _calendarModalBottomSheet();
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  meridiemHourMinuteTimeWidget(timeOfDay: start, context: context),
+                  Text(
+                    " ~ ",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  meridiemHourMinuteTimeWidget(timeOfDay: end, context: context),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
   void _httpUpdateSchedules() async {
-    Schedule schedule = Schedule(
-        id: widget.schedules!.id, startDate: startDate, endDate: endDate, title: _titleController.text, content: _contentController.text, labels: labels);
+    DateTime startDateTime;
+    DateTime endDateTime;
+    if (isSetTime == true) {
+      startDateTime = DateTime.utc(startDate!.year, startDate!.month, startDate!.day, startTime!.hour, startTime!.minute);
+      endDateTime = DateTime.utc(startDate!.year, endDate!.month, endDate!.day, endTime!.hour, endTime!.minute);
+    } else {
+      startDateTime = DateTime.utc(startDate!.year, startDate!.month, startDate!.day);
+      endDateTime = DateTime.utc(startDate!.year, endDate!.month, endDate!.day);
+    }
+    Schedules schedules = Schedules(
+        id: widget.schedules!.id,
+        startDate: startDateTime,
+        endDate: endDateTime,
+        title: _titleController.text,
+        content: _contentController.text,
+        labels: labels);
 
     try {
-      var httpResult = await updateSchedules(schedule);
+      var httpResult = await updateSchedules(schedules);
       setState(() {
         Navigator.pop(context, ["update", httpResult]);
       });
@@ -188,13 +269,27 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
   }
 
   void _httpDeleteSchedules() async {
-    Schedule schedule = Schedule(
-        id: widget.schedules!.id, startDate: startDate, endDate: endDate, title: _titleController.text, content: _contentController.text, labels: labels);
+    DateTime startDateTime;
+    DateTime endDateTime;
+    if (isSetTime == true) {
+      startDateTime = DateTime.utc(startDate!.year, startDate!.month, startDate!.day, startTime!.hour, startTime!.minute);
+      endDateTime = DateTime.utc(startDate!.year, endDate!.month, endDate!.day, endTime!.hour, endTime!.minute);
+    } else {
+      startDateTime = DateTime.utc(startDate!.year, startDate!.month, startDate!.day);
+      endDateTime = DateTime.utc(startDate!.year, endDate!.month, endDate!.day);
+    }
+    Schedules schedules = Schedules(
+        id: widget.schedules!.id,
+        startDate: startDateTime,
+        endDate: endDateTime,
+        title: _titleController.text,
+        content: _contentController.text,
+        labels: labels);
 
     try {
-      var httpResult = await deleteSchedules(schedule);
+      var httpResult = await deleteSchedules(schedules);
       setState(() {
-        Navigator.pop(context, ["${httpResult}", schedule]);
+        Navigator.pop(context, ["${httpResult}", schedules]);
       });
     } on Exception catch (exception) {
       print(exception);

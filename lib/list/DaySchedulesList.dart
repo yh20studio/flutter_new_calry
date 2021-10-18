@@ -16,9 +16,9 @@ class DaySchedulesList extends StatefulWidget {
   DaySchedulesList({Key? key, this.date, this.dayScheduleList, this.onRefreshChanged, this.onScheduleChanged}) : super(key: key);
 
   final DateTime? date;
-  final List<Schedule>? dayScheduleList;
+  final List<Schedules>? dayScheduleList;
   final ValueChanged<String>? onRefreshChanged;
-  final ValueChanged<Schedule>? onScheduleChanged;
+  final ValueChanged<Schedules>? onScheduleChanged;
 
   @override
   _DaySchedulesListstate createState() => _DaySchedulesListstate();
@@ -29,7 +29,7 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
   void initState() {
     super.initState();
     widget.onRefreshChanged!('');
-    widget.onScheduleChanged!(Schedule());
+    widget.onScheduleChanged!(Schedules());
   }
 
   @override
@@ -50,37 +50,40 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
           ],
         )),
         SizedBox(
-          height: 10,
+          height: 30,
         ),
-        Container(
-            child: Wrap(
-                spacing: 8.0, // gap between adjacent chips
-                runSpacing: 4.0, // gap between lines
-                children: List.generate(widget.dayScheduleList!.length,
-                    (i) => listViewDaySchedules(index: i, schedule: widget.dayScheduleList![i], width: _width, context: context)).toList())),
+        widget.dayScheduleList!.length == 0
+            ? Center(
+                child: Text("추가한 일정이 없습니다."),
+              )
+            : Container(
+                child: Wrap(
+                    spacing: 8.0, // gap between adjacent chips
+                    runSpacing: 4.0, // gap between lines
+                    children: List.generate(widget.dayScheduleList!.length,
+                        (i) => listViewDaySchedules(index: i, schedules: widget.dayScheduleList![i], width: _width, context: context)).toList())),
         SizedBox(
-          height: 50,
+          height: 30,
         ),
-        TextButton(onPressed: () {}, child: Text(("나만의 일정 빠르게 추가"))),
       ],
     )));
   }
 
-  Widget listViewDaySchedules({required int index, required Schedule schedule, required double width, required BuildContext context}) {
+  Widget listViewDaySchedules({required int index, required Schedules schedules, required double width, required BuildContext context}) {
     return InkWell(
-        onTap: () => _awaitReturnValueFromScheduleDetail(schedule, index),
+        onTap: () => _awaitReturnValueFromScheduleDetail(schedules, index),
         child: Container(
             width: width,
             padding: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(
                 Icons.circle,
-                color: MyFunction.parseColor(schedule.labels!.label_colors!.code!),
+                color: MyFunction.parseColor(schedules.labels!.label_colors!.code!),
               ),
               SizedBox(
                 width: 10,
               ),
-              Text(schedule.title!),
+              Text(schedules.title!),
             ])));
   }
 
@@ -95,9 +98,9 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
     }
   }
 
-  void _awaitReturnValueFromScheduleDetail(Schedule schedules, int index) async {
+  void _awaitReturnValueFromScheduleDetail(Schedules schedules, int index) async {
     var awaitResult = await schedulesDetailModalBottomSheet(schedules, context);
-    print(awaitResult);
+
     if (awaitResult != null) {
       if (awaitResult[0] == "update") {
         setState(() {
