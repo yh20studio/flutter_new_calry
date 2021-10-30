@@ -155,6 +155,7 @@ class _IndexState extends State<Index> {
                     height: 80,
                     child: Center(
                         child: BottomNavigationBar(
+                            elevation: 0.0,
                             type: BottomNavigationBarType.fixed,
                             key: key,
                             onTap: _onTap,
