@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/class.dart';
-import 'package:flutter_webservice/listItems.dart';
-import 'package:flutter_webservice/widgets/TimeWidget.dart';
+import 'package:flutter_new_calry/widgets/TimeWidget.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class TimeTwoChoice extends StatefulWidget {

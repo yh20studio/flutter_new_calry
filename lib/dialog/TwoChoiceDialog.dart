@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/class.dart';
-import 'package:flutter_webservice/listItems.dart';
 
 Future<String> twoChoiceDialog(BuildContext context, String title) async {
   String result = await showDialog(
@@ -33,7 +31,6 @@ Future<String> twoChoiceDialog(BuildContext context, String title) async {
                       children: [
                         Expanded(
                             child: Container(
-                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(border: Border(right: BorderSide(width: 0.2, color: Colors.black))),
                           child: TextButton(
                             child: Text(
@@ -46,7 +43,6 @@ Future<String> twoChoiceDialog(BuildContext context, String title) async {
                         )),
                         Expanded(
                             child: Container(
-                          padding: EdgeInsets.all(10),
                           decoration: BoxDecoration(border: Border(left: BorderSide(width: 0.2, color: Colors.black))),
                           child: TextButton(
                             child: Text(

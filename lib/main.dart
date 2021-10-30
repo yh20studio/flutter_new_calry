@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/auth/Login.dart';
-import 'package:flutter_webservice/class.dart';
-import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/detail/ArchivesDetail.dart';
-import 'package:flutter_webservice/detail/RoutinesMemosDetail.dart';
-import 'package:flutter_webservice/input/RoutinesGroupsInput.dart';
-import 'package:flutter_webservice/list/ArchivesList.dart';
-import 'package:flutter_webservice/list/CustomRoutinesList.dart';
-import 'package:flutter_webservice/input/ArchivesInput.dart';
-import 'package:flutter_webservice/input/CustomRoutinesInput.dart';
-import 'package:flutter_webservice/home/RoutineHome.dart';
-import 'package:flutter_webservice/home/CalendarNewHome.dart';
-import 'package:flutter_webservice/home/MyPageHome.dart';
-import 'functions.dart';
-import 'package:flutter_webservice/auth/SignUp.dart';
-import 'package:flutter_webservice/auth/MemberInfo.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import 'package:flutter_new_calry/home/RoutineHome.dart';
+import 'package:flutter_new_calry/home/CalendarNewHome.dart';
+import 'package:flutter_new_calry/home/MyPageHome.dart';
+import 'controller/member/MemberController.dart';
+import 'auth/Login.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,17 +19,10 @@ class MyApp extends StatelessWidget {
           child: child!,
         );
       },
-      title: 'Flutter Webservice',
+      title: 'Calry',
       initialRoute: '/',
       routes: {
         '/index': (context) => Index(),
-        '/archives/input': (context) => ArchivesInput(),
-        '/archives/list': (context) => ArchivesList(),
-        '/archives/detail': (context) => ArchivesDetail(),
-        '/customRoutines/input': (context) => CustomRoutinesInput(),
-        '/customRoutines/list': (context) => CustomRoutinesList(),
-        '/routines/memo/detail': (context) => RoutinesMemosDetail(),
-        '/routinesGroups/input': (context) => RoutinesGroupsInput(),
       },
       theme: ThemeData(
         brightness: Brightness.light,
@@ -143,7 +123,14 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
   int _currentIndex = 0;
+  bool? isLogin;
   final key = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _awaitReturnAuth();
+  }
 
   void _onTap(int index) {
     setState(() {
@@ -154,31 +141,75 @@ class _IndexState extends State<Index> {
   @override
   Widget build(BuildContext context) {
     var _height = MediaQuery.of(context).size.height;
-    var _width = MediaQuery.of(context).size.width;
     double bodyHeight = _height - MediaQuery.of(context).padding.top - 80;
-    return Scaffold(
-      backgroundColor: MyFunction.parseColor("#EFFBFB"),
-      bottomNavigationBar: SizedBox(
-          height: 80,
-          child: Center(
-              child: BottomNavigationBar(
-                  type: BottomNavigationBarType.fixed,
-                  key: key,
-                  onTap: _onTap,
-                  currentIndex: _currentIndex,
-                  selectedIconTheme: IconThemeData(color: Colors.black),
-                  unselectedIconTheme: IconThemeData(color: Colors.black),
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
-                  selectedFontSize: 0,
-                  unselectedFontSize: 0,
-                  iconSize: 25,
-                  items: [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-                BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), label: ""),
-                BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
-              ]))),
-      body: SafeArea(child: IndexedStack(index: _currentIndex, children: <Widget>[RoutineHome(), CalendarNewHome(bodyHeight: bodyHeight), MyPageHome()])),
-    );
+
+    return isLogin == null
+        ? Scaffold(
+            backgroundColor: Colors.white,
+            body: SafeArea(child: Center(child: Text("Loading..."))),
+          )
+        : isLogin == true
+            ? Scaffold(
+                backgroundColor: Colors.white,
+                bottomNavigationBar: SizedBox(
+                    height: 80,
+                    child: Center(
+                        child: BottomNavigationBar(
+                            type: BottomNavigationBarType.fixed,
+                            key: key,
+                            onTap: _onTap,
+                            currentIndex: _currentIndex,
+                            selectedIconTheme: IconThemeData(color: Colors.black),
+                            unselectedIconTheme: IconThemeData(color: Colors.black),
+                            showSelectedLabels: false,
+                            showUnselectedLabels: false,
+                            selectedFontSize: 0,
+                            unselectedFontSize: 0,
+                            iconSize: 25,
+                            items: [
+                          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+                          BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), label: ""),
+                          BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
+                        ]))),
+                body: SafeArea(
+                    child: IndexedStack(index: _currentIndex, children: <Widget>[
+                  RoutineHome(),
+                  CalendarNewHome(bodyHeight: bodyHeight),
+                  MyPageHome(
+                    onLoginChanged: (onLoginChanged) {
+                      _awaitReturnAuth();
+                    },
+                  )
+                ])),
+              )
+            : Scaffold(
+                backgroundColor: Colors.white,
+                body: SafeArea(child: Login(onLoginChanged: (onLoginChanged) {
+                  _awaitReturnAuth();
+                })),
+              );
+  }
+
+  _awaitReturnAuth() async {
+    try {
+      await getMyInfo();
+      setState(() {
+        isLogin = true;
+        _onTap(0);
+      });
+    } catch (e) {
+      var result = await authenticationUser();
+      if (result == 'success') {
+        await getMyInfo();
+        setState(() {
+          isLogin = true;
+          _onTap(0);
+        });
+      } else if (result == 'fail') {
+        setState(() {
+          isLogin = false;
+        });
+      }
+    }
   }
 }

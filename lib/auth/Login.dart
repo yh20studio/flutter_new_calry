@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/auth/SignUp.dart';
-import 'package:flutter_webservice/class.dart';
-import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/auth/SignUp.dart';
-import 'package:flutter_webservice/dialog/AlertDialog.dart';
+import 'package:flutter_new_calry/auth/SignUp.dart';
+import 'package:flutter_new_calry/domain/labels/Labels.dart';
+import 'package:flutter_new_calry/dialog/AlertDialog.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_new_calry/controller/member/MemberController.dart';
+import 'package:flutter_new_calry/controller/labels/LabelsController.dart';
+import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 
 class Login extends StatefulWidget {
-  Login({Key? key}) : super(key: key);
+  Login({Key? key, this.onLoginChanged}) : super(key: key);
+
+  final ValueChanged<bool>? onLoginChanged;
 
   @override
   _Loginstate createState() => _Loginstate();
@@ -25,39 +28,82 @@ class _Loginstate extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    var _height = MediaQuery.of(context).size.height;
     var _width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
-        appBar: AppBar(
-          title: Text("Login"),
-        ),
-        body: Center(
-            child: SingleChildScrollView(
+        appBar: PreferredSize(
+            preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.3),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Calry",
+                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 32),
+                  ),
+                  SizedBox(
+                    height: 50,
+                  ),
+                  Text(
+                    "해당 서비스는 로그인이 필요합니다.",
+                    style: TextStyle(color: Colors.black),
+                  )
+                ],
+              ),
+            )),
+        body: SingleChildScrollView(
+            child: Container(
+                padding: EdgeInsets.all(20),
                 child: Column(
-          children: [
-            authTestInputForm(controller: _emailController, title: 'Email', width: _width, context: context),
-            authTestInputForm(controller: _passwordController, title: 'Password', width: _width, context: context),
-            SizedBox(
-              height: 10,
-            ),
-            TextButton(child: Text("Login"), onPressed: _httpPostLogin),
-            SizedBox(
-              height: 10,
-            ),
-            TextButton(child: Text("Sign Up"), onPressed: _awaitFromSignUp),
-          ],
-        ))));
+                  children: [
+                    borderPaddingTitleContainerWidget(
+                        title: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text("이메일", style: Theme.of(context).textTheme.headline2),
+                        ),
+                        widget: authTestInputForm(controller: _emailController, width: _width, context: context),
+                        context: context),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    borderPaddingTitleContainerWidget(
+                        title: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text("비밀번호", style: Theme.of(context).textTheme.headline2),
+                        ),
+                        widget: authTestInputForm(controller: _passwordController, width: _width, context: context),
+                        context: context),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        TextButton(
+                            child: Text(
+                              "Sign Up",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: _awaitFromSignUp),
+                        TextButton(
+                            child: Text(
+                              "Login",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                            onPressed: _httpPostLogin),
+                      ],
+                    )
+                  ],
+                ))));
   }
 
-  Widget authTestInputForm({required TextEditingController controller, required String title, required double width, required BuildContext context}) {
+  Widget authTestInputForm({required TextEditingController controller, required double width, required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          child: Text(title, style: Theme.of(context).textTheme.headline2),
-        ),
         Container(
           width: width * 0.8,
           alignment: Alignment.center,
@@ -67,7 +113,10 @@ class _Loginstate extends State<Login> {
             obscureText: controller == _passwordController ? true : false,
             keyboardType: TextInputType.emailAddress,
             controller: controller,
-            decoration: InputDecoration(disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none), contentPadding: EdgeInsets.only(top: 0.0)),
+            decoration: InputDecoration(
+                border: UnderlineInputBorder(borderSide: BorderSide.none),
+                disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+                contentPadding: EdgeInsets.only(top: 0.0)),
           ),
         ),
       ],
@@ -95,7 +144,7 @@ class _Loginstate extends State<Login> {
         // Labels 저장
         final String encodedData = Labels.encode(labelResult);
         await prefs.setString('labels', encodedData);
-        Navigator.pop(context, 'success');
+        widget.onLoginChanged!(true);
       } on Exception catch (exception) {
         print(exception);
         if (exception.toString() == "Exception: Email is not registered") {

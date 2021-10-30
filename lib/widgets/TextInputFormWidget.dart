@@ -33,9 +33,7 @@ Widget textInputSimpleForm({required TextEditingController controller, required 
         decoration: BoxDecoration(color: Colors.transparent),
         child: TextFormField(
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 21,
-          ),
+          style: TextStyle(fontSize: 21, color: Colors.black),
           keyboardType: TextInputType.multiline,
           maxLines: null,
           controller: controller,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/class.dart';
 
 final List<String> weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 

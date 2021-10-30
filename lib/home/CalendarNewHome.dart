@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/functions.dart';
-import 'dart:convert';
+import 'package:flutter_new_calry/functions.dart';
 import 'dart:ui';
-import 'package:flutter_webservice/main.dart';
-import 'package:flutter_webservice/class.dart';
-import 'package:flutter_webservice/listItems.dart';
-import 'package:flutter_webservice/httpFunction.dart';
-import 'package:flutter_webservice/widgets/TextInputFormWidget.dart';
-import 'package:flutter_webservice/widgets/WeekdayWidget.dart';
-import 'package:flutter_webservice/widgets/DateWidget.dart';
-import 'package:flutter_webservice/modalBottomSheet/DaySchedulesListModalBottomSheet.dart';
-import 'package:flutter_webservice/modalBottomSheet/CalendarModalBottomSheet.dart';
-import 'package:flutter_webservice/calendar/CalendarChoice.dart';
+import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
+import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
+import 'package:flutter_new_calry/widgets/WeekdayWidget.dart';
+import 'package:flutter_new_calry/widgets/DateWidget.dart';
+import 'package:flutter_new_calry/modalBottomSheet/schedules/DaySchedulesListModalBottomSheet.dart';
+import 'package:flutter_new_calry/modalBottomSheet/calendar/CalendarModalBottomSheet.dart';
+import 'package:flutter_new_calry/calendar/Calendar.dart';
+import 'package:flutter_new_calry/controller/schedules/SchedulesController.dart';
+import 'package:flutter_new_calry/controller/quickSchedules/QuickSchedulesController.dart';
+import 'package:flutter_new_calry/auth/Login.dart';
 
 class CalendarNewHome extends StatefulWidget {
   CalendarNewHome({Key? key, this.bodyHeight}) : super(key: key);
@@ -49,7 +48,6 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
 
   @override
   Widget build(BuildContext context) {
-    var _height = MediaQuery.of(context).size.height;
     var _width = MediaQuery.of(context).size.width;
     AppBar appBar = AppBar(
         title: InkWell(
@@ -65,7 +63,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
               ),
             )),
         elevation: 0.0,
-        backgroundColor: MyFunction.parseColor("#EFFBFB"));
+        backgroundColor: Colors.white);
     return Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
         appBar: PreferredSize(
@@ -77,20 +75,19 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                 child: Column(
           children: [
             Container(
-              color: MyFunction.parseColor("#EFFBFB"),
-              height: 20,
+              height: 35,
               child: weekdayWidget(context: context),
             ),
             Expanded(
                 child: FutureBuilder<WeekSchedulesCalendar>(
-                    future: futureWeekSchedulesCalendar,
+                    future: getWholeSchedules(),
                     builder: (BuildContext context, AsyncSnapshot snapshotWeekSchedulesCalendar) {
                       if (!snapshotWeekSchedulesCalendar.hasData) {
                         print('no data');
                         return Container();
                       } else if (snapshotWeekSchedulesCalendar.hasError) {
-                        print('Error');
-                        return Text('Error');
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+                        return Text("Error");
                       } else {
                         weekScheduleCalendar = snapshotWeekSchedulesCalendar.data!.weekSchedules;
                         schedulesMap = snapshotWeekSchedulesCalendar.data!.schedules;
@@ -144,7 +141,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                                       return Container(
                                           child: ConstrainedBox(
                                               constraints: BoxConstraints(
-                                                minHeight: widget.bodyHeight! - 50 - 20,
+                                                minHeight: widget.bodyHeight! - 50 - 35,
                                               ),
                                               child: ListView.builder(
                                                   physics: new ClampingScrollPhysics(),
@@ -155,7 +152,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                                                         child: ConstrainedBox(
                                                             key: keyList[i],
                                                             constraints: BoxConstraints(
-                                                                minHeight: (widget.bodyHeight! - 50 - 20) / (weekDateCalendar.length),
+                                                                minHeight: (widget.bodyHeight! - 50 - 35) / (weekDateCalendar.length),
                                                                 maxHeight: widget.bodyHeight!),
                                                             child: Stack(
                                                               children: [
@@ -247,36 +244,42 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
 
     if (awaitResult != null && awaitResult[0] != '') {
       String action = awaitResult[0];
-      Schedules schedules = awaitResult[1];
+      List<Schedules> schedulesList = awaitResult[1];
+      bool first = true;
+      Map<DateTime, List<dynamic>>? weekSchedules;
+      schedulesList.forEach((schedules) async {
+        DateTime start = schedules.startDate!.subtract(Duration(days: schedules.startDate!.weekday == 7 ? 0 : schedules.startDate!.weekday));
+        DateTime end = schedules.endDate!.add(Duration(days: schedules.endDate!.weekday == 7 ? 6 : 6 - schedules.endDate!.weekday));
+        String updateStart = start.toIso8601String();
+        String updateEnd = end.toIso8601String();
+        updateStart = updateStart.substring(0, updateStart.length - 1);
+        updateEnd = updateEnd.substring(0, updateEnd.length - 1);
+        start = DateTime.parse(updateStart);
+        end = DateTime.parse(updateEnd);
+        if (first) {
+          weekSchedules = (await getPartSchedules(updateStart, updateEnd)).weekSchedules;
+        }
 
-      DateTime start = schedules.startDate!.subtract(Duration(days: schedules.startDate!.weekday == 7 ? 0 : schedules.startDate!.weekday));
-      DateTime end = schedules.endDate!.add(Duration(days: schedules.endDate!.weekday == 7 ? 6 : 6 - schedules.endDate!.weekday));
-      String updateStart = start.toIso8601String();
-      String updateEnd = end.toIso8601String();
-      updateStart = updateStart.substring(0, updateStart.length - 1);
-      updateEnd = updateEnd.substring(0, updateEnd.length - 1);
-      start = DateTime.parse(updateStart);
-      end = DateTime.parse(updateEnd);
-      Map<DateTime, List<dynamic>>? weekSchedules = (await getPartSchedules(updateStart, updateEnd)).weekSchedules;
-      if (action == 'input' || action == 'update') {
-        setState(() {
-          schedulesMap[schedules.id!] = schedules;
-          weekSchedules!.forEach((key, value) {
-            weekScheduleCalendar[key] = value;
+        if (action == 'input' || action == 'update') {
+          setState(() {
+            schedulesMap[schedules.id!] = schedules;
+            weekSchedules!.forEach((key, value) {
+              weekScheduleCalendar[key] = value;
+            });
           });
-        });
-      } else if (action == 'delete') {
-        setState(() {
-          schedulesMap.remove(schedules.id!);
-          while (start.isBefore(end)) {
-            weekScheduleCalendar.remove(start);
-            start = start.add(Duration(days: 7));
-          }
-          weekSchedules!.forEach((key, value) {
-            weekScheduleCalendar[key] = value;
+        } else if (action == 'delete') {
+          setState(() {
+            schedulesMap.remove(schedules.id!);
+            while (start.isBefore(end)) {
+              weekScheduleCalendar.remove(start);
+              start = start.add(Duration(days: 7));
+            }
+            weekSchedules!.forEach((key, value) {
+              weekScheduleCalendar[key] = value;
+            });
           });
-        });
-      }
+        }
+      });
     }
   }
 
@@ -381,5 +384,13 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                               },
                               child: Column(children: [])))).toList()))
         ]));
+  }
+
+  _httpGetWholeSchedules() {
+    try {
+      return getWholeSchedules();
+    } catch (e) {
+      return Future.error(e.toString());
+    }
   }
 }

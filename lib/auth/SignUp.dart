@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/class.dart';
-import 'package:flutter_webservice/httpFunction.dart';
-import 'dart:convert';
+import 'package:flutter_new_calry/dialog/AlertDialog.dart';
+import 'package:flutter_new_calry/controller/member/MemberController.dart';
+import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key? key}) : super(key: key);
@@ -23,34 +23,77 @@ class _SignUpstate extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    var _height = MediaQuery.of(context).size.height;
     var _width = MediaQuery.of(context).size.width;
     return Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
         appBar: AppBar(
-          title: Text("Sign Up"),
+          title: Text(
+            "Calry 가입하기",
+            style: TextStyle(color: Colors.black),
+          ),
+          iconTheme: IconThemeData(color: Colors.black),
+          elevation: 0.0,
+          backgroundColor: Colors.white,
         ),
-        body: Center(
-            child: SingleChildScrollView(
+        body: SingleChildScrollView(
+            child: Container(
+                padding: EdgeInsets.all(20),
                 child: Column(
-          children: [
-            authTestInputForm(controller: _emailController, title: 'Email', width: _width, context: context),
-            authTestInputForm(controller: _passwordController, title: 'Password', width: _width, context: context),
-            authTestInputForm(controller: _passwordConfirmController, title: 'Password Confirm', width: _width, context: context),
-            authTestInputForm(controller: _nameController, title: 'Name', width: _width, context: context),
-            TextButton(child: Text("Sign Up"), onPressed: _httpPostSignUp),
-          ],
-        ))));
+                  children: [
+                    borderPaddingTitleContainerWidget(
+                        title: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text("이메일", style: Theme.of(context).textTheme.headline2),
+                        ),
+                        widget: authTestInputForm(controller: _emailController, width: _width, context: context),
+                        context: context),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    borderPaddingTitleContainerWidget(
+                        title: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text("비밀번호", style: Theme.of(context).textTheme.headline2),
+                        ),
+                        widget: authTestInputForm(controller: _passwordController, width: _width, context: context),
+                        context: context),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    borderPaddingTitleContainerWidget(
+                        title: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text("비밀번호 확인", style: Theme.of(context).textTheme.headline2),
+                        ),
+                        widget: authTestInputForm(controller: _passwordConfirmController, width: _width, context: context),
+                        context: context),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    borderPaddingTitleContainerWidget(
+                        title: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text("이름", style: Theme.of(context).textTheme.headline2),
+                        ),
+                        widget: authTestInputForm(controller: _nameController, width: _width, context: context),
+                        context: context),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    TextButton(
+                        child: Text(
+                          "가입하기",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        onPressed: _httpPostSignUp),
+                  ],
+                ))));
   }
 
-  Widget authTestInputForm({required TextEditingController controller, required String title, required double width, required BuildContext context}) {
+  Widget authTestInputForm({required TextEditingController controller, required double width, required BuildContext context}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          child: Text(title, style: Theme.of(context).textTheme.headline2),
-        ),
         Container(
           width: width * 0.8,
           alignment: Alignment.center,
@@ -58,9 +101,16 @@ class _SignUpstate extends State<SignUp> {
           child: TextFormField(
             style: TextStyle(fontSize: 30, color: Colors.black),
             keyboardType: TextInputType.multiline,
-            maxLines: null,
+            obscureText: controller == _passwordController
+                ? true
+                : controller == _passwordConfirmController
+                    ? true
+                    : false,
             controller: controller,
-            decoration: InputDecoration(disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none), contentPadding: EdgeInsets.only(top: 0.0)),
+            decoration: InputDecoration(
+                border: UnderlineInputBorder(borderSide: BorderSide.none),
+                disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none),
+                contentPadding: EdgeInsets.only(top: 0.0)),
           ),
         ),
       ],
@@ -68,8 +118,21 @@ class _SignUpstate extends State<SignUp> {
   }
 
   void _httpPostSignUp() async {
-    var httpResult = await postSignUp(_emailController.text, _passwordController.text, _nameController.text);
+    try {
+      await postSignUp(_emailController.text, _passwordController.text, _nameController.text);
+      Navigator.pop(context, 'success');
+    } catch (exception) {
+      _awaitDialog(exception.toString());
+    }
+  }
 
-    Navigator.pop(context, 'success');
+  void _awaitDialog(String message) async {
+    var dialogResult = await alertDialog(context, message);
+
+    if (dialogResult == 'ok') {
+      setState(() {
+        _passwordController.clear();
+      });
+    }
   }
 }

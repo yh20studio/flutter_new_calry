@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_webservice/class.dart';
-import 'package:flutter_webservice/listItems.dart';
-import 'package:flutter_webservice/httpFunction.dart';
+import 'package:flutter_new_calry/listItems.dart';
 
 Widget weekdayWidget({required BuildContext context}) {
   return Row(
