@@ -47,3 +47,5 @@ app.*.map.json
 
 lib/setting.dart
 .fvm/
+/ios/Podfile.lock
+
