@@ -35,7 +35,7 @@ Future<Map<String, TodayRoutinesGroups>> getAllTodayRoutinesGroups() async {
       throw Exception("error: status code ${response.statusCode}");
     }
   } catch (e) {
-    return Future.error(e.toString());
+    return Future.error("Need login");
   }
 }
 
@@ -43,7 +43,7 @@ Future<TodayRoutinesGroups> getTodayRoutinesGroups(DateTime date) async {
   try {
     String jwt = await getJWT();
     http.Response response = await http.get(
-      Uri.parse(serverIP + 'todayRoutinesGroups/${date.year}-${date.month}-${date.day}'),
+      Uri.parse(serverIP + 'todayRoutinesGroups/${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}'),
       headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
     );
     if (response.statusCode == 200) {
@@ -52,6 +52,6 @@ Future<TodayRoutinesGroups> getTodayRoutinesGroups(DateTime date) async {
       throw Exception("error: status code ${response.statusCode}");
     }
   } catch (e) {
-    return Future.error(e.toString());
+    return Future.error("Need Login");
   }
 }

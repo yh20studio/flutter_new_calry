@@ -7,12 +7,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_new_calry/controller/member/MemberController.dart';
 import 'package:flutter_new_calry/controller/labels/LabelsController.dart';
 import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
+import 'package:flutter_new_calry/main.dart';
 
 class Login extends StatefulWidget {
-  Login({Key? key, this.onLoginChanged}) : super(key: key);
-
-  final ValueChanged<bool>? onLoginChanged;
-
+  Login({Key? key}) : super(key: key);
   @override
   _Loginstate createState() => _Loginstate();
 }
@@ -134,17 +132,15 @@ class _Loginstate extends State<Login> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         // token 저장
-        prefs.setString('grantType', jsonDecode(httpResult)['grantType']);
         prefs.setString('accessToken', jsonDecode(httpResult)['accessToken']);
         prefs.setInt('accessTokenExpiresIn', jsonDecode(httpResult)['accessTokenExpiresIn']);
-        prefs.setString('refreshToken', jsonDecode(httpResult)['refreshToken']);
-        prefs.setInt('refreshTokenExpiresIn', jsonDecode(httpResult)['refreshTokenExpiresIn']);
 
         var labelResult = await getLabels();
         // Labels 저장
         final String encodedData = Labels.encode(labelResult);
         await prefs.setString('labels', encodedData);
-        widget.onLoginChanged!(true);
+        print("Login Success");
+        navigatorKey.currentState!.pushNamed('/');
       } on Exception catch (exception) {
         print(exception);
         if (exception.toString() == "Exception: Email is not registered") {

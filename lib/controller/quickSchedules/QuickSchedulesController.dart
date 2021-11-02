@@ -30,7 +30,7 @@ Future<List<QuickSchedules>> getQuickSchedules() async {
       throw Exception("error: status code ${response.statusCode}");
     }
   } catch (e) {
-    return Future.error(e.toString());
+    return Future.error("Need Login");
   }
 }
 
@@ -99,12 +99,11 @@ Future<QuickSchedules> updateQuickSchedules(QuickSchedules quickSchedules) async
     String startTime_minute = quickSchedules.startTime!.minute == 0 ? "00" : "${quickSchedules.startTime!.minute}";
     String endTime_minute = quickSchedules.endTime!.minute == 0 ? "00" : "${quickSchedules.endTime!.minute}";
 
-    response = await http.post(
-      Uri.parse(serverIP + 'quickSchedules'),
+    response = await http.put(
+      Uri.parse(serverIP + 'quickSchedules/${quickSchedules.id}'),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $jwt",
         HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
-        HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
       },
       body: jsonEncode(
         {

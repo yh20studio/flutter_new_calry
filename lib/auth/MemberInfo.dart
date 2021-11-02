@@ -4,6 +4,7 @@ import 'package:flutter_new_calry/dialog/TwoChoiceDialog.dart';
 import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 import 'package:flutter_new_calry/controller/member/MemberController.dart';
 import 'package:flutter_new_calry/domain/member/Member.dart';
+import 'package:flutter_new_calry/main.dart';
 
 class MemberInfo extends StatefulWidget {
   MemberInfo({Key? key, this.member}) : super(key: key);
@@ -79,16 +80,18 @@ class _MemberInfostate extends State<MemberInfo> {
       if (result == true) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
-        var httpResult = await postLogout(
-            prefs.getString('grantType'), prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'), prefs.getString('refreshToken'));
-        if (httpResult.statusCode == 200) {
-          prefs.remove('grantType');
+        try {
+          var httpResult = await postLogout(prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
           prefs.remove('accessToken');
           prefs.remove('accessTokenExpiresIn');
-          prefs.remove('refreshToken');
+          print("reLogin!");
+          navigatorKey.currentState!.pushNamed('login');
+        } catch (e) {
+          prefs.remove('accessToken');
+          prefs.remove('accessTokenExpiresIn');
+          print("reLogin!");
+          navigatorKey.currentState!.pushNamed('login');
         }
-
-        Navigator.pop(context, 'logout');
       }
     }
   }

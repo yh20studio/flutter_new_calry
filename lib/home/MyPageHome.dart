@@ -14,9 +14,9 @@ import 'package:flutter_new_calry/domain/routines/Routines.dart';
 import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
 
 class MyPageHome extends StatefulWidget {
-  MyPageHome({Key? key, this.onLoginChanged}) : super(key: key);
-
-  final ValueChanged<bool>? onLoginChanged;
+  MyPageHome({
+    Key? key,
+  }) : super(key: key);
   @override
   _MyPageHomestate createState() => _MyPageHomestate();
 }
@@ -110,23 +110,13 @@ class _MyPageHomestate extends State<MyPageHome> {
     try {
       var httpGetMyInfo = await getMyInfo();
       print(httpGetMyInfo);
-      var awaitResult = await Navigator.push(context, MaterialPageRoute(builder: (context) => MemberInfo(member: httpGetMyInfo)));
-      if (awaitResult == 'logout') {
-        setState(() {
-          widget.onLoginChanged!(false);
-        });
-      }
+      await Navigator.push(context, MaterialPageRoute(builder: (context) => MemberInfo(member: httpGetMyInfo)));
     } catch (e) {
       print(e);
       var result = await authenticationUser();
       if (result == 'success') {
         var httpGetMyInfo = await getMyInfo();
-        var awaitResult = await Navigator.push(context, MaterialPageRoute(builder: (context) => MemberInfo(member: httpGetMyInfo)));
-        if (awaitResult == 'logout') {
-          setState(() {
-            widget.onLoginChanged!(false);
-          });
-        }
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => MemberInfo(member: httpGetMyInfo)));
       } else if (result == 'fail') {
         var awaitResult = await Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
         if (awaitResult == 'success') {}

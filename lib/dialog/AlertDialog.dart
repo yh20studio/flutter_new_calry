@@ -7,6 +7,7 @@ Future<String> alertDialog(BuildContext context, String title) async {
     context: context, // user must tap button!
     builder: (BuildContext context) {
       return Dialog(
+          elevation: 0.0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),

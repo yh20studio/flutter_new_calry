@@ -40,7 +40,7 @@ Future<WeekSchedulesCalendar> getWholeSchedules() async {
       throw Exception("error: status code ${response.statusCode}");
     }
   } catch (e) {
-    return Future.error(e.toString());
+    return Future.error("Need login");
   }
 }
 
@@ -72,7 +72,7 @@ Future<List<Schedules>> getDaySchedules() async {
       throw Exception("error: status code ${response.statusCode}");
     }
   } catch (e) {
-    return Future.error(e.toString());
+    return Future.error("Need Login");
   }
 }
 

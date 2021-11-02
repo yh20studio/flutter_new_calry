@@ -80,13 +80,12 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
             ),
             Expanded(
                 child: FutureBuilder<WeekSchedulesCalendar>(
-                    future: getWholeSchedules(),
+                    future: futureWeekSchedulesCalendar,
                     builder: (BuildContext context, AsyncSnapshot snapshotWeekSchedulesCalendar) {
                       if (!snapshotWeekSchedulesCalendar.hasData) {
                         print('no data');
                         return Container();
                       } else if (snapshotWeekSchedulesCalendar.hasError) {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
                         return Text("Error");
                       } else {
                         weekScheduleCalendar = snapshotWeekSchedulesCalendar.data!.weekSchedules;
@@ -384,13 +383,5 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                               },
                               child: Column(children: [])))).toList()))
         ]));
-  }
-
-  _httpGetWholeSchedules() {
-    try {
-      return getWholeSchedules();
-    } catch (e) {
-      return Future.error(e.toString());
-    }
   }
 }

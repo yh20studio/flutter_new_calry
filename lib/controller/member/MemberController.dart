@@ -6,6 +6,8 @@ import 'package:flutter_new_calry/domain/member/Member.dart';
 import 'package:flutter_new_calry/setting.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
+import 'package:flutter_new_calry/main.dart';
+import 'package:flutter_new_calry/dialog/AlertDialog.dart';
 
 Member parseMember(String responseBody) {
   final parsed = jsonDecode(responseBody);
@@ -14,31 +16,46 @@ Member parseMember(String responseBody) {
 
 Future getJWT() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  print(prefs.getString('accessToken'));
+  print(prefs.getInt('accessTokenExpiresIn'));
   if (prefs.getString('accessToken') == null) {
-    throw Exception("Login");
+    print("Need Login");
+    navigatorKey.currentState!.pushNamed('login');
   } else {
-    return prefs.getString('accessToken');
+    DateTime accessTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(prefs.getInt('accessTokenExpiresIn')!);
+    DateTime now = DateTime.now();
+    if (accessTokenExpiresIn.isBefore(now)) {
+      print("Expires");
+      try {
+        var httpPostReissue = await postReissueAccess(prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
+        prefs.setString('accessToken', jsonDecode(httpPostReissue)['accessToken']);
+        prefs.setInt('accessTokenExpiresIn', jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
+        return prefs.getString('accessToken')!;
+      } catch (e) {
+        print("reLogin!");
+        var dialogResult = await alertDialog(navigatorKey.currentContext!, "로그인이 유효하지 않습니다. 다시 로그인 해주세요.");
+        if (dialogResult == 'ok') {
+          navigatorKey.currentState!.pushNamed('login');
+        }
+      }
+    } else {
+      return prefs.getString('accessToken')!;
+    }
   }
 }
 
 Future<String> authenticationUser() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   DateTime now = DateTime.now();
-  if (prefs.getInt('refreshTokenExpiresIn') == null) {
+  if (prefs.getInt('accessTokenExpiresIn') == null) {
     return 'fail';
   } else {
-    DateTime refreshTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(prefs.getInt('refreshTokenExpiresIn')!);
-    if (refreshTokenExpiresIn.isAfter(now)) {
+    DateTime accessTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(prefs.getInt('accessTokenExpiresIn')!);
+    if (accessTokenExpiresIn.isBefore(now)) {
       try {
-        var httpPostReissue = await postReissue(
-            prefs.getString('grantType'), prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'), prefs.getString('refreshToken'));
-
-        prefs.setString('grantType', jsonDecode(httpPostReissue)['grantType']);
+        var httpPostReissue = await postReissueAccess(prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
         prefs.setString('accessToken', jsonDecode(httpPostReissue)['accessToken']);
         prefs.setInt('accessTokenExpiresIn', jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
-        prefs.setString('refreshToken', jsonDecode(httpPostReissue)['refreshToken']);
-        prefs.setInt('refreshTokenExpiresIn', jsonDecode(httpPostReissue)['refreshTokenExpiresIn']);
-
         return 'success';
       } catch (e) {
         print(e);
@@ -53,7 +70,7 @@ Future<String> authenticationUser() async {
 Future<Member> getMyInfo() async {
   String jwt = await getJWT();
   http.Response response = await http.get(
-    Uri.parse(serverIP + 'auth/user/info'),
+    Uri.parse(serverIP + 'member/info'),
     headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
   );
   if (response.statusCode == 200) {
@@ -65,7 +82,7 @@ Future<Member> getMyInfo() async {
 
 Future postSignUp(String email, String password, String name) async {
   http.Response response = await http.post(
-    Uri.parse(serverIP + 'auth/signup'),
+    Uri.parse(serverIP + 'member/signup'),
     headers: {HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8", HttpHeaders.acceptHeader: "application/json; charset=UTF-8"},
     body: jsonEncode(
       {"email": email, "password": password, "name": name},
@@ -80,7 +97,7 @@ Future postSignUp(String email, String password, String name) async {
 
 Future postLogin(String email, String password) async {
   http.Response response = await http.post(
-    Uri.parse(serverIP + 'auth/login'),
+    Uri.parse(serverIP + 'member/login'),
     headers: {HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8", HttpHeaders.acceptHeader: "application/json; charset=UTF-8"},
     body: jsonEncode(
       {"email": email, "password": password},
@@ -93,10 +110,10 @@ Future postLogin(String email, String password) async {
   }
 }
 
-Future postLogout(String? grantType, String? accessToken, int? accessTokenExpiresIn, String? refreshToken) async {
+Future postLogout(String? accessToken, int? accessTokenExpiresIn) async {
   String jwt = await getJWT();
   http.Response response = await http.post(
-    Uri.parse(serverIP + 'auth/logout'),
+    Uri.parse(serverIP + 'member/logout'),
     headers: {
       HttpHeaders.authorizationHeader: "Bearer $jwt",
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
@@ -104,30 +121,26 @@ Future postLogout(String? grantType, String? accessToken, int? accessTokenExpire
     },
     body: jsonEncode(
       {
-        "grantType": grantType,
         "accessToken": accessToken,
         "accessTokenExpiresIn": accessTokenExpiresIn,
-        "refreshToken": refreshToken,
       },
     ),
   );
   if (response.statusCode == 200) {
-    return response;
+    return jsonDecode(response.body)['message'];
   } else {
     throw Exception("error: status code ${response.statusCode}");
   }
 }
 
-Future postReissue(String? grantType, String? accessToken, int? accessTokenExpiresIn, String? refreshToken) async {
+Future postReissueAccess(String? accessToken, int? accessTokenExpiresIn) async {
   http.Response response = await http.post(
-    Uri.parse(serverIP + 'auth/reissue'),
+    Uri.parse(serverIP + 'member/reissue/access'),
     headers: {HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8", HttpHeaders.acceptHeader: "application/json; charset=UTF-8"},
     body: jsonEncode(
       {
-        "grantType": grantType,
         "accessToken": accessToken,
         "accessTokenExpiresIn": accessTokenExpiresIn,
-        "refreshToken": refreshToken,
       },
     ),
   );

@@ -5,6 +5,7 @@ import 'package:flutter_new_calry/home/MyPageHome.dart';
 import 'controller/member/MemberController.dart';
 import 'auth/Login.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 void main() {
   runApp(MyApp());
 }
@@ -22,8 +23,10 @@ class MyApp extends StatelessWidget {
       title: 'Calry',
       initialRoute: '/',
       routes: {
-        '/index': (context) => Index(),
+        'index': (context) => Index(),
+        "login": (BuildContext context) => Login(),
       },
+      navigatorKey: navigatorKey,
       theme: ThemeData(
         brightness: Brightness.light,
         dialogBackgroundColor: Colors.white,
@@ -107,15 +110,15 @@ class MyApp extends StatelessWidget {
 
         // additional settings go here
       ),
-      home: Index(title: 'Flutter Webservice'),
+      home: Index(),
     );
   }
 }
 
 class Index extends StatefulWidget {
-  Index({Key? key, this.title}) : super(key: key);
-
-  final String? title;
+  Index({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _IndexState createState() => _IndexState();
@@ -123,13 +126,11 @@ class Index extends StatefulWidget {
 
 class _IndexState extends State<Index> {
   int _currentIndex = 0;
-  bool? isLogin;
   final key = GlobalKey();
 
   @override
   void initState() {
     super.initState();
-    _awaitReturnAuth();
   }
 
   void _onTap(int index) {
@@ -143,74 +144,30 @@ class _IndexState extends State<Index> {
     var _height = MediaQuery.of(context).size.height;
     double bodyHeight = _height - MediaQuery.of(context).padding.top - 80;
 
-    return isLogin == null
-        ? Scaffold(
-            backgroundColor: Colors.white,
-            body: SafeArea(child: Center(child: Text("Loading..."))),
-          )
-        : isLogin == true
-            ? Scaffold(
-                backgroundColor: Colors.white,
-                bottomNavigationBar: SizedBox(
-                    height: 80,
-                    child: Center(
-                        child: BottomNavigationBar(
-                            elevation: 0.0,
-                            type: BottomNavigationBarType.fixed,
-                            key: key,
-                            onTap: _onTap,
-                            currentIndex: _currentIndex,
-                            selectedIconTheme: IconThemeData(color: Colors.black),
-                            unselectedIconTheme: IconThemeData(color: Colors.black),
-                            showSelectedLabels: false,
-                            showUnselectedLabels: false,
-                            selectedFontSize: 0,
-                            unselectedFontSize: 0,
-                            iconSize: 25,
-                            items: [
-                          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-                          BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), label: ""),
-                          BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
-                        ]))),
-                body: SafeArea(
-                    child: IndexedStack(index: _currentIndex, children: <Widget>[
-                  RoutineHome(),
-                  CalendarNewHome(bodyHeight: bodyHeight),
-                  MyPageHome(
-                    onLoginChanged: (onLoginChanged) {
-                      _awaitReturnAuth();
-                    },
-                  )
-                ])),
-              )
-            : Scaffold(
-                backgroundColor: Colors.white,
-                body: SafeArea(child: Login(onLoginChanged: (onLoginChanged) {
-                  _awaitReturnAuth();
-                })),
-              );
-  }
-
-  _awaitReturnAuth() async {
-    try {
-      await getMyInfo();
-      setState(() {
-        isLogin = true;
-        _onTap(0);
-      });
-    } catch (e) {
-      var result = await authenticationUser();
-      if (result == 'success') {
-        await getMyInfo();
-        setState(() {
-          isLogin = true;
-          _onTap(0);
-        });
-      } else if (result == 'fail') {
-        setState(() {
-          isLogin = false;
-        });
-      }
-    }
+    return Scaffold(
+      backgroundColor: Colors.white,
+      bottomNavigationBar: SizedBox(
+          height: 80,
+          child: Center(
+              child: BottomNavigationBar(
+                  elevation: 0.0,
+                  type: BottomNavigationBarType.fixed,
+                  key: key,
+                  onTap: _onTap,
+                  currentIndex: _currentIndex,
+                  selectedIconTheme: IconThemeData(color: Colors.black),
+                  unselectedIconTheme: IconThemeData(color: Colors.black),
+                  showSelectedLabels: false,
+                  showUnselectedLabels: false,
+                  selectedFontSize: 0,
+                  unselectedFontSize: 0,
+                  iconSize: 25,
+                  items: [
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), label: ""),
+                BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
+              ]))),
+      body: SafeArea(child: IndexedStack(index: _currentIndex, children: <Widget>[RoutineHome(), CalendarNewHome(bodyHeight: bodyHeight), MyPageHome()])),
+    );
   }
 }
