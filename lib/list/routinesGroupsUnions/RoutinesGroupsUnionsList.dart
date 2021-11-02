@@ -110,8 +110,11 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
       DateTime now = DateTime.now();
       List<TodayRoutines> todayRoutinesList = [];
       routinesGroupsUnions.routinesGroupsList!.forEach((routinesGroups) {
-        TodayRoutines todayRoutines =
-            TodayRoutines(finishTime: null, finish: false, routines: routinesGroups.routines!, date: "${now.year}-${now.month}-${now.day}");
+        TodayRoutines todayRoutines = TodayRoutines(
+            finishTime: null,
+            finish: false,
+            routines: routinesGroups.routines!,
+            date: "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}");
         todayRoutinesList.add(todayRoutines);
       });
       List<TodayRoutines> httpResult = await postTodayRoutinesList(todayRoutinesList);

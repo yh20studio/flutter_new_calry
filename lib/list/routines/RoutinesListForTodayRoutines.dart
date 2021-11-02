@@ -105,7 +105,7 @@ class _RoutinesListForTodayRoutinesstate extends State<RoutinesListForTodayRouti
         finishTime: null,
         finish: false,
         routines: routines,
-        date: "${now.year}-${now.month}-${now.day}",
+        date: "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
       );
       TodayRoutines httpResult = await postTodayRoutines(todayRoutines);
       widget.todayRoutinesGroups!.todayRoutinesList!.add(httpResult);
