@@ -16,8 +16,6 @@ Member parseMember(String responseBody) {
 
 Future getJWT() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  print(prefs.getString('accessToken'));
-  print(prefs.getInt('accessTokenExpiresIn'));
   if (prefs.getString('accessToken') == null) {
     print("Need Login");
     navigatorKey.currentState!.pushNamed('login');

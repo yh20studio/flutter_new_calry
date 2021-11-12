@@ -111,13 +111,14 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
       List<TodayRoutines> todayRoutinesList = [];
       routinesGroupsUnions.routinesGroupsList!.forEach((routinesGroups) {
         TodayRoutines todayRoutines = TodayRoutines(
-            finishTime: null,
-            finish: false,
-            routines: routinesGroups.routines!,
-            date: "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}");
+          finishTime: null,
+          finish: false,
+          routines: routinesGroups.routines!,
+        );
         todayRoutinesList.add(todayRoutines);
       });
-      List<TodayRoutines> httpResult = await postTodayRoutinesList(todayRoutinesList);
+      List<TodayRoutines> httpResult =
+          await postTodayRoutinesList("${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}", todayRoutinesList);
 
       setState(() {
         httpResult.forEach((element) {

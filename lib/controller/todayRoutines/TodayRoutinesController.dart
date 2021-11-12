@@ -42,7 +42,7 @@ Future<TodayRoutines> postTodayRoutines(TodayRoutines todayRoutines) async {
   }
 }
 
-Future<List<TodayRoutines>> postTodayRoutinesList(List<TodayRoutines> todayRoutinesList) async {
+Future<List<TodayRoutines>> postTodayRoutinesList(String date, List<TodayRoutines> todayRoutinesList) async {
   String jwt = await getJWT();
 
   http.Response response = await http.post(
@@ -52,9 +52,7 @@ Future<List<TodayRoutines>> postTodayRoutinesList(List<TodayRoutines> todayRouti
       HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8",
       HttpHeaders.acceptHeader: "application/json; charset=UTF-8"
     },
-    body: jsonEncode(
-      todayRoutinesList.map((i) => i.toJson()).toList(),
-    ),
+    body: jsonEncode({"date": date, "todayRoutinesList": todayRoutinesList.map((i) => i.toJson()).toList()}),
   );
   if (response.statusCode == 200) {
     return compute(parseTodayRoutines, response.body);

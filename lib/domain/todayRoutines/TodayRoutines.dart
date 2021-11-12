@@ -23,7 +23,6 @@ class TodayRoutines {
       'finishTime': finishTime,
       'finish': finish,
       'routines': routines!.toJson(),
-      'date': date,
     };
   }
 }
