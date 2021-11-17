@@ -17,47 +17,6 @@ Schedules parseSchedule(String responseBody) {
   return Schedules.fromJson(parsed);
 }
 
-WeekSchedulesCalendar parseWeekSchedulesCalendar(String responseBody) {
-  final parsed = jsonDecode(responseBody);
-  return WeekSchedulesCalendar.fromJson(parsed);
-}
-
-WeekSchedules parseWeekSchedules(String responseBody) {
-  final parsed = jsonDecode(responseBody);
-  return WeekSchedules.fromJson(parsed);
-}
-
-Future<WeekSchedulesCalendar> getWholeSchedules() async {
-  try {
-    String jwt = await getJWT();
-    http.Response response = await http.get(
-      Uri.parse(serverIP + 'schedules/whole'),
-      headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
-    );
-    if (response.statusCode == 200) {
-      return compute(parseWeekSchedulesCalendar, response.body);
-    } else {
-      throw Exception("error: status code ${response.statusCode}");
-    }
-  } catch (e) {
-    return Future.error("Need login");
-  }
-}
-
-Future<WeekSchedules> getPartSchedules(String updateStart, String updateEnd) async {
-  String jwt = await getJWT();
-
-  http.Response response = await http.get(
-    Uri.parse(serverIP + 'schedules/part/${updateStart}/${updateEnd}'),
-    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
-  );
-  if (response.statusCode == 200) {
-    return compute(parseWeekSchedules, response.body);
-  } else {
-    throw Exception("error: status code ${response.statusCode}");
-  }
-}
-
 Future<List<Schedules>> getDaySchedules() async {
   try {
     String jwt = await getJWT();

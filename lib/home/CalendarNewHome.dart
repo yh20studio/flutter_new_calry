@@ -8,9 +8,9 @@ import 'package:flutter_new_calry/widgets/DateWidget.dart';
 import 'package:flutter_new_calry/modalBottomSheet/schedules/DaySchedulesListModalBottomSheet.dart';
 import 'package:flutter_new_calry/modalBottomSheet/calendar/CalendarModalBottomSheet.dart';
 import 'package:flutter_new_calry/calendar/Calendar.dart';
-import 'package:flutter_new_calry/controller/schedules/SchedulesController.dart';
 import 'package:flutter_new_calry/controller/quickSchedules/QuickSchedulesController.dart';
-import 'package:flutter_new_calry/auth/Login.dart';
+import 'package:flutter_new_calry/domain/calendars/Calendars.dart';
+import 'package:flutter_new_calry/controller/calendars/CalendarsController.dart';
 
 class CalendarNewHome extends StatefulWidget {
   CalendarNewHome({Key? key, this.bodyHeight}) : super(key: key);
