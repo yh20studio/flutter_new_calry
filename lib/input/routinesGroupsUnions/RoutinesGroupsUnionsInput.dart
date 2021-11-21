@@ -6,6 +6,7 @@ import 'package:flutter_new_calry/controller/routinesGroupsUnion/RoutinesGroupsU
 import 'package:flutter_new_calry/domain/routines/Routines.dart';
 import 'package:flutter_new_calry/domain/routinesGroups/RoutinesGroups.dart';
 import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 
 class RoutinesGroupsUnionsInput extends StatefulWidget {
   RoutinesGroupsUnionsInput({Key? key}) : super(key: key);
@@ -41,7 +42,13 @@ class _RoutinesGroupsUnionsInputstate extends State<RoutinesGroupsUnionsInput> {
             ),
           ],
         )),
-        textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
+        SizedBox(
+          height: 20,
+        ),
+        borderPaddingContainerWidget(
+          context: context,
+          widget: textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
+        ),
         SizedBox(
           height: 30,
         ),

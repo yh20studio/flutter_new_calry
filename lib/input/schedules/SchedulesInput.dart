@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_new_calry/modalBottomSheet/time/TimeModalBottomSheet.dart';
 import 'package:flutter_new_calry/widgets/TimeWidget.dart';
 import 'package:flutter_new_calry/controller/schedules/schedulesController.dart';
+import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 
 class SchedulesInput extends StatefulWidget {
   SchedulesInput({Key? key, this.selectedDate}) : super(key: key);
@@ -92,8 +93,23 @@ class _SchedulesInputstate extends State<SchedulesInput> {
           ),
         ),
         isSetTime ? timeInputForm(start: startTime!, end: endTime!, width: _width, context: context) : SizedBox(),
-        textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
+        SizedBox(
+          height: 10,
+        ),
+        borderPaddingContainerWidget(
+          context: context,
+          widget: textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        borderPaddingContainerWidget(
+          context: context,
+          widget: textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
+        ),
+        SizedBox(
+          height: 20,
+        ),
         labelsInputForm(labelsList: labelsList, width: _width, context: context),
       ],
     )));

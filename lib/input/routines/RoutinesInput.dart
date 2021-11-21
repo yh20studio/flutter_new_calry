@@ -5,6 +5,7 @@ import 'package:flutter_new_calry/widgets/timeDurationWidget.dart';
 import 'package:flutter_new_calry/controller/routines/RoutinesController.dart';
 import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
 import 'package:flutter_new_calry/domain/routines/Routines.dart';
+import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 
 class RoutinesInput extends StatefulWidget {
   RoutinesInput({Key? key}) : super(key: key);
@@ -41,8 +42,20 @@ class _RoutinesInputstate extends State<RoutinesInput> {
             ),
           ],
         )),
-        textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        durationInputForm(timeDuration: timeDuration, title: 'Duration', width: _width, context: context),
+        SizedBox(
+          height: 20,
+        ),
+        borderPaddingContainerWidget(
+          context: context,
+          widget: textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        borderPaddingContainerWidget(
+          context: context,
+          widget: durationInputForm(timeDuration: timeDuration, title: 'Duration', width: _width, context: context),
+        ),
         SizedBox(
           height: 30,
         ),

@@ -78,9 +78,6 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
                         routinesList = snapshotRoutines.data!;
                         return Column(
                           children: [
-                            SizedBox(
-                              height: 10,
-                            ),
                             todayRoutinesGroups!.todayRoutinesList!.length == 0
                                 ? Container(
                                     child: Center(
@@ -88,6 +85,7 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
                                     ),
                                   )
                                 : Container(
+                                    padding: EdgeInsets.only(top: 5, bottom: 5),
                                     child: Wrap(
                                         spacing: 8.0, // gap between adjacent chips
                                         runSpacing: 4.0, // gap between lines
@@ -98,9 +96,6 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
                                                 todayRoutines: todayRoutinesGroups!.todayRoutinesList![i],
                                                 width: _width,
                                                 context: context)).toList())),
-                            SizedBox(
-                              height: 10,
-                            ),
                           ],
                         );
                       }
@@ -143,17 +138,9 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
         },
         child: Container(
             width: width,
-            padding: EdgeInsets.only(right: 10, left: 10, top: 5, bottom: 5),
+            padding: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10),
             child: Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(todayRoutines.routines!.title!),
-                  ),
-                ],
-              )
+              Text(todayRoutines.routines!.title!),
             ])));
   }
 

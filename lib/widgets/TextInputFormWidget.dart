@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 Widget textInputForm({required TextEditingController controller, required String title, required double width, required BuildContext context}) {
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Container(
-        padding: EdgeInsets.all(10),
         child: Text(title, style: Theme.of(context).textTheme.headline2),
       ),
       Container(
@@ -13,11 +13,12 @@ Widget textInputForm({required TextEditingController controller, required String
         alignment: Alignment.center,
         decoration: BoxDecoration(color: Colors.transparent),
         child: TextFormField(
-          style: TextStyle(fontSize: 30, color: Colors.black),
+          style: TextStyle(fontSize: 24, color: Colors.black),
           keyboardType: TextInputType.multiline,
           maxLines: null,
           controller: controller,
-          decoration: InputDecoration(disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none), contentPadding: EdgeInsets.only(top: 0.0)),
+          decoration: InputDecoration(
+              border: InputBorder.none, disabledBorder: UnderlineInputBorder(borderSide: BorderSide.none), contentPadding: EdgeInsets.only(top: 0.0)),
         ),
       ),
     ],

@@ -143,9 +143,9 @@ class _Loginstate extends State<Login> {
         navigatorKey.currentState!.pushNamed('/');
       } on Exception catch (exception) {
         print(exception);
-        if (exception.toString() == "Exception: Email is not registered") {
+        if (exception.toString() == "Exception: 가입되지 않은 이메일입니다.") {
           _awaitDialog("가입되지 않은 이메일입니다.");
-        } else if (exception.toString() == "Exception: Password does not match stored value") {
+        } else if (exception.toString() == "Exception: 비밀번호가 틀렸습니다.") {
           _awaitDialog("비밀번호가 틀렸습니다.");
         }
       }

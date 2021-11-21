@@ -49,6 +49,7 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
                 child: Text("추가한 일정이 없습니다."),
               )
             : Container(
+                padding: EdgeInsets.only(top: 5, bottom: 5),
                 child: Wrap(
                     spacing: 8.0, // gap between adjacent chips
                     runSpacing: 4.0, // gap between lines
@@ -66,7 +67,7 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
         onTap: () => _awaitReturnValueFromScheduleDetail(schedules, index),
         child: Container(
             width: width,
-            padding: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
+            padding: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(
                 Icons.circle,

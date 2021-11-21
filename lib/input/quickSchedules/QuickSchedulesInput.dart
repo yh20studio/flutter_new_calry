@@ -9,6 +9,7 @@ import 'package:flutter_new_calry/widgets/TimeWidget.dart';
 import 'package:flutter_new_calry/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_new_calry/controller/quickSchedules/QuickSchedulesController.dart';
+import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 
 class QuickSchedulesInput extends StatefulWidget {
   QuickSchedulesInput({Key? key}) : super(key: key);
@@ -86,8 +87,23 @@ class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
           ),
         ),
         isSetTime ? timeInputForm(start: startTime!, end: endTime!, width: _width, context: context) : SizedBox(),
-        textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
+        SizedBox(
+          height: 20,
+        ),
+        borderPaddingContainerWidget(
+          context: context,
+          widget: textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        borderPaddingContainerWidget(
+          context: context,
+          widget: textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
+        ),
+        SizedBox(
+          height: 20,
+        ),
         labelsInputForm(labelsList: labelsList, width: _width, context: context),
       ],
     )));
