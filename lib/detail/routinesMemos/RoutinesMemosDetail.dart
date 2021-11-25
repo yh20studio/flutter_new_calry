@@ -3,6 +3,7 @@ import 'package:flutter_new_calry/widgets/TextInputFormWidget.dart';
 import 'package:flutter_new_calry/widgets/DateWidget.dart';
 import 'package:flutter_new_calry/controller/routinesMemos/RoutinesMemosController.dart';
 import 'package:flutter_new_calry/domain/routinesMemos/RoutinesMemos.dart';
+import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 
 class RoutinesMemosDetail extends StatefulWidget {
   RoutinesMemosDetail({Key? key, this.routinesMemos}) : super(key: key);
@@ -48,7 +49,7 @@ class _RoutinesMemosDetailstate extends State<RoutinesMemosDetail> {
         SizedBox(
           height: 30,
         ),
-        textInputForm(controller: _memoController, title: '내용', width: _width, context: context),
+        borderPaddingContainerWidget(widget: textInputForm(controller: _memoController, title: '내용', width: _width, context: context), context: context),
         SizedBox(
           height: 30,
         ),

@@ -6,6 +6,7 @@ import 'package:flutter_new_calry/modalBottomSheet/todayRoutines/TodayRoutinesIn
 import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 import 'package:flutter_new_calry/domain/routines/Routines.dart';
 import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
+import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
 
 class TodayRoutinesEditList extends StatefulWidget {
   TodayRoutinesEditList(
@@ -56,6 +57,7 @@ class _TodayRoutinesEditListstate extends State<TodayRoutinesEditList> {
           height: 10,
         ),
         Container(
+            padding: EdgeInsets.only(right: 10, left: 10),
             child: Wrap(
                 spacing: 8.0, // gap between adjacent chips
                 runSpacing: 4.0, // gap between lines
@@ -72,23 +74,7 @@ class _TodayRoutinesEditListstate extends State<TodayRoutinesEditList> {
   Widget listViewTodayRoutines({required int index, required TodayRoutines todayRoutines, required double width, required BuildContext context}) {
     return InkWell(
         onTap: () => _awaitReturnValueFromTodayRoutinesDetail(todayRoutines, index),
-        child: Container(
-            width: width,
-            padding: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
-            child: Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(todayRoutines.routines!.title!),
-                  ),
-                ],
-              )
-            ])));
+        child: multiLineTextForListItemWidget(width: width, text: todayRoutines.routines!.title!, context: context));
   }
 
   void _awaitReturnValueFromTodayRoutinesInput() async {

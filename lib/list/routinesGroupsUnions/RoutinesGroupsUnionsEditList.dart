@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_new_calry/modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsInputModalBottomSheet.dart';
 import 'package:flutter_new_calry/modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsDetailModalBottomSheet.dart';
 import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
 
 class RoutinesGroupsUnionsEditList extends StatefulWidget {
   RoutinesGroupsUnionsEditList({Key? key, this.routinesGroupsUnionList, this.onRefreshChanged, this.onRoutinesGroupsUnionChanged}) : super(key: key);
@@ -43,6 +44,7 @@ class _RoutinesGroupsUnionsEditListstate extends State<RoutinesGroupsUnionsEditL
           height: 10,
         ),
         Container(
+            padding: EdgeInsets.only(right: 10, left: 10),
             child: Wrap(
                 spacing: 8.0, // gap between adjacent chips
                 runSpacing: 4.0, // gap between lines
@@ -57,23 +59,7 @@ class _RoutinesGroupsUnionsEditListstate extends State<RoutinesGroupsUnionsEditL
       {required int index, required RoutinesGroupsUnions routinesGroupsUnions, required double width, required BuildContext context}) {
     return InkWell(
         onTap: () => _awaitReturnValueFromRoutinesGroupsUnionsDetail(routinesGroupsUnions, index),
-        child: Container(
-            width: width,
-            padding: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
-            child: Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(routinesGroupsUnions.title!),
-                  ),
-                ],
-              )
-            ])));
+        child: multiLineTextForListItemWidget(width: width, text: routinesGroupsUnions.title!, context: context));
   }
 
   void _awaitReturnValueFromRoutinesGroupsUnionsInput() async {

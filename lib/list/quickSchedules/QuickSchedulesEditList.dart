@@ -68,12 +68,18 @@ class _QuickSchedulesEditListstate extends State<QuickSchedulesEditList> {
               SizedBox(
                 width: 10,
               ),
-              Column(
+              Expanded(
+                  child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(quickSchedules.title!),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: Container(
+                        padding: EdgeInsets.only(bottom: 5),
+                        child: Text(quickSchedules.title!),
+                      )),
+                    ],
                   ),
                   quickSchedules.startTime == null && quickSchedules.endTime == null
                       ? SizedBox()
@@ -90,7 +96,7 @@ class _QuickSchedulesEditListstate extends State<QuickSchedulesEditList> {
                           ],
                         )
                 ],
-              )
+              ))
             ])));
   }
 

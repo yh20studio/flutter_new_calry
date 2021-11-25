@@ -76,7 +76,7 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
               SizedBox(
                 width: 10,
               ),
-              Text(schedules.title!),
+              Expanded(child: Text(schedules.title!)),
             ])));
   }
 

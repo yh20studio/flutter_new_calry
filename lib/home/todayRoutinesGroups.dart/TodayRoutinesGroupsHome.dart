@@ -9,6 +9,7 @@ import 'package:flutter_new_calry/controller/routines/RoutinesController.dart';
 import 'package:flutter_new_calry/domain/routines/Routines.dart';
 import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
 import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
 
 class TodayRoutinesGroupsHome extends StatefulWidget {
   TodayRoutinesGroupsHome({Key? key, this.todayRoutinesGroups, this.onRefreshChanged, this.onTodayRoutinesGroupsChanged}) : super(key: key);
@@ -80,6 +81,7 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
                           children: [
                             todayRoutinesGroups!.todayRoutinesList!.length == 0
                                 ? Container(
+                                    padding: EdgeInsets.all(10),
                                     child: Center(
                                       child: Text("매일 진행하는 루틴을 추가해보세요!"),
                                     ),
@@ -136,12 +138,7 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
 
           _awaitReturnValueFromTodayRoutinesDetail();
         },
-        child: Container(
-            width: width,
-            padding: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10),
-            child: Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(todayRoutines.routines!.title!),
-            ])));
+        child: multiLineTextForListItemWidget(width: width, text: todayRoutines.routines!.title!, context: context));
   }
 
   void _awaitReturnValueFromTodayRoutinesGroupsEditList() async {

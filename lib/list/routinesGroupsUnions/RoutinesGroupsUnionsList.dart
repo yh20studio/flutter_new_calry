@@ -96,7 +96,7 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
               SizedBox(
                 width: 10,
               ),
-              Text(routinesGroupsUnions.title!),
+              Expanded(child: Text(routinesGroupsUnions.title!)),
             ],
           )),
           IconButton(onPressed: () => _httpPostTodayRoutinesList(routinesGroupsUnions), icon: Icon(Icons.add))

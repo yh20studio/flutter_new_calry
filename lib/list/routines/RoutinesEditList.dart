@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_new_calry/modalBottomSheet/routines/RoutinesDetailModalBottomSheet.dart';
 import 'package:flutter_new_calry/modalBottomSheet/routines/RoutinesInputModalBottomSheet.dart';
 import 'package:flutter_new_calry/domain/routines/Routines.dart';
+import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
 
 class RoutinesEditList extends StatefulWidget {
   RoutinesEditList({Key? key, this.routinesList, this.onRefreshChanged, this.onRoutinesChanged}) : super(key: key);
@@ -43,6 +44,7 @@ class _RoutinesEditListstate extends State<RoutinesEditList> {
           height: 10,
         ),
         Container(
+            padding: EdgeInsets.only(right: 10, left: 10),
             child: Wrap(
                 spacing: 8.0, // gap between adjacent chips
                 runSpacing: 4.0, // gap between lines
@@ -56,23 +58,7 @@ class _RoutinesEditListstate extends State<RoutinesEditList> {
   Widget listViewRoutines({required int index, required Routines routines, required double width, required BuildContext context}) {
     return InkWell(
         onTap: () => _awaitReturnValueFromRoutinesDetail(routines, index),
-        child: Container(
-            width: width,
-            padding: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
-            child: Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              SizedBox(
-                width: 10,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(routines.title!),
-                  ),
-                ],
-              )
-            ])));
+        child: multiLineTextForListItemWidget(width: width, text: routines.title!, context: context));
   }
 
   void _awaitReturnValueFromRoutinesInput() async {

@@ -72,41 +72,45 @@ class _RoutinesListForRoutinesGroupsstate extends State<RoutinesListForRoutinesG
                   SizedBox(
                     width: 5,
                   ),
-                  Text(routines.title!),
+                  Expanded(
+                    child: Text(routines.title!),
+                  )
                 ],
               ),
-              Container(
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Center(
-                        child: Icon(
-                      Icons.timer_rounded,
-                      size: 17,
-                    )),
-                    Text(":"),
-                    routines.timeDuration!.hour == 0
-                        ? SizedBox()
-                        : Text(
-                            "${routines.timeDuration!.hour} 시간",
-                            style: TextStyle(fontSize: 17),
-                          ),
-                    routines.timeDuration!.min == 0
-                        ? SizedBox()
-                        : Text(
-                            "${routines.timeDuration!.min} 분",
-                            style: TextStyle(fontSize: 17),
-                          ),
-                    routines.timeDuration!.sec == 0
-                        ? SizedBox()
-                        : Text(
-                            "${routines.timeDuration!.sec} 초",
-                            style: TextStyle(fontSize: 17),
-                          ),
-                  ],
-                ),
-              )
+              routines.duration == 0
+                  ? SizedBox()
+                  : Container(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Center(
+                              child: Icon(
+                            Icons.timer_rounded,
+                            size: 17,
+                          )),
+                          Text(":"),
+                          routines.timeDuration!.hour == 0
+                              ? SizedBox()
+                              : Text(
+                                  "${routines.timeDuration!.hour} 시간",
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                          routines.timeDuration!.min == 0
+                              ? SizedBox()
+                              : Text(
+                                  "${routines.timeDuration!.min} 분",
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                          routines.timeDuration!.sec == 0
+                              ? SizedBox()
+                              : Text(
+                                  "${routines.timeDuration!.sec} 초",
+                                  style: TextStyle(fontSize: 17),
+                                ),
+                        ],
+                      ),
+                    )
             ])));
   }
 

@@ -88,10 +88,10 @@ class _RoutinesListForTodayRoutinesstate extends State<RoutinesListForTodayRouti
                   SizedBox(
                     width: 10,
                   ),
-                  Text(routines.title!),
+                  Expanded(child: Text(routines.title!)),
                 ],
               ),
-              simpleTimeDurationWidget(routines: routines, context: context),
+              routines.duration == 0 ? SizedBox() : simpleTimeDurationWidget(routines: routines, context: context),
             ])),
             IconButton(onPressed: () => _httpPostTodayRoutines(routines), icon: Icon(Icons.add)),
           ],

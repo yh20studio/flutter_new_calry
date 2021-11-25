@@ -85,14 +85,11 @@ class _SchedulesListstate extends State<SchedulesList> {
               SizedBox(
                 width: 10,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(schedules.title!),
-                  ),
-                ],
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(bottom: 5),
+                  child: Text(schedules.title!),
+                ),
               )
             ])));
   }

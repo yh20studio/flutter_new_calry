@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_new_calry/domain/focusTodos/FocusTodos.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/functions.dart';
 import 'package:flutter_new_calry/modalBottomSheet/focusTodos/FocusTodosDetailModalBottomSheet.dart';
 import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
 import 'package:flutter_new_calry/modalBottomSheet/focusTodos/FocusTodosInputModalBottomSheet.dart';
+import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
 
 class FocusTodosList extends StatefulWidget {
   FocusTodosList({
@@ -75,20 +74,7 @@ class _FocusTodosListstate extends State<FocusTodosList> {
         onTap: () {
           _awaitReturnValueFromFocusTodosDetail(focusTodos, index);
         },
-        child: Container(
-            width: width,
-            padding: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10),
-            child: Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(bottom: 5),
-                    child: Text(focusTodos.content!),
-                  ),
-                ],
-              )
-            ])));
+        child: multiLineTextForListItemWidget(width: width, text: focusTodos.content!, context: context));
   }
 
   void _awaitReturnValueFromFocusTodosDetail(FocusTodos focusTodos, int index) async {
