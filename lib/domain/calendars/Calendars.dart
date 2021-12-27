@@ -1,19 +1,18 @@
-import 'package:flutter_new_calry/domain/labelColors/LabelColors.dart';
-import 'dart:convert';
 import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
+import 'WeekCalendars.dart';
 
 class WeekSchedulesCalendar {
-  final Map<DateTime, List<dynamic>>? weekSchedules;
+  final Map<DateTime, WeekCalendars>? weekCalendars;
   final Map<int, Schedules>? schedules;
   final Map<DateTime, Schedules>? holidays;
 
-  WeekSchedulesCalendar({this.schedules, this.weekSchedules, this.holidays});
+  WeekSchedulesCalendar({this.schedules, this.weekCalendars, this.holidays});
 
   factory WeekSchedulesCalendar.fromJson(Map<String, dynamic> json) {
-    Map<String, dynamic>? weekMap = json['weekSchedules'];
-    Map<DateTime, List<dynamic>> map = {};
-    weekMap!.forEach((key, value) {
-      map.putIfAbsent(DateTime.parse(key), () => value);
+    Map<String, dynamic>? jsonWeekCalendars = json['weekCalendarMap'];
+    Map<DateTime, WeekCalendars> weekCalendars = {};
+    jsonWeekCalendars!.forEach((key, value) {
+      weekCalendars.putIfAbsent(DateTime.parse(key), () => WeekCalendars.fromJson(value));
     });
 
     List<Schedules>? schedulesList = json['schedules'].map<Schedules>((json) => Schedules.fromJson(json)).toList();
@@ -28,23 +27,23 @@ class WeekSchedulesCalendar {
       map2.putIfAbsent(DateTime.parse(key), () => Schedules.fromJson(value));
     });
 
-    return WeekSchedulesCalendar(schedules: schedulesMap, weekSchedules: map, holidays: map2);
+    return WeekSchedulesCalendar(schedules: schedulesMap, weekCalendars: weekCalendars, holidays: map2);
   }
 }
 
-class WeekSchedules {
-  final Map<DateTime, List<dynamic>>? weekSchedules;
+class PartWeekSchedules {
+  final Map<DateTime, WeekCalendars>? weekCalendars;
 
-  WeekSchedules({this.weekSchedules});
+  PartWeekSchedules({this.weekCalendars});
 
-  factory WeekSchedules.fromJson(Map<String, dynamic> json) {
-    Map<String, dynamic>? weekMap = json['weekSchedules'];
-    Map<DateTime, List<dynamic>> map = {};
-    weekMap!.forEach((key, value) {
-      map.putIfAbsent(DateTime.parse(key), () => value);
+  factory PartWeekSchedules.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic>? jsonWeekCalendars = json['weekCalendarMap'];
+    Map<DateTime, WeekCalendars> weekCalendars = {};
+    jsonWeekCalendars!.forEach((key, value) {
+      weekCalendars.putIfAbsent(DateTime.parse(key), () => WeekCalendars.fromJson(value));
     });
-    return WeekSchedules(
-      weekSchedules: map,
+    return PartWeekSchedules(
+      weekCalendars: weekCalendars,
     );
   }
 }

@@ -12,9 +12,9 @@ WeekSchedulesCalendar parseWeekSchedulesCalendar(String responseBody) {
   return WeekSchedulesCalendar.fromJson(parsed);
 }
 
-WeekSchedules parseWeekSchedules(String responseBody) {
+PartWeekSchedules parsePartWeekSchedules(String responseBody) {
   final parsed = jsonDecode(responseBody);
-  return WeekSchedules.fromJson(parsed);
+  return PartWeekSchedules.fromJson(parsed);
 }
 
 Future<WeekSchedulesCalendar> getWholeSchedules() async {
@@ -34,7 +34,7 @@ Future<WeekSchedulesCalendar> getWholeSchedules() async {
   }
 }
 
-Future<WeekSchedules> getPartSchedules(String updateStart, String updateEnd) async {
+Future<PartWeekSchedules> getPartSchedules(String updateStart, String updateEnd) async {
   String jwt = await getJWT();
 
   http.Response response = await http.get(
@@ -42,7 +42,7 @@ Future<WeekSchedules> getPartSchedules(String updateStart, String updateEnd) asy
     headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
   );
   if (response.statusCode == 200) {
-    return compute(parseWeekSchedules, response.body);
+    return compute(parsePartWeekSchedules, response.body);
   } else {
     throw Exception("error: status code ${response.statusCode}");
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_new_calry/domain/calendars/WeekCalendars.dart';
 import 'package:flutter_new_calry/functions.dart';
 import 'dart:ui';
 import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
@@ -28,7 +29,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
 
   //calendar
   Map<int, DateTime> dateTimeMap = {};
-  Map<DateTime, List<dynamic>> weekScheduleCalendar = {};
+  Map<DateTime, WeekCalendars> weekScheduleCalendar = {};
   Future<WeekSchedulesCalendar>? futureWeekSchedulesCalendar;
   int left_cnt = 0;
   bool isJumptoPage = false;
@@ -88,7 +89,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                       } else if (snapshotWeekSchedulesCalendar.hasError) {
                         return Text("Error");
                       } else {
-                        weekScheduleCalendar = snapshotWeekSchedulesCalendar.data!.weekSchedules;
+                        weekScheduleCalendar = snapshotWeekSchedulesCalendar.data!.weekCalendars;
                         schedulesMap = snapshotWeekSchedulesCalendar.data!.schedules;
                         holidaysMap = snapshotWeekSchedulesCalendar.data!.holidays;
                         return FutureBuilder<List<QuickSchedules>>(
@@ -158,8 +159,8 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                                                                 listViewCalendar(
                                                                     dates: weekDateCalendar[i],
                                                                     schedules: schedulesMap,
-                                                                    weekSchedule: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
-                                                                        ? []
+                                                                    weekCalendars: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
+                                                                        ? WeekCalendars(weeks: [])
                                                                         : weekScheduleCalendar[weekDateCalendar[i][0].date]!,
                                                                     width: _width,
                                                                     context: context),
@@ -167,8 +168,8 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                                                                   child: listViewOverlapCalendar(
                                                                       dates: weekDateCalendar[i],
                                                                       schedules: schedulesMap,
-                                                                      weekSchedule: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
-                                                                          ? []
+                                                                      weekCalendars: weekScheduleCalendar[weekDateCalendar[i][0].date] == null
+                                                                          ? WeekCalendars(weeks: [])
                                                                           : weekScheduleCalendar[weekDateCalendar[i][0].date]!,
                                                                       quickSchedulesList: quickSchedulesList!,
                                                                       context: context),
@@ -245,7 +246,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
       String action = awaitResult[0];
       List<Schedules> schedulesList = awaitResult[1];
       bool first = true;
-      Map<DateTime, List<dynamic>>? weekSchedules;
+      Map<DateTime, WeekCalendars>? weekCalendars;
       schedulesList.forEach((schedules) async {
         DateTime start = schedules.startDate!.subtract(Duration(days: schedules.startDate!.weekday == 7 ? 0 : schedules.startDate!.weekday));
         DateTime end = schedules.endDate!.add(Duration(days: schedules.endDate!.weekday == 7 ? 6 : 6 - schedules.endDate!.weekday));
@@ -256,13 +257,13 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
         start = DateTime.parse(updateStart);
         end = DateTime.parse(updateEnd);
         if (first) {
-          weekSchedules = (await getPartSchedules(updateStart, updateEnd)).weekSchedules;
+          weekCalendars = (await getPartSchedules(updateStart, updateEnd)).weekCalendars;
         }
 
         if (action == 'input' || action == 'update') {
           setState(() {
             schedulesMap[schedules.id!] = schedules;
-            weekSchedules!.forEach((key, value) {
+            weekCalendars!.forEach((key, value) {
               weekScheduleCalendar[key] = value;
             });
           });
@@ -273,7 +274,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
               weekScheduleCalendar.remove(start);
               start = start.add(Duration(days: 7));
             }
-            weekSchedules!.forEach((key, value) {
+            weekCalendars!.forEach((key, value) {
               weekScheduleCalendar[key] = value;
             });
           });
@@ -285,7 +286,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
   Widget listViewCalendar(
       {required List<Calendar> dates,
       required Map<int, Schedules> schedules,
-      required List weekSchedule,
+      required WeekCalendars weekCalendars,
       required double width,
       required BuildContext context}) {
     return Column(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
@@ -312,15 +313,15 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
       Wrap(
           runSpacing: 1.0,
           children: List.generate(
-              weekSchedule.length,
+              weekCalendars.weeks!.length,
               (i) => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: List.generate(
-                      weekSchedule[i].length,
+                      weekCalendars.weeks![i].schedules!.length,
                       (j) => Expanded(
-                          flex: weekSchedule[i][j][1]!,
-                          child: weekSchedule[i][j][0] == -1
+                          flex: weekCalendars.weeks![i].schedules![j].width!,
+                          child: weekCalendars.weeks![i].schedules![j].scheduleId == -1
                               ? Container()
                               : Padding(
                                   padding: EdgeInsets.only(left: 1, right: 1),
@@ -329,10 +330,10 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                         borderRadius: new BorderRadius.circular(3),
-                                        color: MyFunction.parseColor(schedules[weekSchedule[i][j][0]]!.labels!.label_colors!.code!)),
+                                        color: MyFunction.parseColor(schedules[weekCalendars.weeks![i].schedules![j].scheduleId]!.labels!.label_colors!.code!)),
                                     child: Center(
                                         child: Text(
-                                      "${schedules[weekSchedule[i][j][0]]!.title}",
+                                      "${schedules[weekCalendars.weeks![i].schedules![j].scheduleId]!.title}",
                                       style: Theme.of(context).textTheme.subtitle1,
                                       overflow: TextOverflow.clip,
                                       maxLines: 1,
@@ -344,7 +345,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
   Widget listViewOverlapCalendar(
       {required List<Calendar> dates,
       required Map<int, Schedules> schedules,
-      required List weekSchedule,
+      required WeekCalendars weekCalendars,
       required List<QuickSchedules> quickSchedulesList,
       required BuildContext context}) {
     return Container(
@@ -360,20 +361,20 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                           child: InkWell(
                               onTap: () {
                                 List<Schedules> dayScheduleList = [];
-                                for (int index = 0; index < weekSchedule.length; index++) {
+                                for (int index = 0; index < weekCalendars.weeks!.length; index++) {
                                   int gap = 0;
-                                  for (int j = 0; j < weekSchedule[index].length; j++) {
+                                  for (int j = 0; j < weekCalendars.weeks![index].schedules!.length; j++) {
                                     if (gap == i) {
-                                      if (weekSchedule[index][j][0] != -1) {
-                                        dayScheduleList.add(schedules[weekSchedule[index][j][0]]!);
+                                      if (weekCalendars.weeks![index].schedules![j].scheduleId != -1) {
+                                        dayScheduleList.add(schedules[weekCalendars.weeks![index].schedules![j].scheduleId]!);
                                       }
                                       break;
                                     } else {
-                                      if (i < weekSchedule[index][j][1] + gap) {
-                                        dayScheduleList.add(schedules[weekSchedule[index][j][0]]!);
+                                      if (i < weekCalendars.weeks![index].schedules![j].width! + gap) {
+                                        dayScheduleList.add(schedules[weekCalendars.weeks![index].schedules![j].scheduleId]!);
                                         break;
                                       } else {
-                                        gap = weekSchedule[index][j][1] + gap;
+                                        gap = weekCalendars.weeks![index].schedules![j].width! + gap;
                                       }
                                     }
                                   }
