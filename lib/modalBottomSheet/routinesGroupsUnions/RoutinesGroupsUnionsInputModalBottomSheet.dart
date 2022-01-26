@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/input/routinesGroupsUnions/RoutinesGroupsUnionsInput.dart';
+
+import '../../input/routinesGroupsUnions/RoutinesGroupsUnionsInput.dart';
 
 routinesGroupsUnionsInputModalBottomSheet(BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

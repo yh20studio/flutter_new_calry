@@ -1,4 +1,4 @@
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+import '../../domain/routines/Routines.dart';
 
 class RoutinesGroups {
   final int? id;

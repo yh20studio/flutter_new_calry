@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter_new_calry/widgets/DateWidget.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/functions.dart';
-import 'package:flutter_new_calry/modalBottomSheet/Schedules/SchedulesInputModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/Schedules/SchedulesDetailModalBottomSheet.dart';
+
+import '../../domain/schedules/Schedules.dart';
+import '../../widgets/DateWidget.dart';
+import '../../functions.dart';
+import '../../modalBottomSheet/Schedules/SchedulesInputModalBottomSheet.dart';
+import '../../modalBottomSheet/Schedules/SchedulesDetailModalBottomSheet.dart';
 
 class DaySchedulesList extends StatefulWidget {
   DaySchedulesList({Key? key, this.date, this.dayScheduleList, this.onRefreshChanged, this.onScheduleChanged}) : super(key: key);

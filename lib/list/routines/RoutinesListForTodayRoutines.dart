@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routines/RoutinesEditListModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/TimeDurationWidget.dart';
-import 'package:flutter_new_calry/controller/todayRoutines/TodayRoutinesController.dart';
-import 'package:flutter_new_calry/controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
+
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../modalBottomSheet/routines/RoutinesEditListModalBottomSheet.dart';
+import '../../widgets/TimeDurationWidget.dart';
+import '../../controller/todayRoutines/TodayRoutinesController.dart';
+import '../../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
+import '../../domain/routines/Routines.dart';
+import '../../domain/todayRoutines/TodayRoutines.dart';
 
 class RoutinesListForTodayRoutines extends StatefulWidget {
   RoutinesListForTodayRoutines({Key? key, this.todayRoutinesGroups, this.routinesList, this.onRefreshChanged, this.onTodayRoutinesGroupsChanged})

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/input/schedules/SchedulesInput.dart';
+
+import '../../input/schedules/SchedulesInput.dart';
 
 schedulesInputModalBottomSheet(DateTime selectedDate, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/controller/focusTodos/FocusTodosController.dart';
-import 'package:flutter_new_calry/domain/focusTodos/FocusTodos.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter_new_calry/list/schedules/SchedulesList.dart';
+
 import 'todayRoutinesGroups.dart/TodayRoutinesGroupsHome.dart';
-import 'package:flutter_new_calry/widgets/DateWidget.dart';
-import 'package:flutter_new_calry/controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
-import 'package:flutter_new_calry/controller/schedules/SchedulesController.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter_new_calry/list/focusTodos/FocusTodosList.dart';
+import '../controller/focusTodos/FocusTodosController.dart';
+import '../domain/focusTodos/FocusTodos.dart';
+import '../domain/schedules/Schedules.dart';
+import '../list/schedules/SchedulesList.dart';
+import '../widgets/DateWidget.dart';
+import '../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
+import '../controller/schedules/SchedulesController.dart';
+import '../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../list/focusTodos/FocusTodosList.dart';
 
 class RoutineHome extends StatefulWidget {
   RoutineHome({Key? key}) : super(key: key);

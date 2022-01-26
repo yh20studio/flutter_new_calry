@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/time/TimeDurationChoice.dart';
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
+
+import '../../time/TimeDurationChoice.dart';
+import '../../domain/timeDuration/TimeDuration.dart';
 
 timeDurationChoiceModalBottomSheet(TimeDuration duration, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

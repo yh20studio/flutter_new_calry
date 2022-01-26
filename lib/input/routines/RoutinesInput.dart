@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/widgets/TextInputFormWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/time/TimeDurationModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/timeDurationWidget.dart';
-import 'package:flutter_new_calry/controller/routines/RoutinesController.dart';
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
+
+import '../../widgets/TextInputFormWidget.dart';
+import '../../modalBottomSheet/time/TimeDurationModalBottomSheet.dart';
+import '../../widgets/timeDurationWidget.dart';
+import '../../controller/routines/RoutinesController.dart';
+import '../../domain/timeDuration/TimeDuration.dart';
+import '../../domain/routines/Routines.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class RoutinesInput extends StatefulWidget {
   RoutinesInput({Key? key}) : super(key: key);

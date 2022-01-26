@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_new_calry/widgets/timeDurationWidget.dart';
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
+
+import '../../widgets/timeDurationWidget.dart';
+import '../../domain/timeDuration/TimeDuration.dart';
 
 class TimeDurationChoice extends StatefulWidget {
   TimeDurationChoice({Key? key, this.duration, this.onDurationChanged}) : super(key: key);

@@ -1,5 +1,5 @@
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
-import 'package:flutter_new_calry/domain/routinesCategory/RoutinesCategory.dart';
+import '../../domain/timeDuration/TimeDuration.dart';
+import '../../domain/routinesCategory/RoutinesCategory.dart';
 
 class RecommendRoutines {
   final int? id;

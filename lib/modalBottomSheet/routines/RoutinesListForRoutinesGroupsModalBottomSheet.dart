@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/list/routines/RoutinesListForRoutinesGroups.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+
+import '../../list/routines/RoutinesListForRoutinesGroups.dart';
+import '../../domain/routines/Routines.dart';
 
 routinesListForRoutinesGroupsModalBottomSheet(List<Routines> routinesList, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

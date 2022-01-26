@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routines/RoutinesEditListModalBottomSheet.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+
+import '../../modalBottomSheet/routines/RoutinesEditListModalBottomSheet.dart';
+import '../../domain/routines/Routines.dart';
 
 class RoutinesListForRoutinesGroups extends StatefulWidget {
   RoutinesListForRoutinesGroups({Key? key, this.routinesList}) : super(key: key);

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter_new_calry/list/routinesGroupsUnions/RoutinesGroupsUnionsList.dart';
-import 'package:flutter_new_calry/list/routines/RoutinesListForTodayRoutines.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../list/routinesGroupsUnions/RoutinesGroupsUnionsList.dart';
+import '../../list/routines/RoutinesListForTodayRoutines.dart';
+import '../../domain/routines/Routines.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 
 class TodayRoutinesInput extends StatefulWidget {
   TodayRoutinesInput({Key? key, this.todayRoutinesGroups, this.routinesGroupsUnionsList, this.routinesList, this.onTodayRoutinesGroupsChanged})

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_new_calry/setting.dart';
-import 'package:flutter_new_calry/controller/member/MemberController.dart';
-import 'dart:io';
-import 'package:flutter_new_calry/domain/calendars/Calendars.dart';
+
+import '../../setting.dart';
+import '../../controller/member/MemberController.dart';
+import '../../domain/calendars/Calendars.dart';
 
 WeekSchedulesCalendar parseWeekSchedulesCalendar(String responseBody) {
   final parsed = jsonDecode(responseBody);

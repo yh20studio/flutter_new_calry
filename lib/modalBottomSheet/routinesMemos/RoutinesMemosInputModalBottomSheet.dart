@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/input/routinesMemos/RoutinesMemosInput.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+
+import '../../input/routinesMemos/RoutinesMemosInput.dart';
+import '../../domain/routines/Routines.dart';
 
 routinesMemosInputModalBottomSheet(Routines routines, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/input/quickSchedules/QuickSchedulesInput.dart';
+
+import '../../input/quickSchedules/QuickSchedulesInput.dart';
 
 quickSchedulesInputModalBottomSheet(BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

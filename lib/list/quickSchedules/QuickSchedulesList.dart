@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/functions.dart';
-import 'package:flutter_new_calry/modalBottomSheet/QuickSchedules/QuickSchedulesEditListModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/TimeWidget.dart';
-import 'package:flutter_new_calry/controller/schedules/SchedulesController.dart';
+
+import '../../domain/quickSchedules/QuickSchedules.dart';
+import '../../domain/schedules/Schedules.dart';
+import '../../functions.dart';
+import '../../modalBottomSheet/QuickSchedules/QuickSchedulesEditListModalBottomSheet.dart';
+import '../../widgets/TimeWidget.dart';
+import '../../controller/schedules/SchedulesController.dart';
 
 class QuickSchedulesList extends StatefulWidget {
   QuickSchedulesList({Key? key, this.date, this.quickScheduleList, this.onRefreshChanged, this.onScheduleChanged, this.onQuickScheduleChanged})

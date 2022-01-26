@@ -1,4 +1,4 @@
-import 'package:flutter_new_calry/domain/member/Member.dart';
+import '../../domain/member/Member.dart';
 
 class FocusTodos {
   final int? id;

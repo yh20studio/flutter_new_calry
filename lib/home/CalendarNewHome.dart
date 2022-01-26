@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/calendars/WeekCalendars.dart';
-import 'package:flutter_new_calry/functions.dart';
-import 'dart:ui';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
-import 'package:flutter_new_calry/widgets/WeekdayWidget.dart';
-import 'package:flutter_new_calry/widgets/DateWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/schedules/DaySchedulesListModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/calendar/CalendarModalBottomSheet.dart';
-import 'package:flutter_new_calry/calendar/Calendar.dart';
-import 'package:flutter_new_calry/controller/quickSchedules/QuickSchedulesController.dart';
-import 'package:flutter_new_calry/domain/calendars/Calendars.dart';
-import 'package:flutter_new_calry/controller/calendars/CalendarsController.dart';
+
+import '../domain/calendars/WeekCalendars.dart';
+import '../functions.dart';
+import '../domain/schedules/Schedules.dart';
+import '../domain/quickSchedules/QuickSchedules.dart';
+import '../widgets/WeekdayWidget.dart';
+import '../widgets/DateWidget.dart';
+import '../modalBottomSheet/schedules/DaySchedulesListModalBottomSheet.dart';
+import '../modalBottomSheet/calendar/CalendarModalBottomSheet.dart';
+import '../calendar/Calendar.dart';
+import '../controller/quickSchedules/QuickSchedulesController.dart';
+import '../domain/calendars/Calendars.dart';
+import '../controller/calendars/CalendarsController.dart';
 
 class CalendarNewHome extends StatefulWidget {
   CalendarNewHome({Key? key, this.bodyHeight}) : super(key: key);

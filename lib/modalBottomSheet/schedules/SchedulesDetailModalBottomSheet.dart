@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter_new_calry/detail/schedules/SchedulesDetail.dart';
+
+import '../../domain/schedules/Schedules.dart';
+import '../../detail/schedules/SchedulesDetail.dart';
 
 schedulesDetailModalBottomSheet(Schedules schedules, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

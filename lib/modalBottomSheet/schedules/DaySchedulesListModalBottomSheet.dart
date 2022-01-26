@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
-import 'package:flutter_new_calry/list/schedules/DaySchedulesList.dart';
-import 'package:flutter_new_calry/list/quickSchedules/QuickSchedulesList.dart';
+
+import '../../domain/schedules/Schedules.dart';
+import '../../domain/quickSchedules/QuickSchedules.dart';
+import '../../list/schedules/DaySchedulesList.dart';
+import '../../list/quickSchedules/QuickSchedulesList.dart';
 
 daySchedulesListModalBottomSheet(DateTime date, List<Schedules> dayScheduleList, List<QuickSchedules> quickScheduleList, BuildContext context) async {
   String action = '';

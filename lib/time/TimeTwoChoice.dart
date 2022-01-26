@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/widgets/TimeWidget.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+
+import '../../widgets/TimeWidget.dart';
 
 class TimeTwoChoice extends StatefulWidget {
   TimeTwoChoice({Key? key, this.startTime, this.endTime, this.onStartTimeChanged, this.onEndTimeChanged}) : super(key: key);

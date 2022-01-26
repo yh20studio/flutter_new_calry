@@ -1,4 +1,4 @@
-import 'package:flutter_new_calry/domain/labels/Labels.dart';
+import '../../domain/labels/Labels.dart';
 
 class DayCalendar {
   final int? id;

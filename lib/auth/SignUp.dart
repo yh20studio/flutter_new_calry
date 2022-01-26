@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/dialog/AlertDialog.dart';
-import 'package:flutter_new_calry/controller/member/MemberController.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
+
+import '../dialog/AlertDialog.dart';
+import '../controller/member/MemberController.dart';
+import '../widgets/ContainerWidget.dart';
 
 class SignUp extends StatefulWidget {
   SignUp({Key? key}) : super(key: key);

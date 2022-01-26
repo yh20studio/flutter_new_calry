@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routines/RoutinesDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routines/RoutinesInputModalBottomSheet.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
+
+import '../../modalBottomSheet/routines/RoutinesDetailModalBottomSheet.dart';
+import '../../modalBottomSheet/routines/RoutinesInputModalBottomSheet.dart';
+import '../../domain/routines/Routines.dart';
+import '../../widgets/MultiLineTextForListItemWidget.dart';
 
 class RoutinesEditList extends StatefulWidget {
   RoutinesEditList({Key? key, this.routinesList, this.onRefreshChanged, this.onRoutinesChanged}) : super(key: key);

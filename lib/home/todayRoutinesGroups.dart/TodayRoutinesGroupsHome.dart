@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/todayRoutines/TodayRoutinesEditListModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/todayRoutines/TodayRoutinesDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
-import 'package:flutter_new_calry/controller/routinesGroupsUnion/RoutinesGroupsUnionsController.dart';
-import 'package:flutter_new_calry/controller/routines/RoutinesController.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
-import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
+
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../modalBottomSheet/todayRoutines/TodayRoutinesEditListModalBottomSheet.dart';
+import '../../modalBottomSheet/todayRoutines/TodayRoutinesDetailModalBottomSheet.dart';
+import '../../widgets/ContainerWidget.dart';
+import '../../controller/routinesGroupsUnion/RoutinesGroupsUnionsController.dart';
+import '../../controller/routines/RoutinesController.dart';
+import '../../domain/routines/Routines.dart';
+import '../../domain/todayRoutines/TodayRoutines.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import '../../widgets/MultiLineTextForListItemWidget.dart';
 
 class TodayRoutinesGroupsHome extends StatefulWidget {
   TodayRoutinesGroupsHome({Key? key, this.todayRoutinesGroups, this.onRefreshChanged, this.onTodayRoutinesGroupsChanged}) : super(key: key);

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter_new_calry/domain/labels/Labels.dart';
-import 'package:flutter_new_calry/widgets/TextInputFormWidget.dart';
-import 'package:flutter_new_calry/widgets/DateWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/Calendar/CalendarModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/labels/LabelsModalBottomSheet.dart';
-import 'package:flutter_new_calry/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_new_calry/modalBottomSheet/time/TimeModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/TimeWidget.dart';
-import 'package:flutter_new_calry/controller/schedules/SchedulesController.dart';
+
+import '../../domain/schedules/Schedules.dart';
+import '../../domain/labels/Labels.dart';
+import '../../widgets/TextInputFormWidget.dart';
+import '../../widgets/DateWidget.dart';
+import '../../modalBottomSheet/Calendar/CalendarModalBottomSheet.dart';
+import '../../modalBottomSheet/labels/LabelsModalBottomSheet.dart';
+import '../../functions.dart';
+import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
+import '../../widgets/TimeWidget.dart';
+import '../../controller/schedules/SchedulesController.dart';
 
 class SchedulesDetail extends StatefulWidget {
   SchedulesDetail({Key? key, this.schedules}) : super(key: key);

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/widgets/TimeDurationWidget.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
-import 'package:flutter_new_calry/widgets/DateWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routinesMemos/RoutinesMemosInputModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routinesMemos/RoutinesMemosDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/controller/todayRoutines/TodayRoutinesController.dart';
-import 'package:flutter_new_calry/domain/routinesMemos/RoutinesMemos.dart';
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
-import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
+
+import '../../widgets/TimeDurationWidget.dart';
+import '../../widgets/ContainerWidget.dart';
+import '../../widgets/DateWidget.dart';
+import '../../modalBottomSheet/routinesMemos/RoutinesMemosInputModalBottomSheet.dart';
+import '../../modalBottomSheet/routinesMemos/RoutinesMemosDetailModalBottomSheet.dart';
+import '../../controller/todayRoutines/TodayRoutinesController.dart';
+import '../../domain/routinesMemos/RoutinesMemos.dart';
+import '../../domain/timeDuration/TimeDuration.dart';
+import '../../domain/todayRoutines/TodayRoutines.dart';
 
 class TodayRoutinesDetail extends StatefulWidget {
   TodayRoutinesDetail({Key? key, this.todayRoutines}) : super(key: key);

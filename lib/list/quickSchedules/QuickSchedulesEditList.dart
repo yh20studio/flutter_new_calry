@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/functions.dart';
-import 'package:flutter_new_calry/modalBottomSheet/QuickSchedules/QuickSchedulesInputModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/QuickSchedules/QuickSchedulesDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/TimeWidget.dart';
+
+import '../../domain/quickSchedules/QuickSchedules.dart';
+import '../../functions.dart';
+import '../../modalBottomSheet/QuickSchedules/QuickSchedulesInputModalBottomSheet.dart';
+import '../../modalBottomSheet/QuickSchedules/QuickSchedulesDetailModalBottomSheet.dart';
+import '../../widgets/TimeWidget.dart';
 
 class QuickSchedulesEditList extends StatefulWidget {
   QuickSchedulesEditList({Key? key, this.quickScheduleList, this.onRefreshChanged, this.onQuickScheduleChanged}) : super(key: key);

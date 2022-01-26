@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/widgets/TextInputFormWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routines/RoutinesListForRoutinesGroupsModalBottomSheet.dart';
-import 'package:flutter_new_calry/controller/routines/RoutinesController.dart';
-import 'package:flutter_new_calry/controller/routinesGroupsUnion/RoutinesGroupsUnionsController.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/routinesGroups/RoutinesGroups.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
+
+import '../../widgets/TextInputFormWidget.dart';
+import '../../modalBottomSheet/routines/RoutinesListForRoutinesGroupsModalBottomSheet.dart';
+import '../../controller/routines/RoutinesController.dart';
+import '../../controller/routinesGroupsUnion/RoutinesGroupsUnionsController.dart';
+import '../../domain/routines/Routines.dart';
+import '../../domain/routinesGroups/RoutinesGroups.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class RoutinesGroupsUnionsInput extends StatefulWidget {
   RoutinesGroupsUnionsInput({Key? key}) : super(key: key);

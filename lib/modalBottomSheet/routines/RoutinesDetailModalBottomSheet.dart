@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/detail/routines/RoutinesDetail.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+
+import '../../detail/routines/RoutinesDetail.dart';
+import '../../domain/routines/Routines.dart';
 
 routinesDetailModalBottomSheet(
   Routines routines,

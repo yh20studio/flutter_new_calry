@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/list/routines/RoutinesListForTodayRoutines.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+
+import '../../list/routines/RoutinesListForTodayRoutines.dart';
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../domain/routines/Routines.dart';
 
 routinesListForTodayRoutinesModalBottomSheet(TodayRoutinesGroups? todayRoutinesGroups, List<Routines> routinesList, BuildContext context) async {
   String action = "";

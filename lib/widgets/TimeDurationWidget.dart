@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
+
+import '../domain/routines/Routines.dart';
+import '../domain/timeDuration/TimeDuration.dart';
 
 Widget timeDurationWidget({required TimeDuration timeDuration, required BuildContext context}) {
   return Container(

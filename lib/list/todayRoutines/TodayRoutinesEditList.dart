@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/todayRoutines/todayRoutinesDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/todayRoutines/TodayRoutinesInputModalBottomSheet.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
-import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
+
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../modalBottomSheet/todayRoutines/todayRoutinesDetailModalBottomSheet.dart';
+import '../../modalBottomSheet/todayRoutines/TodayRoutinesInputModalBottomSheet.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import '../../domain/routines/Routines.dart';
+import '../../domain/todayRoutines/TodayRoutines.dart';
+import '../../widgets/MultiLineTextForListItemWidget.dart';
 
 class TodayRoutinesEditList extends StatefulWidget {
   TodayRoutinesEditList(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
-import 'package:flutter_new_calry/list/quickSchedules/QuickSchedulesEditList.dart';
+
+import '../../domain/quickSchedules/QuickSchedules.dart';
+import '../../list/quickSchedules/QuickSchedulesEditList.dart';
 
 quickSchedulesEditListModalBottomSheet(BuildContext context, List<QuickSchedules> quickScheduleList) async {
   String action = '';

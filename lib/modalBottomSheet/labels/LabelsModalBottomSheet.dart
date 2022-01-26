@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/labels/Labels.dart';
-import 'package:flutter_new_calry/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'LabelsEditModalBottomSheet.dart';
+import '../../domain/labels/Labels.dart';
+import '../../functions.dart';
+
 
 labelsModalBottomSheet(List<Labels> labelsList, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

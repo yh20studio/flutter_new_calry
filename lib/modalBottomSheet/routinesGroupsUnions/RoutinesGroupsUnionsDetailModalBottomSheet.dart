@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/detail/RoutinesGroupsUnions/RoutinesGroupsUnionsDetail.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+
+import '../../detail/RoutinesGroupsUnions/RoutinesGroupsUnionsDetail.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 
 routinesGroupsUnionsDetailModalBottomSheet(
   RoutinesGroupsUnions routinesGroupsUnions,

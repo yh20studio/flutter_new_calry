@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_new_calry/dialog/TwoChoiceDialog.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
-import 'package:flutter_new_calry/controller/member/MemberController.dart';
-import 'package:flutter_new_calry/domain/member/Member.dart';
-import 'package:flutter_new_calry/main.dart';
+
+import '../dialog/TwoChoiceDialog.dart';
+import '../widgets/ContainerWidget.dart';
+import '../controller/member/MemberController.dart';
+import '../domain/member/Member.dart';
+import '../main.dart';
 
 class MemberInfo extends StatefulWidget {
   MemberInfo({Key? key, this.member}) : super(key: key);

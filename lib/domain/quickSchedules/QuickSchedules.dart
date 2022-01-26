@@ -1,5 +1,6 @@
-import 'package:flutter_new_calry/domain/labels/Labels.dart';
 import 'package:flutter/material.dart';
+
+import '../../domain/labels/Labels.dart';
 
 class QuickSchedules {
   final int? id;

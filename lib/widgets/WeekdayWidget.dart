@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/listItems.dart';
+
+import '../listItems.dart';
 
 Widget weekdayWidget({required BuildContext context}) {
   return Row(

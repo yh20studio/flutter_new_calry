@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/detail/routinesMemos/RoutinesMemosDetail.dart';
-import 'package:flutter_new_calry/domain/routinesMemos/RoutinesMemos.dart';
+
+import '../../detail/routinesMemos/RoutinesMemosDetail.dart';
+import '../../domain/routinesMemos/RoutinesMemos.dart';
 
 routinesMemosDetailModalBottomSheet(
   RoutinesMemos routinesMemos,

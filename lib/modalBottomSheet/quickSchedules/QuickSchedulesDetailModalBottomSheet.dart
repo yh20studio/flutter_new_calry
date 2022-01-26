@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
-import 'package:flutter_new_calry/detail/quickSchedules/QuickSchedulesDetail.dart';
+
+import '../../domain/quickSchedules/QuickSchedules.dart';
+import '../../detail/quickSchedules/QuickSchedulesDetail.dart';
 
 quickSchedulesDetailModalBottomSheet(
   QuickSchedules quickSchedules,

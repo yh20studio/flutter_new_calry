@@ -1,5 +1,5 @@
-import 'package:flutter_new_calry/domain/routinesMemos/RoutinesMemos.dart';
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
+import '../../domain/routinesMemos/RoutinesMemos.dart';
+import '../../domain/timeDuration/TimeDuration.dart';
 
 class Routines {
   final int? id;

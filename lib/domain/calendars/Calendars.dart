@@ -1,5 +1,5 @@
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
 import 'WeekCalendars.dart';
+import '../../domain/schedules/Schedules.dart';
 
 class WeekSchedulesCalendar {
   final Map<DateTime, WeekCalendars>? weekCalendars;

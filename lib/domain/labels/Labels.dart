@@ -1,5 +1,6 @@
-import 'package:flutter_new_calry/domain/labelColors/LabelColors.dart';
 import 'dart:convert';
+
+import '../../domain/labelColors/LabelColors.dart';
 
 class Labels {
   final int? id;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/focusTodos/FocusTodos.dart';
-import 'package:flutter_new_calry/detail/focusTodos/FocusTodosDetail.dart';
+
+import '../../domain/focusTodos/FocusTodos.dart';
+import '../../detail/focusTodos/FocusTodosDetail.dart';
 
 focusTodosDetailModalBottomSheet(FocusTodos focusTodos, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

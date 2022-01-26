@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsInputModalBottomSheet.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
-import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
+
+import '../../modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsInputModalBottomSheet.dart';
+import '../../modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsDetailModalBottomSheet.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import '../../widgets/MultiLineTextForListItemWidget.dart';
 
 class RoutinesGroupsUnionsEditList extends StatefulWidget {
   RoutinesGroupsUnionsEditList({Key? key, this.routinesGroupsUnionList, this.onRefreshChanged, this.onRoutinesGroupsUnionChanged}) : super(key: key);

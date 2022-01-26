@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+
 import 'Calendar.dart';
+import '../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
 
 class CalendarWithColors extends StatefulWidget {
   CalendarWithColors({Key? key, this.selectedDateTime, this.todayRoutinesGroupsMap}) : super(key: key);

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/quickSchedules/QuickSchedules.dart';
-import 'package:flutter_new_calry/domain/labels/Labels.dart';
-import 'package:flutter_new_calry/domain/labelColors/LabelColors.dart';
-import 'package:flutter_new_calry/widgets/TextInputFormWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/labels/LabelsModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/TimeWidget.dart';
-import 'package:flutter_new_calry/functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_new_calry/modalBottomSheet/time/TimeModalBottomSheet.dart';
-import 'package:flutter_new_calry/controller/quickSchedules/QuickSchedulesController.dart';
-import 'package:flutter_new_calry/auth/Login.dart';
+
+import '../../domain/quickSchedules/QuickSchedules.dart';
+import '../../domain/labels/Labels.dart';
+import '../../domain/labelColors/LabelColors.dart';
+import '../../widgets/TextInputFormWidget.dart';
+import '../../modalBottomSheet/labels/LabelsModalBottomSheet.dart';
+import '../../widgets/TimeWidget.dart';
+import '../../functions.dart';
+import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
+import '../../controller/quickSchedules/QuickSchedulesController.dart';
+import '../../auth/Login.dart';
 
 class QuickSchedulesDetail extends StatefulWidget {
   QuickSchedulesDetail({Key? key, this.quickSchedules}) : super(key: key);

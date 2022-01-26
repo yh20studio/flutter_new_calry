@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/functions.dart';
-import 'package:flutter_new_calry/modalBottomSheet/Schedules/SchedulesDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/schedules/SchedulesInputModalBottomSheet.dart';
+
+import '../../domain/schedules/Schedules.dart';
+import '../../functions.dart';
+import '../../modalBottomSheet/Schedules/SchedulesDetailModalBottomSheet.dart';
+import '../../widgets/ContainerWidget.dart';
+import '../../modalBottomSheet/schedules/SchedulesInputModalBottomSheet.dart';
 
 class SchedulesList extends StatefulWidget {
   SchedulesList({

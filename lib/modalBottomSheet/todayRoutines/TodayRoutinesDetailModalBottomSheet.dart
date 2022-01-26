@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/detail/todayRoutines.dart/TodayRoutinesDetail.dart';
-import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
+
+import '../../detail/todayRoutines.dart/TodayRoutinesDetail.dart';
+import '../../domain/todayRoutines/TodayRoutines.dart';
 
 todayRoutinesDetailModalBottomSheet(
   TodayRoutines todayRoutines,

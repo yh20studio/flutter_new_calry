@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter_new_calry/list/todayRoutines/TodayRoutinesEditList.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../list/todayRoutines/TodayRoutinesEditList.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import '../../domain/routines/Routines.dart';
 
 todayRoutinesEditListModalBottomSheet(
     BuildContext context, TodayRoutinesGroups? todayRoutinesGroups, List<RoutinesGroupsUnions> routinesGroupsUnionList, List<Routines> routinesList) async {

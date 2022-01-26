@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/list/routines/RoutinesEditList.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+
+import '../../list/routines/RoutinesEditList.dart';
+import '../../domain/routines/Routines.dart';
 
 routinesEditListModalBottomSheet(BuildContext context, List<Routines> routinesList) async {
   String action = '';

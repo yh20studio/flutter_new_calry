@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/input/todayRoutines/TodayRoutinesInput.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+
+import '../../input/todayRoutines/TodayRoutinesInput.dart';
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../domain/routines/Routines.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 
 todayRoutinesInputModalBottomSheet(
   BuildContext context,

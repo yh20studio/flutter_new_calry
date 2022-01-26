@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/time/TimeTwoChoice.dart';
+
+import '../../time/TimeTwoChoice.dart';
 
 timeTwoChoiceModalBottomSheet(TimeOfDay startTime, TimeOfDay endTime, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

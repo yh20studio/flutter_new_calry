@@ -1,13 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/auth/SignUp.dart';
-import 'package:flutter_new_calry/domain/labels/Labels.dart';
-import 'package:flutter_new_calry/dialog/AlertDialog.dart';
 import 'dart:convert';
+
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_new_calry/controller/member/MemberController.dart';
-import 'package:flutter_new_calry/controller/labels/LabelsController.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
-import 'package:flutter_new_calry/main.dart';
+
+import 'SignUp.dart';
+import '../domain/labels/Labels.dart';
+import '../dialog/AlertDialog.dart';
+import '../controller/member/MemberController.dart';
+import '../controller/labels/LabelsController.dart';
+import '../widgets/ContainerWidget.dart';
+import '../main.dart';
 
 class Login extends StatefulWidget {
   Login({Key? key}) : super(key: key);

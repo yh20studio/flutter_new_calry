@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/controller/focusTodos/FocusTodosController.dart';
-import 'package:flutter_new_calry/domain/focusTodos/FocusTodos.dart';
-import 'package:flutter_new_calry/widgets/TextInputFormWidget.dart';
-import 'package:flutter_new_calry/dialog/AlertDialog.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
+
+import '../../controller/focusTodos/FocusTodosController.dart';
+import '../../domain/focusTodos/FocusTodos.dart';
+import '../../widgets/TextInputFormWidget.dart';
+import '../../dialog/AlertDialog.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class FocusTodosDetail extends StatefulWidget {
   FocusTodosDetail({Key? key, this.focusTodos}) : super(key: key);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/home/RoutineHome.dart';
-import 'package:flutter_new_calry/home/CalendarNewHome.dart';
-import 'package:flutter_new_calry/home/MyPageHome.dart';
-import 'controller/member/MemberController.dart';
+
+import 'home/RoutineHome.dart';
+import 'home/CalendarNewHome.dart';
+import 'home/MyPageHome.dart';
 import 'auth/Login.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();

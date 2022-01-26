@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_new_calry/widgets/DateWidget.dart';
 import 'Calendar.dart';
+import '../widgets/DateWidget.dart';
 
 class CalendarTwoChoice extends StatefulWidget {
   CalendarTwoChoice({Key? key, this.startDateTime, this.endDateTime, this.onStartDateTimeChanged, this.onEndDateTimeChanged}) : super(key: key);

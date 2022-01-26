@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
+import '../../domain/routines/Routines.dart';
 
 class TodayRoutines {
   final int? id;

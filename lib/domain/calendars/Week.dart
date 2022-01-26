@@ -1,5 +1,3 @@
-import 'package:flutter_new_calry/domain/schedules/Schedules.dart';
-import 'package:flutter_new_calry/domain/timeDuration/TimeDuration.dart';
 import 'Days.dart';
 
 class Week {

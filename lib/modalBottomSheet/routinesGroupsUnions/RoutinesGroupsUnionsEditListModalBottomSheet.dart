@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/list/routinesGroupsUnions/RoutinesGroupsUnionsEditList.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+
+import '../../list/routinesGroupsUnions/RoutinesGroupsUnionsEditList.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 
 routinesGroupsUnionsEditListModalBottomSheet(BuildContext context, List<RoutinesGroupsUnions> routinesGroupsUnionList) async {
   String action = '';

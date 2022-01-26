@@ -1,4 +1,4 @@
-import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
+import '../../domain/todayRoutines/TodayRoutines.dart';
 
 class TodayRoutinesGroups {
   final int? id;

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/widgets/TextInputFormWidget.dart';
-import 'package:flutter_new_calry/controller/routinesMemos/RoutinesMemosController.dart';
-import 'package:flutter_new_calry/domain/routines/Routines.dart';
-import 'package:flutter_new_calry/domain/routinesMemos/RoutinesMemos.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
+
+import '../../widgets/TextInputFormWidget.dart';
+import '../../controller/routinesMemos/RoutinesMemosController.dart';
+import '../../domain/routines/Routines.dart';
+import '../../domain/routinesMemos/RoutinesMemos.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class RoutinesMemosInput extends StatefulWidget {
   RoutinesMemosInput({Key? key, this.routines}) : super(key: key);

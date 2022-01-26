@@ -1,5 +1,6 @@
 import 'dart:convert';
-import 'package:flutter_new_calry/domain/routinesGroups/RoutinesGroups.dart';
+
+import '../../domain/routinesGroups/RoutinesGroups.dart';
 
 List<RoutinesGroups> parseRoutinesGroups(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();

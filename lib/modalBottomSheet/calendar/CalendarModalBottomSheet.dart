@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/calendar/CalendarTwoChoice.dart';
-import 'package:flutter_new_calry/calendar/CalendarChoice.dart';
+
+import '../../calendar/CalendarTwoChoice.dart';
+import '../../calendar/CalendarChoice.dart';
 
 Future<DateTime> calendarChoiceModalBottomSheet(DateTime selectedDateTime, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/routinesGroupsUnions/routinesGroupsUnionsEditListModalBottomSheet.dart';
-import 'package:flutter_new_calry/controller/todayRoutines/TodayRoutinesController.dart';
-import 'package:flutter_new_calry/controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
-import 'package:flutter_new_calry/domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
-import 'package:flutter_new_calry/domain/routinesGroups/RoutinesGroups.dart';
-import 'package:flutter_new_calry/domain/todayRoutines/TodayRoutines.dart';
+
+import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../../modalBottomSheet/routinesGroupsUnions/routinesGroupsUnionsEditListModalBottomSheet.dart';
+import '../../controller/todayRoutines/TodayRoutinesController.dart';
+import '../../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
+import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
+import '../../domain/routinesGroups/RoutinesGroups.dart';
+import '../../domain/todayRoutines/TodayRoutines.dart';
 
 class RoutinesGroupsUnionsList extends StatefulWidget {
   RoutinesGroupsUnionsList(

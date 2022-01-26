@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_new_calry/domain/focusTodos/FocusTodos.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_new_calry/modalBottomSheet/focusTodos/FocusTodosDetailModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/ContainerWidget.dart';
-import 'package:flutter_new_calry/modalBottomSheet/focusTodos/FocusTodosInputModalBottomSheet.dart';
-import 'package:flutter_new_calry/widgets/MultiLineTextForListItemWidget.dart';
+
+import '../../domain/focusTodos/FocusTodos.dart';
+import '../../modalBottomSheet/focusTodos/FocusTodosDetailModalBottomSheet.dart';
+import '../../widgets/ContainerWidget.dart';
+import '../../modalBottomSheet/focusTodos/FocusTodosInputModalBottomSheet.dart';
+import '../../widgets/MultiLineTextForListItemWidget.dart';
 
 class FocusTodosList extends StatefulWidget {
   FocusTodosList({
