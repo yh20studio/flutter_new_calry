@@ -17,10 +17,8 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release
-        working-directory: ./flutter_new_calry
       - run: |
-          # 2. change path to [existed lib/main.dart path]/build/web
-          cd example_macos/build/web
+          cd flutter_new_calry/build/web
           git init
           git config --global user.email yh20studio@gmail.com
           git config --global user.name tiki
