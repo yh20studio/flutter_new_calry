@@ -20,9 +20,10 @@ Schedules parseSchedule(String responseBody) {
 Future<List<Schedules>> getDaySchedules() async {
   try {
     String jwt = await getJWT();
-    DateTime now = DateTime.now();
+    String now = DateTime.now().toIso8601String();
+    now = now.substring(0, now.length - 1);
     http.Response response = await http.get(
-      Uri.parse(serverIP + 'schedules/day/${now.year}-${now.month}-${now.day}'),
+      Uri.parse(serverIP + 'schedules/day/${now}'),
       headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
     );
     if (response.statusCode == 200) {
