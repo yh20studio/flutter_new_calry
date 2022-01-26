@@ -17,8 +17,9 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release
+        working-directory: ./
       - run: |
-          cd flutter_new_calry/build/web
+          cd build/web
           git init
           git config --global user.email yh20studio@gmail.com
           git config --global user.name tiki
