@@ -45,7 +45,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-lib/setting.dart
 .fvm/
 /ios/Podfile.lock
 
