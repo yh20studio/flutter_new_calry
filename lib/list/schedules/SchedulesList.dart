@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../domain/schedules/Schedules.dart';
 import '../../functions.dart';
-import '../../modalBottomSheet/Schedules/SchedulesDetailModalBottomSheet.dart';
+import '../../modalBottomSheet/schedules/SchedulesDetailModalBottomSheet.dart';
 import '../../widgets/ContainerWidget.dart';
 import '../../modalBottomSheet/schedules/SchedulesInputModalBottomSheet.dart';
 

@@ -11,7 +11,7 @@ import '../../widgets/DateWidget.dart';
 import '../../functions.dart';
 import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
 import '../../widgets/TimeWidget.dart';
-import '../../controller/schedules/schedulesController.dart';
+import '../../controller/schedules/SchedulesController.dart';
 import '../../widgets/ContainerWidget.dart';
 
 class SchedulesInput extends StatefulWidget {

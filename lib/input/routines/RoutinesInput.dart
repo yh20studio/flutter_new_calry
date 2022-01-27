@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../widgets/TextInputFormWidget.dart';
 import '../../modalBottomSheet/time/TimeDurationModalBottomSheet.dart';
-import '../../widgets/timeDurationWidget.dart';
+import '../../widgets/TimeDurationWidget.dart';
 import '../../controller/routines/RoutinesController.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
 import '../../domain/routines/Routines.dart';

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../domain/quickSchedules/QuickSchedules.dart';
 import '../../functions.dart';
-import '../../modalBottomSheet/QuickSchedules/QuickSchedulesInputModalBottomSheet.dart';
-import '../../modalBottomSheet/QuickSchedules/QuickSchedulesDetailModalBottomSheet.dart';
+import '../../modalBottomSheet/quickSchedules/QuickSchedulesInputModalBottomSheet.dart';
+import '../../modalBottomSheet/quickSchedules/QuickSchedulesDetailModalBottomSheet.dart';
 import '../../widgets/TimeWidget.dart';
 
 class QuickSchedulesEditList extends StatefulWidget {

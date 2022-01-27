@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../domain/quickSchedules/QuickSchedules.dart';
 import '../../domain/schedules/Schedules.dart';
 import '../../functions.dart';
-import '../../modalBottomSheet/QuickSchedules/QuickSchedulesEditListModalBottomSheet.dart';
+import '../../modalBottomSheet/quickSchedules/QuickSchedulesEditListModalBottomSheet.dart';
 import '../../widgets/TimeWidget.dart';
 import '../../controller/schedules/SchedulesController.dart';
 

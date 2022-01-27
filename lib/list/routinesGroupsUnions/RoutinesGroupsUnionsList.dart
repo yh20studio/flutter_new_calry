@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
-import '../../modalBottomSheet/routinesGroupsUnions/routinesGroupsUnionsEditListModalBottomSheet.dart';
+import '../../modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsEditListModalBottomSheet.dart';
 import '../../controller/todayRoutines/TodayRoutinesController.dart';
 import '../../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
 import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';

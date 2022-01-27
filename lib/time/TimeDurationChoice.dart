@@ -1,6 +1,6 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-import '../../widgets/timeDurationWidget.dart';
+import '../../widgets/TimeDurationWidget.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
 
 class TimeDurationChoice extends StatefulWidget {
