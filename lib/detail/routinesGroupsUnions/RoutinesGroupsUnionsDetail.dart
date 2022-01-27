@@ -6,7 +6,7 @@ import '../../widgets/TimeDurationWidget.dart';
 import '../../widgets/TextInputFormWidget.dart';
 import '../../widgets/ContainerWidget.dart';
 import '../../modalBottomSheet/time/TimeDurationModalBottomSheet.dart';
-import '../../modalBottomSheet/routines/routinesListForRoutinesGroupsModalBottomSheet.dart';
+import '../../modalBottomSheet/routines/RoutinesListForRoutinesGroupsModalBottomSheet.dart';
 import '../../controller/routinesGroupsUnion/RoutinesGroupsUnionsController.dart';
 import '../../controller/routines/RoutinesController.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
