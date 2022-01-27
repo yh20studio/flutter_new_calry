@@ -5,7 +5,7 @@ import '../../domain/schedules/Schedules.dart';
 import '../../domain/labels/Labels.dart';
 import '../../widgets/TextInputFormWidget.dart';
 import '../../widgets/DateWidget.dart';
-import '../../modalBottomSheet/Calendar/CalendarModalBottomSheet.dart';
+import '../../modalBottomSheet/calendar/CalendarModalBottomSheet.dart';
 import '../../modalBottomSheet/labels/LabelsModalBottomSheet.dart';
 import '../../functions.dart';
 import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';

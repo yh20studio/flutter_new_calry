@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../detail/RoutinesGroupsUnions/RoutinesGroupsUnionsDetail.dart';
+import '../../detail/routinesGroupsUnions/RoutinesGroupsUnionsDetail.dart';
 import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 
 routinesGroupsUnionsDetailModalBottomSheet(
