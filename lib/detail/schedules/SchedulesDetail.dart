@@ -11,6 +11,7 @@ import '../../functions.dart';
 import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
 import '../../widgets/TimeWidget.dart';
 import '../../controller/schedules/SchedulesController.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class SchedulesDetail extends StatefulWidget {
   SchedulesDetail({Key? key, this.schedules}) : super(key: key);
@@ -248,7 +249,7 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
         labels: labels);
 
     try {
-      var httpResult = await updateSchedules(schedules);
+      var httpResult = await updateSchedules(await getJwt(context), schedules);
       setState(() {
         Navigator.pop(context, ["update", httpResult]);
       });
@@ -276,7 +277,7 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
         labels: labels);
 
     try {
-      var httpResult = await deleteSchedules(schedules);
+      var httpResult = await deleteSchedules(await getJwt(context), schedules);
       setState(() {
         Navigator.pop(context, ["${httpResult}", schedules]);
       });

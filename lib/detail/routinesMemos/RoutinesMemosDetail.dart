@@ -5,6 +5,7 @@ import '../../widgets/DateWidget.dart';
 import '../../controller/routinesMemos/RoutinesMemosController.dart';
 import '../../domain/routinesMemos/RoutinesMemos.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class RoutinesMemosDetail extends StatefulWidget {
   RoutinesMemosDetail({Key? key, this.routinesMemos}) : super(key: key);
@@ -75,7 +76,7 @@ class _RoutinesMemosDetailstate extends State<RoutinesMemosDetail> {
 
   void _httpDeleteRoutinesMemos() async {
     try {
-      var httpResult = await deleteRoutinesMemos(routinesMemos!);
+      var httpResult = await deleteRoutinesMemos(await getJwt(context), routinesMemos!);
       print((httpResult));
       Navigator.pop(context, [httpResult, null]);
     } on Exception catch (exception) {
@@ -86,7 +87,7 @@ class _RoutinesMemosDetailstate extends State<RoutinesMemosDetail> {
   void _awaitReturnValueFromRoutinesMemosUpdate() async {
     RoutinesMemos newRoutinesMemos = RoutinesMemos(id: routinesMemos!.id, content: _memoController.text);
     try {
-      var httpResult = await updateRoutinesMemos(newRoutinesMemos);
+      var httpResult = await updateRoutinesMemos(await getJwt(context), newRoutinesMemos);
       Navigator.pop(context, ["update", httpResult]);
     } on Exception catch (exception) {
       print(exception);

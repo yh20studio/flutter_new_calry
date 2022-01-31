@@ -13,6 +13,7 @@ import '../controller/quickSchedules/QuickSchedulesController.dart';
 import '../controller/routines/RoutinesController.dart';
 import '../domain/routines/Routines.dart';
 import '../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
+import '../controller/jwt/JwtController.dart';
 
 class MyPageHome extends StatefulWidget {
   MyPageHome({
@@ -54,7 +55,7 @@ class _MyPageHomestate extends State<MyPageHome> {
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     widget: FutureBuilder<Map<String, TodayRoutinesGroups>>(
-                        future: getAllTodayRoutinesGroups(),
+                        future: futureGetAllTodayRoutinesGroups(),
                         builder: (BuildContext context, AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
                             print('no data');
@@ -106,17 +107,21 @@ class _MyPageHomestate extends State<MyPageHome> {
           ),
         ));
   }
+  Future<Map<String, TodayRoutinesGroups>> futureGetAllTodayRoutinesGroups() async{
+    String jwt = await getJwt(context);
+    return getAllTodayRoutinesGroups(jwt);
+  }
 
   void _awaitReturnAuth() async {
     try {
-      var httpGetMyInfo = await getMyInfo();
+      var httpGetMyInfo = await getMyInfo(await getJwt(context));
       print(httpGetMyInfo);
       await Navigator.push(context, MaterialPageRoute(builder: (context) => MemberInfo(member: httpGetMyInfo)));
     } catch (e) {
       print(e);
       var result = await authenticationUser();
       if (result == 'success') {
-        var httpGetMyInfo = await getMyInfo();
+        var httpGetMyInfo = await getMyInfo(await getJwt(context));
         await Navigator.push(context, MaterialPageRoute(builder: (context) => MemberInfo(member: httpGetMyInfo)));
       } else if (result == 'fail') {
         var awaitResult = await Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
@@ -126,12 +131,12 @@ class _MyPageHomestate extends State<MyPageHome> {
   }
 
   void _awaitReturnValueFromQuickSchedulesEditList() async {
-    List<QuickSchedules> quickSchedulesList = await getQuickSchedules();
+    List<QuickSchedules> quickSchedulesList = await getQuickSchedules(await getJwt(context));
     await quickSchedulesEditListModalBottomSheet(context, quickSchedulesList);
   }
 
   void _awaitReturnValueFromRoutinesEditList() async {
-    List<Routines> customRoutinesList = await getRoutines();
+    List<Routines> customRoutinesList = await getRoutines(await getJwt(context));
     await routinesEditListModalBottomSheet(context, customRoutinesList);
   }
 }

@@ -10,6 +10,7 @@ import '../controller/member/MemberController.dart';
 import '../controller/labels/LabelsController.dart';
 import '../widgets/ContainerWidget.dart';
 import '../main.dart';
+import '../controller/jwt/JwtController.dart';
 
 class Login extends StatefulWidget {
   Login({Key? key}) : super(key: key);
@@ -29,7 +30,9 @@ class _Loginstate extends State<Login> {
   @override
   Widget build(BuildContext context) {
     var _width = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return new WillPopScope(
+        onWillPop: () async => false,
+    child:  Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
         appBar: PreferredSize(
             preferredSize: Size.fromHeight(MediaQuery.of(context).size.height * 0.3),
@@ -97,7 +100,7 @@ class _Loginstate extends State<Login> {
                       ],
                     )
                   ],
-                ))));
+                )))));
   }
 
   Widget authTestInputForm({required TextEditingController controller, required double width, required BuildContext context}) {
@@ -136,8 +139,7 @@ class _Loginstate extends State<Login> {
         // token 저장
         prefs.setString('accessToken', jsonDecode(httpResult)['accessToken']);
         prefs.setInt('accessTokenExpiresIn', jsonDecode(httpResult)['accessTokenExpiresIn']);
-
-        var labelResult = await getLabels();
+        var labelResult = await getLabels(await getJwt(context));
         // Labels 저장
         final String encodedData = Labels.encode(labelResult);
         await prefs.setString('labels', encodedData);

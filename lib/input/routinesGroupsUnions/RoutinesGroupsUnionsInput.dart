@@ -8,6 +8,7 @@ import '../../domain/routines/Routines.dart';
 import '../../domain/routinesGroups/RoutinesGroups.dart';
 import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class RoutinesGroupsUnionsInput extends StatefulWidget {
   RoutinesGroupsUnionsInput({Key? key}) : super(key: key);
@@ -155,7 +156,7 @@ class _RoutinesGroupsUnionsInputstate extends State<RoutinesGroupsUnionsInput> {
 
     RoutinesGroupsUnions routinesGroupsUnions = RoutinesGroupsUnions(title: _titleController.text, routinesGroupsList: routinesGroupsList);
     try {
-      RoutinesGroupsUnions httpResult = await postRoutinesGroupsUnions(routinesGroupsUnions);
+      RoutinesGroupsUnions httpResult = await postRoutinesGroupsUnions(await getJwt(context), routinesGroupsUnions);
       Navigator.pop(context, httpResult);
     } catch (e) {
       print(e);
@@ -163,7 +164,7 @@ class _RoutinesGroupsUnionsInputstate extends State<RoutinesGroupsUnionsInput> {
   }
 
   void _awaitReturnValueFromRoutinesListForRoutinesGroups() async {
-    List<Routines> routinesList = await getRoutines();
+    List<Routines> routinesList = await getRoutines(await getJwt(context));
     var awaitResult = await routinesListForRoutinesGroupsModalBottomSheet(routinesList, context);
     if (awaitResult != null) {
       setState(() {

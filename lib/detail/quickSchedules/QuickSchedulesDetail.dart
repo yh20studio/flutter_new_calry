@@ -11,6 +11,7 @@ import '../../functions.dart';
 import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
 import '../../controller/quickSchedules/QuickSchedulesController.dart';
 import '../../auth/Login.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class QuickSchedulesDetail extends StatefulWidget {
   QuickSchedulesDetail({Key? key, this.quickSchedules}) : super(key: key);
@@ -188,7 +189,7 @@ class _QuickSchedulesDetailstate extends State<QuickSchedulesDetail> {
         content: _contentController.text,
         labels: labels);
     try {
-      var httpResult = await updateQuickSchedules(quickSchedules);
+      var httpResult = await updateQuickSchedules(await getJwt(context), quickSchedules);
       Navigator.pop(context, ["update", httpResult]);
     } catch (e) {
       if (e == 'login') {
@@ -205,14 +206,7 @@ class _QuickSchedulesDetailstate extends State<QuickSchedulesDetail> {
         title: _titleController.text,
         content: _contentController.text,
         labels: labels);
-
-    try {
-      await deleteQuickSchedules(quickSchedules);
-      Navigator.pop(context, ["delete", quickSchedules]);
-    } catch (e) {
-      if (e == 'login') {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-      }
-    }
+    await deleteQuickSchedules(await getJwt(context), quickSchedules);
+    Navigator.pop(context, ["delete", quickSchedules]);
   }
 }

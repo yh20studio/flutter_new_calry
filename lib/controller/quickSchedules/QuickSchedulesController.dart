@@ -7,8 +7,6 @@ import 'package:http/http.dart' as http;
 
 import '../../domain/quickSchedules/QuickSchedules.dart';
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
-
 
 List<QuickSchedules> parseQuickSchedules(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
@@ -20,25 +18,19 @@ QuickSchedules parseQuickSchedule(String responseBody) {
   return QuickSchedules.fromJson(parsed);
 }
 
-Future<List<QuickSchedules>> getQuickSchedules() async {
-  try {
-    String jwt = await getJWT();
-    http.Response response = await http.get(
-      Uri.parse(serverIP + 'quickSchedules'),
-      headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
-    );
-    if (response.statusCode == 200) {
-      return compute(parseQuickSchedules, response.body);
-    } else {
-      throw Exception("error: status code ${response.statusCode}");
-    }
-  } catch (e) {
-    return Future.error("Need Login");
+Future<List<QuickSchedules>> getQuickSchedules(String jwt) async {
+  http.Response response = await http.get(
+    Uri.parse(serverIP + 'quickSchedules'),
+    headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
+  );
+  if (response.statusCode == 200) {
+    return compute(parseQuickSchedules, response.body);
+  } else {
+    throw Exception("error: status code ${response.statusCode}");
   }
 }
 
-Future<QuickSchedules> postQuickSchedules(QuickSchedules quickSchedules) async {
-  String jwt = await getJWT();
+Future<QuickSchedules> postQuickSchedules(String jwt, QuickSchedules quickSchedules) async {
   http.Response response;
   if (quickSchedules.startTime == null && quickSchedules.endTime == null) {
     response = await http.post(
@@ -83,8 +75,7 @@ Future<QuickSchedules> postQuickSchedules(QuickSchedules quickSchedules) async {
   }
 }
 
-Future<QuickSchedules> updateQuickSchedules(QuickSchedules quickSchedules) async {
-  String jwt = await getJWT();
+Future<QuickSchedules> updateQuickSchedules(String jwt, QuickSchedules quickSchedules) async {
   http.Response response;
   if (quickSchedules.startTime == null && quickSchedules.endTime == null) {
     response = await http.put(
@@ -119,7 +110,6 @@ Future<QuickSchedules> updateQuickSchedules(QuickSchedules quickSchedules) async
       ),
     );
   }
-
   if (response.statusCode == 200) {
     return compute(parseQuickSchedule, response.body);
   } else {
@@ -127,8 +117,7 @@ Future<QuickSchedules> updateQuickSchedules(QuickSchedules quickSchedules) async
   }
 }
 
-Future<String> deleteQuickSchedules(QuickSchedules quickSchedules) async {
-  String jwt = await getJWT();
+Future<String> deleteQuickSchedules(String jwt, QuickSchedules quickSchedules) async {
   final url = Uri.parse(serverIP + 'quickSchedules/${quickSchedules.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{

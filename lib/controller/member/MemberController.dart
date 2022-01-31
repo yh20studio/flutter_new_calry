@@ -8,40 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/member/Member.dart';
 import '../../setting.dart';
-import '../../main.dart';
-import '../../dialog/AlertDialog.dart';
+import '../jwt/JwtController.dart';
 
 Member parseMember(String responseBody) {
   final parsed = jsonDecode(responseBody);
   return Member.fromJson(parsed);
-}
-
-Future getJWT() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (prefs.getString('accessToken') == null) {
-    print("Need Login");
-    navigatorKey.currentState!.pushNamed('login');
-  } else {
-    DateTime accessTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(prefs.getInt('accessTokenExpiresIn')!);
-    DateTime now = DateTime.now();
-    if (accessTokenExpiresIn.isBefore(now)) {
-      print("Expires");
-      try {
-        var httpPostReissue = await postReissueAccess(prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
-        prefs.setString('accessToken', jsonDecode(httpPostReissue)['accessToken']);
-        prefs.setInt('accessTokenExpiresIn', jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
-        return prefs.getString('accessToken')!;
-      } catch (e) {
-        print("reLogin!");
-        var dialogResult = await alertDialog(navigatorKey.currentContext!, "로그인이 유효하지 않습니다. 다시 로그인 해주세요.");
-        if (dialogResult == 'ok') {
-          navigatorKey.currentState!.pushNamed('login');
-        }
-      }
-    } else {
-      return prefs.getString('accessToken')!;
-    }
-  }
 }
 
 Future<String> authenticationUser() async {
@@ -67,8 +38,7 @@ Future<String> authenticationUser() async {
   }
 }
 
-Future<Member> getMyInfo() async {
-  String jwt = await getJWT();
+Future<Member> getMyInfo(String jwt) async {
   http.Response response = await http.get(
     Uri.parse(serverIP + 'member/info'),
     headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
@@ -110,8 +80,7 @@ Future postLogin(String email, String password) async {
   }
 }
 
-Future postLogout(String? accessToken, int? accessTokenExpiresIn) async {
-  String jwt = await getJWT();
+Future postLogout(String jwt, String? accessToken, int? accessTokenExpiresIn) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'member/logout'),
     headers: {
@@ -128,24 +97,6 @@ Future postLogout(String? accessToken, int? accessTokenExpiresIn) async {
   );
   if (response.statusCode == 200) {
     return jsonDecode(response.body)['message'];
-  } else {
-    throw Exception("error: status code ${response.statusCode}");
-  }
-}
-
-Future postReissueAccess(String? accessToken, int? accessTokenExpiresIn) async {
-  http.Response response = await http.post(
-    Uri.parse(serverIP + 'member/reissue/access'),
-    headers: {HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8", HttpHeaders.acceptHeader: "application/json; charset=UTF-8"},
-    body: jsonEncode(
-      {
-        "accessToken": accessToken,
-        "accessTokenExpiresIn": accessTokenExpiresIn,
-      },
-    ),
-  );
-  if (response.statusCode == 200) {
-    return response.body;
   } else {
     throw Exception("error: status code ${response.statusCode}");
   }

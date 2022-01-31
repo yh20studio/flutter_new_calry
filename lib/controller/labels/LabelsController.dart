@@ -2,21 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../domain/labels/Labels.dart';
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
-
 
 List<Labels> parseLabels(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
   return parsed.map<Labels>((json) => Labels.fromJson(json)).toList();
 }
 
-Future<List<Labels>> getLabels() async {
-  String jwt = await getJWT();
+Future<List<Labels>> getLabels(String jwt) async {
   http.Response response = await http.get(
     Uri.parse(serverIP + 'labels'),
     headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
@@ -28,8 +26,7 @@ Future<List<Labels>> getLabels() async {
   }
 }
 
-Future<List<Labels>> updateLabels(List<Labels> labelsList) async {
-  String jwt = await getJWT();
+Future<List<Labels>> updateLabels(String jwt, List<Labels> labelsList) async {
   List jsonList = [];
   labelsList.map((item) => jsonList.add(item.toJson())).toList();
 

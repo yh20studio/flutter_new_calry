@@ -6,6 +6,7 @@ import '../widgets/ContainerWidget.dart';
 import '../controller/member/MemberController.dart';
 import '../domain/member/Member.dart';
 import '../main.dart';
+import '../controller/jwt/JwtController.dart';
 
 class MemberInfo extends StatefulWidget {
   MemberInfo({Key? key, this.member}) : super(key: key);
@@ -82,16 +83,16 @@ class _MemberInfostate extends State<MemberInfo> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         try {
-          var httpResult = await postLogout(prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
+          var httpResult = await postLogout(await getJwt(context), prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
           prefs.remove('accessToken');
           prefs.remove('accessTokenExpiresIn');
           print("reLogin!");
-          navigatorKey.currentState!.pushNamed('login');
+          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
         } catch (e) {
           prefs.remove('accessToken');
           prefs.remove('accessTokenExpiresIn');
           print("reLogin!");
-          navigatorKey.currentState!.pushNamed('login');
+          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
         }
       }
     }
@@ -99,7 +100,6 @@ class _MemberInfostate extends State<MemberInfo> {
 
   Future<bool> _awaitTwoChoiceDialog(String message) async {
     var dialogResult = await twoChoiceDialog(context, message);
-
     if (dialogResult == 'ok') {
       return true;
     } else {

@@ -10,6 +10,7 @@ import '../../domain/routines/Routines.dart';
 import '../../domain/todayRoutines/TodayRoutines.dart';
 import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 import '../../widgets/MultiLineTextForListItemWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class TodayRoutinesGroupsHome extends StatefulWidget {
   TodayRoutinesGroupsHome({Key? key, this.todayRoutinesGroups, this.onRefreshChanged, this.onTodayRoutinesGroupsChanged}) : super(key: key);
@@ -31,7 +32,6 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
   void initState() {
     super.initState();
     todayRoutinesGroups = widget.todayRoutinesGroups;
-
     widget.onRefreshChanged!('');
     widget.onTodayRoutinesGroupsChanged!(TodayRoutinesGroups());
   }
@@ -56,7 +56,7 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
               ],
             )),
         widget: FutureBuilder<List<RoutinesGroupsUnions>>(
-            future: getRoutinesGroupsUnions(),
+            future: futureGetRoutinesGroupsUnions(),
             builder: (BuildContext context, AsyncSnapshot snapshotRoutinesGroup) {
               if (!snapshotRoutinesGroup.hasData) {
                 print('no data');
@@ -66,8 +66,9 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
                 return Text('Error');
               } else {
                 routinesGroupsUnionList = snapshotRoutinesGroup.data!;
+
                 return FutureBuilder<List<Routines>>(
-                    future: getRoutines(),
+                    future: futureGetRoutines(),
                     builder: (BuildContext context, AsyncSnapshot snapshotRoutines) {
                       if (!snapshotRoutines.hasData) {
                         print('no data');
@@ -105,6 +106,16 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
               }
             }),
         context: context);
+  }
+
+  Future<List<RoutinesGroupsUnions>> futureGetRoutinesGroupsUnions() async{
+    String jwt = await getJwt(context);
+    return getRoutinesGroupsUnions(jwt);
+  }
+
+  Future<List<Routines>> futureGetRoutines() async{
+    String jwt = await getJwt(context);
+    return getRoutines(jwt);
   }
 
   Widget listViewTodayRoutines({required int index, required TodayRoutines todayRoutines, required double width, required BuildContext context}) {

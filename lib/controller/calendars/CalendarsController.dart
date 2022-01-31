@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
 import '../../domain/calendars/Calendars.dart';
 
 WeekSchedulesCalendar parseWeekSchedulesCalendar(String responseBody) {
@@ -19,9 +18,7 @@ PartWeekSchedules parsePartWeekSchedules(String responseBody) {
   return PartWeekSchedules.fromJson(parsed);
 }
 
-Future<WeekSchedulesCalendar> getWholeSchedules() async {
-  try {
-    String jwt = await getJWT();
+Future<WeekSchedulesCalendar> getWholeSchedules(String jwt) async {
     http.Response response = await http.get(
       Uri.parse(serverIP + 'calendars/whole'),
       headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
@@ -31,14 +28,9 @@ Future<WeekSchedulesCalendar> getWholeSchedules() async {
     } else {
       throw Exception("error: status code ${response.statusCode}");
     }
-  } catch (e) {
-    return Future.error("Need login");
-  }
 }
 
-Future<PartWeekSchedules> getPartSchedules(String updateStart, String updateEnd) async {
-  String jwt = await getJWT();
-
+Future<PartWeekSchedules> getPartSchedules(String jwt, String updateStart, String updateEnd) async {
   http.Response response = await http.get(
     Uri.parse(serverIP + 'calendars/part/${updateStart}/${updateEnd}'),
     headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},

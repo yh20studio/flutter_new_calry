@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
 import '../../domain/routinesMemos/RoutinesMemos.dart';
 
 RoutinesMemos parseRoutinesMemo(String responseBody) {
@@ -14,8 +13,7 @@ RoutinesMemos parseRoutinesMemo(String responseBody) {
   return RoutinesMemos.fromJson(parsed);
 }
 
-Future<RoutinesMemos> postRoutinesMemos(RoutinesMemos routinesMemos) async {
-  String jwt = await getJWT();
+Future<RoutinesMemos> postRoutinesMemos(String jwt, RoutinesMemos routinesMemos) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'routines/memos'),
     headers: {
@@ -37,8 +35,7 @@ Future<RoutinesMemos> postRoutinesMemos(RoutinesMemos routinesMemos) async {
   }
 }
 
-Future<RoutinesMemos> updateRoutinesMemos(RoutinesMemos routinesMemos) async {
-  String jwt = await getJWT();
+Future<RoutinesMemos> updateRoutinesMemos(String jwt, RoutinesMemos routinesMemos) async {
   http.Response response = await http.put(
     Uri.parse(serverIP + 'routines/memos/${routinesMemos.id}'),
     headers: {
@@ -56,8 +53,7 @@ Future<RoutinesMemos> updateRoutinesMemos(RoutinesMemos routinesMemos) async {
   }
 }
 
-Future<String> deleteRoutinesMemos(RoutinesMemos routinesMemos) async {
-  String jwt = await getJWT();
+Future<String> deleteRoutinesMemos(String jwt, RoutinesMemos routinesMemos) async {
   final url = Uri.parse(serverIP + 'routines/memos/${routinesMemos.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{

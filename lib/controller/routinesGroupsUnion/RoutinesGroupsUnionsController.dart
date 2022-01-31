@@ -6,7 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
 import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 
 List<RoutinesGroupsUnions> parseRoutinesGroupsUnions(String responseBody) {
@@ -19,8 +18,7 @@ RoutinesGroupsUnions parseRoutinesGroupsUnion(String responseBody) {
   return RoutinesGroupsUnions.fromJson(parsed);
 }
 
-Future<List<RoutinesGroupsUnions>> getRoutinesGroupsUnions() async {
-  String jwt = await getJWT();
+Future<List<RoutinesGroupsUnions>> getRoutinesGroupsUnions(String jwt) async {
   http.Response response = await http.get(
     Uri.parse(serverIP + 'routinesGroups/unions'),
     headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
@@ -32,9 +30,7 @@ Future<List<RoutinesGroupsUnions>> getRoutinesGroupsUnions() async {
   }
 }
 
-Future<RoutinesGroupsUnions> postRoutinesGroupsUnions(RoutinesGroupsUnions routinesGroupsUnions) async {
-  String jwt = await getJWT();
-
+Future<RoutinesGroupsUnions> postRoutinesGroupsUnions(String jwt, RoutinesGroupsUnions routinesGroupsUnions) async {
   print(routinesGroupsUnions.routinesGroupsList!.map((i) => i.toJsonWithoutId()).toList());
   http.Response response = await http.post(
     Uri.parse(serverIP + 'routinesGroups/unions'),
@@ -55,8 +51,7 @@ Future<RoutinesGroupsUnions> postRoutinesGroupsUnions(RoutinesGroupsUnions routi
   }
 }
 
-Future<RoutinesGroupsUnions> updateRoutinesGroupsUnions(RoutinesGroupsUnions routinesGroupsUnions) async {
-  String jwt = await getJWT();
+Future<RoutinesGroupsUnions> updateRoutinesGroupsUnions(String jwt, RoutinesGroupsUnions routinesGroupsUnions) async {
   http.Response response = await http.put(
     Uri.parse(serverIP + 'routinesGroups/unions/${routinesGroupsUnions.id}'),
     headers: {
@@ -72,9 +67,7 @@ Future<RoutinesGroupsUnions> updateRoutinesGroupsUnions(RoutinesGroupsUnions rou
   }
 }
 
-Future<String> deleteRoutinesGroupsUnions(RoutinesGroupsUnions routinesGroupsUnions) async {
-  String jwt = await getJWT();
-
+Future<String> deleteRoutinesGroupsUnions(String jwt, RoutinesGroupsUnions routinesGroupsUnions) async {
   final url = Uri.parse(serverIP + 'routinesGroups/unions/${routinesGroupsUnions.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{

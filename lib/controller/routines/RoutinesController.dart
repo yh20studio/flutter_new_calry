@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
 import '../../domain/routines/Routines.dart';
 
 List<Routines> parseRoutines(String responseBody) {
@@ -19,8 +19,7 @@ Routines parseRoutine(String responseBody) {
   return Routines.fromJson(parsed);
 }
 
-Future<List<Routines>> getRoutines() async {
-  String jwt = await getJWT();
+Future<List<Routines>> getRoutines(String jwt) async {
   http.Response response = await http.get(
     Uri.parse(serverIP + 'routines'),
     headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
@@ -32,9 +31,7 @@ Future<List<Routines>> getRoutines() async {
   }
 }
 
-Future<Routines> postRoutines(Routines routines) async {
-  String jwt = await getJWT();
-
+Future<Routines> postRoutines(String jwt, Routines routines) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'routines'),
     headers: {
@@ -56,8 +53,7 @@ Future<Routines> postRoutines(Routines routines) async {
   }
 }
 
-Future<Routines> updateRoutines(Routines routines) async {
-  String jwt = await getJWT();
+Future<Routines> updateRoutines(String jwt, Routines routines) async {
   http.Response response = await http.put(
     Uri.parse(serverIP + 'routines/${routines.id}'),
     headers: {
@@ -76,8 +72,7 @@ Future<Routines> updateRoutines(Routines routines) async {
   }
 }
 
-Future<String> deleteRoutines(Routines routines) async {
-  String jwt = await getJWT();
+Future<String> deleteRoutines(String jwt, Routines routines) async {
   final url = Uri.parse(serverIP + 'routines/${routines.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{

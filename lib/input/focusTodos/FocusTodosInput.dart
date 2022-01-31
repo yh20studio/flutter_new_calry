@@ -5,6 +5,7 @@ import '../../controller/focusTodos/FocusTodosController.dart';
 import '../../domain/focusTodos/FocusTodos.dart';
 import '../../dialog/AlertDialog.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class FocusTodosInput extends StatefulWidget {
   FocusTodosInput({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class _FocusTodosInputstate extends State<FocusTodosInput> {
   void _httpPostFocusTodos() async {
     FocusTodos focusTodos = FocusTodos(content: _contentController.text, success: false);
     try {
-      var httpResult = await postFocusTodos(focusTodos);
+      var httpResult = await postFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, httpResult);
     } catch (e) {
       alertDialog(context, e.toString());

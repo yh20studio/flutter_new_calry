@@ -9,6 +9,7 @@ import '../../controller/todayRoutines/TodayRoutinesController.dart';
 import '../../domain/routinesMemos/RoutinesMemos.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
 import '../../domain/todayRoutines/TodayRoutines.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class TodayRoutinesDetail extends StatefulWidget {
   TodayRoutinesDetail({Key? key, this.todayRoutines}) : super(key: key);
@@ -146,7 +147,7 @@ class _TodayRoutinesDetailstate extends State<TodayRoutinesDetail> {
 
   void _httpUpdateTodayRoutines() async {
     try {
-      var httpResult = await updateTodayRoutines(todayRoutines!);
+      var httpResult = await updateTodayRoutines(await getJwt(context), todayRoutines!);
       Navigator.pop(context, ["complete", httpResult]);
     } on Exception catch (exception) {
       print(exception);
@@ -155,7 +156,7 @@ class _TodayRoutinesDetailstate extends State<TodayRoutinesDetail> {
 
   void _httpDeleteTodayRoutines() async {
     try {
-      await deleteTodayRoutines(todayRoutines!);
+      await deleteTodayRoutines(await getJwt(context), todayRoutines!);
       Navigator.pop(context, ["delete", todayRoutines]);
     } on Exception catch (exception) {
       print(exception);

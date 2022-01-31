@@ -7,8 +7,6 @@ import 'package:http/http.dart' as http;
 
 import '../../domain/focusTodos/FocusTodos.dart';
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
-
 
 List<FocusTodos> parseFocusTodos(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
@@ -20,9 +18,7 @@ FocusTodos parseFocusTodo(String responseBody) {
   return FocusTodos.fromJson(parsed);
 }
 
-Future<List<FocusTodos>> getFocusTodos() async {
-  try {
-    String jwt = await getJWT();
+Future<List<FocusTodos>> getFocusTodos(String jwt) async {
     http.Response response = await http.get(
       Uri.parse(serverIP + 'focusTodos'),
       headers: {HttpHeaders.authorizationHeader: "Bearer $jwt", HttpHeaders.contentTypeHeader: "application/json; charset=UTF-8"},
@@ -32,13 +28,9 @@ Future<List<FocusTodos>> getFocusTodos() async {
     } else {
       throw Exception("error: status code ${response.statusCode}");
     }
-  } catch (e) {
-    return Future.error("Need Login");
-  }
 }
 
-Future<FocusTodos> postFocusTodos(FocusTodos focusTodos) async {
-  String jwt = await getJWT();
+Future<FocusTodos> postFocusTodos(String jwt, FocusTodos focusTodos) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'focusTodos'),
     headers: {
@@ -60,9 +52,7 @@ Future<FocusTodos> postFocusTodos(FocusTodos focusTodos) async {
   }
 }
 
-Future<FocusTodos> updateFocusTodos(FocusTodos focusTodos) async {
-  String jwt = await getJWT();
-
+Future<FocusTodos> updateFocusTodos(String jwt, FocusTodos focusTodos) async {
   http.Response response = await http.put(
     Uri.parse(serverIP + 'focusTodos/${focusTodos.id}'),
     headers: {
@@ -81,9 +71,7 @@ Future<FocusTodos> updateFocusTodos(FocusTodos focusTodos) async {
   }
 }
 
-Future<FocusTodos> successFocusTodos(FocusTodos focusTodos) async {
-  String jwt = await getJWT();
-
+Future<FocusTodos> successFocusTodos(String jwt, FocusTodos focusTodos) async {
   http.Response response = await http.put(
     Uri.parse(serverIP + 'focusTodos/success/${focusTodos.id}'),
     headers: {
@@ -102,8 +90,7 @@ Future<FocusTodos> successFocusTodos(FocusTodos focusTodos) async {
   }
 }
 
-Future<String> deleteFocusTodos(FocusTodos focusTodos) async {
-  String jwt = await getJWT();
+Future<String> deleteFocusTodos(String jwt, FocusTodos focusTodos) async {
   final url = Uri.parse(serverIP + 'focusTodos/${focusTodos.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{

@@ -11,6 +11,7 @@ import '../../widgets/TimeWidget.dart';
 import '../../functions.dart';
 import '../../controller/quickSchedules/QuickSchedulesController.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class QuickSchedulesInput extends StatefulWidget {
   QuickSchedulesInput({Key? key}) : super(key: key);
@@ -186,7 +187,7 @@ class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
         title: _titleController.text,
         content: _contentController.text,
         labels: labels);
-    var httpResult = await postQuickSchedules(quickSchedules);
+    var httpResult = await postQuickSchedules(await getJwt(context), quickSchedules);
     Navigator.pop(context, httpResult);
   }
 }

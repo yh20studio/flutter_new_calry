@@ -7,6 +7,7 @@ import '../../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart'
 import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 import '../../domain/routinesGroups/RoutinesGroups.dart';
 import '../../domain/todayRoutines/TodayRoutines.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class RoutinesGroupsUnionsList extends StatefulWidget {
   RoutinesGroupsUnionsList(
@@ -118,7 +119,7 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
         todayRoutinesList.add(todayRoutines);
       });
       List<TodayRoutines> httpResult =
-          await postTodayRoutinesList("${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}", todayRoutinesList);
+          await postTodayRoutinesList(await getJwt(context), "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}", todayRoutinesList);
 
       setState(() {
         httpResult.forEach((element) {
@@ -140,7 +141,7 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
 
     if (awaitResult != null) {
       if (awaitResult[0] == "update" || awaitResult[0] == "delete") {
-        TodayRoutinesGroups newTodayRoutinesGroups = await getTodayRoutinesGroups(DateTime.now());
+        TodayRoutinesGroups newTodayRoutinesGroups = await getTodayRoutinesGroups(await getJwt(context), DateTime.now());
         setState(() {
           todayRoutinesGroups = newTodayRoutinesGroups;
           widget.onRefreshChanged!("refresh");

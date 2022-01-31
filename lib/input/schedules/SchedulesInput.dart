@@ -13,6 +13,7 @@ import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
 import '../../widgets/TimeWidget.dart';
 import '../../controller/schedules/SchedulesController.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class SchedulesInput extends StatefulWidget {
   SchedulesInput({Key? key, this.selectedDate}) : super(key: key);
@@ -239,7 +240,7 @@ class _SchedulesInputstate extends State<SchedulesInput> {
 
     Schedules schedules =
         Schedules(startDate: startDateTime, endDate: endDateTime, title: _titleController.text, content: _contentController.text, labels: labels);
-    var httpResult = await postSchedules(schedules);
+    var httpResult = await postSchedules(await getJwt(context), schedules);
     Navigator.pop(context, httpResult);
   }
 }

@@ -5,6 +5,7 @@ import '../../controller/routinesMemos/RoutinesMemosController.dart';
 import '../../domain/routines/Routines.dart';
 import '../../domain/routinesMemos/RoutinesMemos.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class RoutinesMemosInput extends StatefulWidget {
   RoutinesMemosInput({Key? key, this.routines}) : super(key: key);
@@ -61,7 +62,7 @@ class _RoutinesMemosInputstate extends State<RoutinesMemosInput> {
       content: _memoController.text,
     );
     try {
-      RoutinesMemos httpResult = await postRoutinesMemos(routinesMemos);
+      RoutinesMemos httpResult = await postRoutinesMemos(await getJwt(context), routinesMemos);
       Navigator.pop(context, httpResult);
     } catch (e) {
       print(e);

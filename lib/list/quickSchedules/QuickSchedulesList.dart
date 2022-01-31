@@ -6,6 +6,7 @@ import '../../functions.dart';
 import '../../modalBottomSheet/quickSchedules/QuickSchedulesEditListModalBottomSheet.dart';
 import '../../widgets/TimeWidget.dart';
 import '../../controller/schedules/SchedulesController.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class QuickSchedulesList extends StatefulWidget {
   QuickSchedulesList({Key? key, this.date, this.quickScheduleList, this.onRefreshChanged, this.onScheduleChanged, this.onQuickScheduleChanged})
@@ -135,7 +136,7 @@ class _QuickSchedulesListstate extends State<QuickSchedulesList> {
         Schedules(startDate: startDate, endDate: endDate, title: quickSchedules.title, content: quickSchedules.content, labels: quickSchedules.labels);
 
     try {
-      var httpResult = await postSchedules(schedules);
+      var httpResult = await postSchedules(await getJwt(context), schedules);
       widget.onScheduleChanged!(httpResult);
     } catch (e) {
       print(e);

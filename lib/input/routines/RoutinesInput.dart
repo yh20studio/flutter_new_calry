@@ -7,6 +7,7 @@ import '../../controller/routines/RoutinesController.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
 import '../../domain/routines/Routines.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class RoutinesInput extends StatefulWidget {
   RoutinesInput({Key? key}) : super(key: key);
@@ -94,7 +95,7 @@ class _RoutinesInputstate extends State<RoutinesInput> {
       title: _titleController.text,
       duration: (timeDuration.hour!) * 3600 + (timeDuration.min!) * 60 + (timeDuration.sec!),
     );
-    var httpResult = await postRoutines(routines);
+    var httpResult = await postRoutines(await getJwt(context), routines);
     Navigator.pop(context, httpResult);
   }
 }

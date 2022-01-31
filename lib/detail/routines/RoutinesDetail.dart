@@ -8,6 +8,7 @@ import '../../modalBottomSheet/time/TimeDurationModalBottomSheet.dart';
 import '../../controller/routines/RoutinesController.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
 import '../../auth/Login.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class RoutinesDetail extends StatefulWidget {
   RoutinesDetail({Key? key, this.routines}) : super(key: key);
@@ -102,7 +103,7 @@ class _RoutinesDetailstate extends State<RoutinesDetail> {
 
   void _httpDeleteRoutines() async {
     try {
-      await deleteRoutines(routines!);
+      await deleteRoutines(await getJwt(context), routines!);
       Navigator.pop(context, ["delete", routines]);
     } catch (e) {
       if (e == 'login') {
@@ -117,7 +118,7 @@ class _RoutinesDetailstate extends State<RoutinesDetail> {
         title: _titleController.text,
         duration: (routines!.timeDuration!.hour!) * 3600 + (routines!.timeDuration!.min!) * 60 + (routines!.timeDuration!.sec!));
     try {
-      var httpResult = await updateRoutines(newRoutines);
+      var httpResult = await updateRoutines(await getJwt(context), newRoutines);
       Navigator.pop(context, ["update", httpResult]);
     } catch (e) {
       if (e == 'login') {

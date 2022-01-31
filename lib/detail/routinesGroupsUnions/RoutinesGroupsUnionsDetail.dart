@@ -12,6 +12,7 @@ import '../../controller/routines/RoutinesController.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
 import '../../domain/routines/Routines.dart';
 import '../../auth/Login.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class RoutinesGroupsUnionsDetail extends StatefulWidget {
   RoutinesGroupsUnionsDetail({Key? key, this.routinesGroupsUnions}) : super(key: key);
@@ -180,7 +181,7 @@ class _RoutinesGroupsUnionsDetailstate extends State<RoutinesGroupsUnionsDetail>
 
   void _awaitReturnValueFromRoutinesListForRoutinesGroups() async {
     try {
-      List<Routines> routinesList = await getRoutines();
+      List<Routines> routinesList = await getRoutines(await getJwt(context));
       var awaitResult = await routinesListForRoutinesGroupsModalBottomSheet(routinesList, context);
       if (awaitResult != null) {
         setState(() {
@@ -205,7 +206,7 @@ class _RoutinesGroupsUnionsDetailstate extends State<RoutinesGroupsUnionsDetail>
 
   void _httpDeleteRoutinesGroupsAll() async {
     try {
-      await deleteRoutinesGroupsUnions(routinesGroupsUnions!);
+      await deleteRoutinesGroupsUnions(await getJwt(context), routinesGroupsUnions!);
       Navigator.pop(context, ["delete", routinesGroupsUnions]);
     } catch (e) {
       if (e == 'login') {
@@ -218,7 +219,7 @@ class _RoutinesGroupsUnionsDetailstate extends State<RoutinesGroupsUnionsDetail>
     RoutinesGroupsUnions newRoutinesGroupsUnions =
         RoutinesGroupsUnions(id: widget.routinesGroupsUnions!.id, title: _titleController.text, routinesGroupsList: routinesGroupsList);
     try {
-      var httpResult = await updateRoutinesGroupsUnions(newRoutinesGroupsUnions);
+      var httpResult = await updateRoutinesGroupsUnions(await getJwt(context), newRoutinesGroupsUnions);
       Navigator.pop(context, ["update", httpResult]);
     } catch (e) {
       if (e == 'login') {

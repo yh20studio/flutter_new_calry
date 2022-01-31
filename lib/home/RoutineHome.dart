@@ -10,6 +10,7 @@ import '../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
 import '../controller/schedules/SchedulesController.dart';
 import '../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
 import '../list/focusTodos/FocusTodosList.dart';
+import '../controller/jwt/JwtController.dart';
 
 class RoutineHome extends StatefulWidget {
   RoutineHome({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _RoutineHomestate extends State<RoutineHome> {
   @override
   void initState() {
     super.initState();
-    futureTodayRoutinesGroups = getTodayRoutinesGroups(DateTime.now());
+    futureTodayRoutinesGroups = futureGetTodayRoutinesGroups();
   }
 
   @override
@@ -69,7 +70,7 @@ class _RoutineHomestate extends State<RoutineHome> {
                     height: 30,
                   ),
                   FutureBuilder<List<FocusTodos>>(
-                      future: getFocusTodos(),
+                      future: futureGetFocusTodos(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
                           print('no data');
@@ -89,7 +90,7 @@ class _RoutineHomestate extends State<RoutineHome> {
                     height: 30,
                   ),
                   FutureBuilder<List<Schedules>>(
-                      future: getDaySchedules(),
+                      future: futureGetDaySchedules(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
                           print('no data');
@@ -108,5 +109,20 @@ class _RoutineHomestate extends State<RoutineHome> {
                 ],
               )),
         ));
+  }
+
+  Future<TodayRoutinesGroups> futureGetTodayRoutinesGroups() async{
+    String jwt = await getJwt(context);
+    return getTodayRoutinesGroups(jwt, DateTime.now());
+  }
+
+  Future<List<FocusTodos>> futureGetFocusTodos() async{
+    String jwt = await getJwt(context);
+    return getFocusTodos(jwt);
+  }
+
+  Future<List<Schedules>> futureGetDaySchedules() async{
+    String jwt = await getJwt(context);
+    return getDaySchedules(jwt);
   }
 }

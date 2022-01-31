@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../domain/labels/Labels.dart';
 import '../../functions.dart';
 import '../../controller/labels/LabelsController.dart';
+import '../../controller/jwt/JwtController.dart';
 
 labelsEditModalBottomSheet(List<Labels> labelsList, BuildContext context) async {
   var result = await showModalBottomSheet<dynamic>(
@@ -32,11 +33,9 @@ labelsEditModalBottomSheet(List<Labels> labelsList, BuildContext context) async 
                             TextButton(
                                 onPressed: () {
                                   _awaitHttpFunction() async {
-                                    var result = await updateLabels(labelsList);
-
+                                    var result = await updateLabels(await getJwt(context),labelsList);
                                     Navigator.pop(context, result);
                                   }
-
                                   _awaitHttpFunction();
                                 },
                                 child: Text("저장"))

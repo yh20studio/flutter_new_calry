@@ -7,8 +7,6 @@ import 'package:http/http.dart' as http;
 
 import '../../domain/schedules/Schedules.dart';
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
-
 
 List<Schedules> parseSchedules(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
@@ -20,9 +18,7 @@ Schedules parseSchedule(String responseBody) {
   return Schedules.fromJson(parsed);
 }
 
-Future<List<Schedules>> getDaySchedules() async {
-  try {
-    String jwt = await getJWT();
+Future<List<Schedules>> getDaySchedules(String jwt, ) async {
     String now = DateTime.now().toIso8601String();
     now = now.substring(0, now.length - 1);
     http.Response response = await http.get(
@@ -34,13 +30,9 @@ Future<List<Schedules>> getDaySchedules() async {
     } else {
       throw Exception("error: status code ${response.statusCode}");
     }
-  } catch (e) {
-    return Future.error("Need Login");
-  }
 }
 
-Future<Schedules> postSchedules(Schedules schedules) async {
-  String jwt = await getJWT();
+Future<Schedules> postSchedules(String jwt, Schedules schedules) async {
   print(schedules.startDate!.toIso8601String());
   http.Response response = await http.post(
     Uri.parse(serverIP + 'schedules'),
@@ -66,9 +58,7 @@ Future<Schedules> postSchedules(Schedules schedules) async {
   }
 }
 
-Future<Schedules> updateSchedules(Schedules schedules) async {
-  String jwt = await getJWT();
-
+Future<Schedules> updateSchedules(String jwt, Schedules schedules) async {
   http.Response response = await http.put(
     Uri.parse(serverIP + 'schedules/${schedules.id}'),
     headers: {
@@ -90,8 +80,7 @@ Future<Schedules> updateSchedules(Schedules schedules) async {
   }
 }
 
-Future<String> deleteSchedules(Schedules schedules) async {
-  String jwt = await getJWT();
+Future<String> deleteSchedules(String jwt, Schedules schedules) async {
   final url = Uri.parse(serverIP + 'schedules/${schedules.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{

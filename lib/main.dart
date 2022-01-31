@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       title: 'Calry',
       initialRoute: '/',
       routes: {
-        'index': (context) => Index(),
-        "login": (BuildContext context) => Login(),
+        '/': (BuildContext context) => Index(),
+        "/login": (BuildContext context) => Login(),
       },
       navigatorKey: navigatorKey,
       theme: ThemeData(
@@ -109,8 +109,7 @@ class MyApp extends StatelessWidget {
         ),
 
         // additional settings go here
-      ),
-      home: Index(),
+      )
     );
   }
 }

@@ -5,6 +5,7 @@ import '../../domain/focusTodos/FocusTodos.dart';
 import '../../widgets/TextInputFormWidget.dart';
 import '../../dialog/AlertDialog.dart';
 import '../../widgets/ContainerWidget.dart';
+import '../../controller/jwt/JwtController.dart';
 
 class FocusTodosDetail extends StatefulWidget {
   FocusTodosDetail({Key? key, this.focusTodos}) : super(key: key);
@@ -74,7 +75,7 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
     );
 
     try {
-      var httpResult = await updateFocusTodos(focusTodos);
+      var httpResult = await updateFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, ["update", httpResult]);
     } on Exception catch (exception) {
       alertDialog(context, exception.toString());
@@ -85,7 +86,7 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
     FocusTodos focusTodos = FocusTodos(id: widget.focusTodos!.id, content: _contentController.text, success: true, successDateTime: DateTime.now());
 
     try {
-      var httpResult = await successFocusTodos(focusTodos);
+      var httpResult = await successFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, ["delete", httpResult]);
     } on Exception catch (exception) {
       alertDialog(context, exception.toString());
@@ -101,7 +102,7 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
     );
 
     try {
-      var httpResult = await deleteFocusTodos(focusTodos);
+      var httpResult = await deleteFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, ["${httpResult}", focusTodos]);
     } on Exception catch (exception) {
       alertDialog(context, exception.toString());

@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 
 import '../../domain/todayRoutines/TodayRoutines.dart';
 import '../../setting.dart';
-import '../../controller/member/MemberController.dart';
 
 List<TodayRoutines> parseTodayRoutines(String responseBody) {
   final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
@@ -19,8 +18,7 @@ TodayRoutines parseTodayRoutine(String responseBody) {
   return TodayRoutines.fromJson(parsed);
 }
 
-Future<TodayRoutines> postTodayRoutines(TodayRoutines todayRoutines) async {
-  String jwt = await getJWT();
+Future<TodayRoutines> postTodayRoutines(String jwt, TodayRoutines todayRoutines) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'todayRoutines'),
     headers: {
@@ -44,9 +42,7 @@ Future<TodayRoutines> postTodayRoutines(TodayRoutines todayRoutines) async {
   }
 }
 
-Future<List<TodayRoutines>> postTodayRoutinesList(String date, List<TodayRoutines> todayRoutinesList) async {
-  String jwt = await getJWT();
-
+Future<List<TodayRoutines>> postTodayRoutinesList(String jwt, String date, List<TodayRoutines> todayRoutinesList) async {
   http.Response response = await http.post(
     Uri.parse(serverIP + 'todayRoutines/list'),
     headers: {
@@ -63,8 +59,7 @@ Future<List<TodayRoutines>> postTodayRoutinesList(String date, List<TodayRoutine
   }
 }
 
-Future<TodayRoutines> updateTodayRoutines(TodayRoutines todayRoutines) async {
-  String jwt = await getJWT();
+Future<TodayRoutines> updateTodayRoutines(String jwt, TodayRoutines todayRoutines) async {
   http.Response response = await http.put(
     Uri.parse(serverIP + 'todayRoutines/${todayRoutines.id}'),
     headers: {
@@ -83,8 +78,7 @@ Future<TodayRoutines> updateTodayRoutines(TodayRoutines todayRoutines) async {
   }
 }
 
-Future<String> deleteTodayRoutines(TodayRoutines todayRoutines) async {
-  String jwt = await getJWT();
+Future<String> deleteTodayRoutines(String jwt, TodayRoutines todayRoutines) async {
   final url = Uri.parse(serverIP + 'todayRoutines/${todayRoutines.id}');
   final request = http.Request("DELETE", url);
   request.headers.addAll(<String, String>{

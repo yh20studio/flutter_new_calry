@@ -12,6 +12,7 @@ import '../calendar/Calendar.dart';
 import '../controller/quickSchedules/QuickSchedulesController.dart';
 import '../domain/calendars/Calendars.dart';
 import '../controller/calendars/CalendarsController.dart';
+import '../controller/jwt/JwtController.dart';
 
 class CalendarNewHome extends StatefulWidget {
   CalendarNewHome({Key? key, this.bodyHeight}) : super(key: key);
@@ -38,10 +39,10 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
   List<QuickSchedules>? quickSchedulesList;
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
-    futureWeekSchedulesCalendar = getWholeSchedules();
-    futureQuickSchedulesList = getQuickSchedules();
+    futureWeekSchedulesCalendar = futureGetWholeSchedules();
+    futureQuickSchedulesList = futureGetQuickSchedules();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setState(() => _getThreeCalendar());
     });
@@ -186,6 +187,16 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
         ))));
   }
 
+  Future<WeekSchedulesCalendar> futureGetWholeSchedules() async{
+    String jwt = await getJwt(context);
+    return getWholeSchedules(jwt);
+  }
+
+  Future<List<QuickSchedules>> futureGetQuickSchedules() async{
+    String jwt = await getJwt(context);
+    return getQuickSchedules(jwt);
+  }
+
   void _getThreeCalendar() {
     DateTime _nextMonth;
     DateTime _prevMonth;
@@ -257,7 +268,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
         start = DateTime.parse(updateStart);
         end = DateTime.parse(updateEnd);
         if (first) {
-          weekCalendars = (await getPartSchedules(updateStart, updateEnd)).weekCalendars;
+          weekCalendars = (await getPartSchedules(await getJwt(context), updateStart, updateEnd)).weekCalendars;
         }
 
         if (action == 'input' || action == 'update') {
