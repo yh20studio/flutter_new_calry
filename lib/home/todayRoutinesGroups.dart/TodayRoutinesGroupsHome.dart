@@ -71,10 +71,8 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
               builder:
                   (BuildContext context, AsyncSnapshot snapshotRoutinesGroup) {
                 if (!snapshotRoutinesGroup.hasData) {
-                  print('no data');
                   return Container();
                 } else if (snapshotRoutinesGroup.hasError) {
-                  print('Error');
                   return Text('Error');
                 } else {
                   routinesGroupsUnionList = snapshotRoutinesGroup.data!;
@@ -83,10 +81,8 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
                       builder: (BuildContext context,
                           AsyncSnapshot snapshotRoutines) {
                         if (!snapshotRoutines.hasData) {
-                          print('no data');
                           return Container();
                         } else if (snapshotRoutines.hasError) {
-                          print('Error');
                           return Text('Error');
                         } else {
                           routinesList = snapshotRoutines.data!;
@@ -184,7 +180,6 @@ class _TodayRoutinesGroupsHomestate extends State<TodayRoutinesGroupsHome> {
   void _awaitReturnValueFromTodayRoutinesGroupsEditList() async {
     var awaitResult = await todayRoutinesEditListModalBottomSheet(
         context, todayRoutinesGroups, routinesGroupsUnionList!, routinesList!);
-    print(awaitResult);
     if (awaitResult != null) {
       setState(() {
         if (awaitResult[0] == "input") {

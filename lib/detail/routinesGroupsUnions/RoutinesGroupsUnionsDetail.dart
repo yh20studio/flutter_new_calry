@@ -210,7 +210,6 @@ class _RoutinesGroupsUnionsDetailstate
             var dialogResult =
                 await timeDurationChoiceModalBottomSheet(timeDuration, context);
             setState(() {
-              print(timeDuration.hour);
               timeDuration = dialogResult;
             });
           }

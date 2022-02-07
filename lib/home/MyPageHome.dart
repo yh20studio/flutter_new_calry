@@ -77,10 +77,8 @@ class _MyPageHomestate extends State<MyPageHome> {
                       future: futureGetAllTodayRoutinesGroups(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          print('no data');
                           return Container();
                         } else if (snapshot.hasError) {
-                          print('Error');
                           return Text('Error');
                         } else {
                           todayRoutinesGroupsMap = snapshot.data;
@@ -112,10 +110,8 @@ class _MyPageHomestate extends State<MyPageHome> {
                       future: futureGetQuickSchedules(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          print('no data');
                           return Container();
                         } else if (snapshot.hasError) {
-                          print('Error');
                           return Text('Error');
                         } else {
                           List<QuickSchedules> quickSchedulesList = snapshot.data;
@@ -153,10 +149,8 @@ class _MyPageHomestate extends State<MyPageHome> {
                       future: futureGetRoutines(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          print('no data');
                           return Container();
                         } else if (snapshot.hasError) {
-                          print('Error');
                           return Text('Error');
                         } else {
                           List<Routines> routinesList = snapshot.data;
@@ -198,7 +192,6 @@ class _MyPageHomestate extends State<MyPageHome> {
   void _awaitReturnAuth() async {
     try {
       var httpGetMyInfo = await getMyInfo(await getJwt(context));
-      print(httpGetMyInfo);
       await Navigator.push(
           context,
           MaterialPageRoute(

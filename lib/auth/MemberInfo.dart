@@ -113,13 +113,11 @@ class _MemberInfostate extends State<MemberInfo> {
               prefs.getInt('accessTokenExpiresIn'));
           prefs.remove('accessToken');
           prefs.remove('accessTokenExpiresIn');
-          print("reLogin!");
           Navigator.pushNamedAndRemoveUntil(
               context, '/login', (route) => false);
         } catch (e) {
           prefs.remove('accessToken');
           prefs.remove('accessTokenExpiresIn');
-          print("reLogin!");
           Navigator.pushNamedAndRemoveUntil(
               context, '/login', (route) => false);
         }

@@ -33,7 +33,6 @@ Future<List<Schedules>> getDaySchedules(String jwt, ) async {
 }
 
 Future<Schedules> postSchedules(String jwt, Schedules schedules) async {
-  print(schedules.startDate!.toIso8601String());
   http.Response response = await http.post(
     Uri.parse(serverIP + 'schedules'),
     headers: {

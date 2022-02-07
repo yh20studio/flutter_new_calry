@@ -73,7 +73,7 @@ class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
                             style: TextStyle(
                                 color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
                 TextButton(
-                  onPressed: () => _httpPostQuickSchedules,
+                  onPressed: () => _httpPostQuickSchedules(),
                   child: Text("저장",
                       style:
                       TextStyle(color: Theme.of(context).backgroundColor)),

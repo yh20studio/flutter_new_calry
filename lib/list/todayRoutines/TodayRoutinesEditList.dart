@@ -117,7 +117,6 @@ class _TodayRoutinesEditListstate extends State<TodayRoutinesEditList> {
   void _awaitReturnValueFromTodayRoutinesInput() async {
     var awaitResult = await todayRoutinesInputModalBottomSheet(context,
         widget.todayRoutinesGroups, routinesGroupsUnionList, routinesList!);
-    print(awaitResult);
     if (awaitResult != null) {
       setState(() {
         if (awaitResult[0] == 'input') {

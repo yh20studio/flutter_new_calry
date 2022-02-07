@@ -6,7 +6,6 @@ import '../domain/focusTodos/FocusTodos.dart';
 import '../domain/schedules/Schedules.dart';
 import '../list/schedules/SchedulesList.dart';
 import '../widgets/DateWidget.dart';
-import '../widgets/ContainerWidget.dart';
 import '../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
 import '../controller/schedules/SchedulesController.dart';
 import '../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
@@ -52,10 +51,8 @@ class _RoutineHomestate extends State<RoutineHome> {
                       future: futureTodayRoutinesGroups,
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          print('no data');
                           return Container();
                         } else if (snapshot.hasError) {
-                          print('Error');
                           return Text('Error');
                         } else {
                           todayRoutinesGroups = snapshot.data!;
@@ -77,10 +74,8 @@ class _RoutineHomestate extends State<RoutineHome> {
                       future: futureGetFocusTodos(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          print('no data');
                           return Container();
                         } else if (snapshot.hasError) {
-                          print('Error');
                           return Text('Error');
                         } else {
                           if (snapshot.data!.length != 0) {}
@@ -97,10 +92,8 @@ class _RoutineHomestate extends State<RoutineHome> {
                       future: futureGetDaySchedules(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         if (!snapshot.hasData) {
-                          print('no data');
                           return Container();
                         } else if (snapshot.hasError) {
-                          print('Error');
                           return Text('Error');
                         } else {
                           if (snapshot.data!.length != 0) {}

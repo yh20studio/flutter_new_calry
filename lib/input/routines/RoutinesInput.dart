@@ -124,11 +124,9 @@ class _RoutinesInputstate extends State<RoutinesInput> {
           var dialogResult =
               await timeDurationChoiceModalBottomSheet(timeDuration, context);
           setState(() {
-            print(timeDuration.hour);
             timeDuration = dialogResult;
           });
         }
-
         _timeDurationChoiceModalBottomSheet();
       },
       child: timeDurationWidget(timeDuration: timeDuration, context: context),

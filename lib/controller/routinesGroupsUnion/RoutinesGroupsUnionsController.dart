@@ -31,7 +31,6 @@ Future<List<RoutinesGroupsUnions>> getRoutinesGroupsUnions(String jwt) async {
 }
 
 Future<RoutinesGroupsUnions> postRoutinesGroupsUnions(String jwt, RoutinesGroupsUnions routinesGroupsUnions) async {
-  print(routinesGroupsUnions.routinesGroupsList!.map((i) => i.toJsonWithoutId()).toList());
   http.Response response = await http.post(
     Uri.parse(serverIP + 'routinesGroups/unions'),
     headers: {

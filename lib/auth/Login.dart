@@ -9,7 +9,6 @@ import '../dialog/AlertDialog.dart';
 import '../controller/member/MemberController.dart';
 import '../controller/labels/LabelsController.dart';
 import '../widgets/ContainerWidget.dart';
-import '../main.dart';
 import '../controller/jwt/JwtController.dart';
 
 class Login extends StatefulWidget {
@@ -164,7 +163,6 @@ class _Loginstate extends State<Login> {
         // Labels 저장
         final String encodedData = Labels.encode(labelResult);
         await prefs.setString('labels', encodedData);
-        print("Login Success");
         Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       } on Exception catch (exception) {
         print(exception);

@@ -123,7 +123,6 @@ class _RoutinesMemosDetailstate extends State<RoutinesMemosDetail> {
     try {
       var httpResult =
           await deleteRoutinesMemos(await getJwt(context), routinesMemos!);
-      print((httpResult));
       Navigator.pop(context, [httpResult, null]);
     } on Exception catch (exception) {
       print(exception);

@@ -200,7 +200,6 @@ class _RoutinesGroupsUnionsInputstate extends State<RoutinesGroupsUnionsInput> {
     var awaitResult = await routinesListForRoutinesGroupsModalBottomSheet(routinesList, context);
     if (awaitResult != null) {
       setState(() {
-        print(awaitResult[0]);
         if (awaitResult[0] == 'add') {
           selectRoutinesList.add(awaitResult[1]);
         }

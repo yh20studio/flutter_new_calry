@@ -133,7 +133,6 @@ class _RoutinesDetailstate extends State<RoutinesDetail> {
           void _timeDurationChoiceModalBottomSheet() async {
             var dialogResult = await timeDurationChoiceModalBottomSheet(timeDuration, context);
             setState(() {
-              print(timeDuration.hour);
               timeDuration = dialogResult;
             });
           }

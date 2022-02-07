@@ -231,9 +231,6 @@ class _SchedulesInputstate extends State<SchedulesInput> {
           var result =
               await calendarTwoChoiceModalBottomSheet(start, end, context);
           setState(() {
-            print(result[0].toString());
-            print(result[0].toIso8601String());
-            print(result[0].toLocal());
             startDate = result[0];
             endDate = result[1];
           });

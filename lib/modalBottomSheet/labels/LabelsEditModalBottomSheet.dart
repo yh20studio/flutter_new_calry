@@ -4,7 +4,6 @@ import '../../domain/labels/Labels.dart';
 import '../../functions.dart';
 import '../../controller/labels/LabelsController.dart';
 import '../../controller/jwt/JwtController.dart';
-import '../../widgets/ContainerWidget.dart';
 
 labelsEditModalBottomSheet(
     List<Labels> labelsList, BuildContext context) async {

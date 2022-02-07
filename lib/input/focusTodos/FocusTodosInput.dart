@@ -25,7 +25,6 @@ class _FocusTodosInputstate extends State<FocusTodosInput> {
 
   @override
   Widget build(BuildContext context) {
-    var _width = MediaQuery.of(context).size.width;
     return Center(
         child: SingleChildScrollView(
             child: Column(
@@ -46,7 +45,7 @@ class _FocusTodosInputstate extends State<FocusTodosInput> {
                             style: TextStyle(
                                 color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
                 TextButton(
-                  onPressed: () => _httpPostFocusTodos,
+                  onPressed: () => _httpPostFocusTodos(),
                   child: Text("저장",
                       style:
                           TextStyle(color: Theme.of(context).backgroundColor)),

@@ -13,20 +13,17 @@ import '../../dialog/AlertDialog.dart';
 Future getJwt(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.getString('accessToken') == null) {
-    print("Need Login");
     Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   } else {
     DateTime accessTokenExpiresIn = DateTime.fromMillisecondsSinceEpoch(prefs.getInt('accessTokenExpiresIn')!);
     DateTime now = DateTime.now();
     if (accessTokenExpiresIn.isBefore(now)) {
-      print("Expires");
       try {
         var httpPostReissue = await postReissueAccess(prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
         prefs.setString('accessToken', jsonDecode(httpPostReissue)['accessToken']);
         prefs.setInt('accessTokenExpiresIn', jsonDecode(httpPostReissue)['accessTokenExpiresIn']);
         return prefs.getString('accessToken')!;
       } catch (e) {
-        print("reLogin!");
         var dialogResult = await alertDialog(navigatorKey.currentContext!, "로그인이 유효하지 않습니다. 다시 로그인 해주세요.");
         if (dialogResult == 'ok') {
           Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);

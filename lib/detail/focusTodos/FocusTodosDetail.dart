@@ -50,7 +50,7 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
                             style: TextStyle(
                                 color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
                 TextButton(
-                  onPressed: () => _httpSuccessFocusTodos,
+                  onPressed: () => _httpSuccessFocusTodos(),
                   child: Text("완료", style: TextStyle(
                       color: Theme.of(context).backgroundColor)),
                 ),

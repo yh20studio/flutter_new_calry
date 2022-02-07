@@ -86,7 +86,6 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                     future: futureWeekSchedulesCalendar,
                     builder: (BuildContext context, AsyncSnapshot snapshotWeekSchedulesCalendar) {
                       if (!snapshotWeekSchedulesCalendar.hasData) {
-                        print('no data');
                         return Container();
                       } else if (snapshotWeekSchedulesCalendar.hasError) {
                         return Text("Error");
@@ -98,10 +97,8 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
                             future: futureQuickSchedulesList,
                             builder: (BuildContext context, AsyncSnapshot snapshotQuickSchedules) {
                               if (!snapshotQuickSchedules.hasData) {
-                                print('no data');
                                 return Container();
                               } else if (snapshotQuickSchedules.hasError) {
-                                print('Error');
                                 return Text('Error');
                               } else {
                                 quickSchedulesList = snapshotQuickSchedules.data!;
