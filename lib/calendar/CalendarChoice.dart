@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Calendar.dart';
+import '../widgets/ContainerWidget.dart';
 
 class CalendarChoice extends StatefulWidget {
   CalendarChoice({Key? key, this.selectedDateTime}) : super(key: key);
@@ -78,7 +79,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
                     },
                     child: Text(
                       '${currentDateTime!.year}년 ${monthNames[currentDateTime!.month - 1]}',
-                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+                      style: TextStyle(color: Theme.of(context).hoverColor, fontSize: 18, fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -87,7 +88,9 @@ class _CalendarChoiceState extends State<CalendarChoice> {
               ],
             )),
         Flexible(
-            child: PageView.builder(
+            child: overlayContainerWidget(
+        context: context,
+    widget:PageView.builder(
                 scrollDirection: Axis.horizontal,
                 controller: pageController,
                 onPageChanged: (i) {
@@ -114,7 +117,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
                 },
                 itemBuilder: (context, index) {
                   return _calendarBody();
-                }))
+                })))
       ],
     );
   }
@@ -140,7 +143,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
         height: 50,
         child: Icon(
           (next) ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-          color: Colors.black,
+          color: Theme.of(context).hoverColor,
         ),
       ),
     );
@@ -176,7 +179,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
     return Center(
         child: Text(
       weekDays[index],
-      style: TextStyle(color: index == 0 ? Colors.red : Colors.black, fontSize: 14),
+      style: TextStyle(color: index == 0 ? Colors.red : Theme.of(context).hoverColor, fontSize: 14),
     ));
   }
 
@@ -202,10 +205,10 @@ class _CalendarChoiceState extends State<CalendarChoice> {
           color: (calendarDate.thisMonth)
               ? (calendarDate.date!.weekday == DateTime.sunday)
                   ? Colors.red
-                  : Colors.black
+                  : Theme.of(context).hoverColor
               : (calendarDate.date!.weekday == DateTime.sunday)
                   ? Colors.red.withOpacity(0.5)
-                  : Colors.black.withOpacity(0.5),
+                  : Theme.of(context).hoverColor.withOpacity(0.5),
         ),
       )),
     );
@@ -231,7 +234,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
         children: [
           Text(
             '${calendarDate.date!.day}',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+            style: TextStyle(color: Theme.of(context).hoverColor, fontWeight: FontWeight.w600),
           ),
 
           // Text(
@@ -287,7 +290,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
           ),
         ),
         Divider(
-          color: Colors.black,
+          color: Theme.of(context).hoverColor
         ),
         Expanded(
           child: ListView.builder(
@@ -304,7 +307,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
               title: Center(
                 child: Text(
                   monthNames[index],
-                  style: TextStyle(fontSize: 18, color: (index == currentDateTime!.month - 1) ? Colors.yellow : Colors.black),
+                  style: TextStyle(fontSize: 18, color: (index == currentDateTime!.month - 1) ? Theme.of(context).primaryColor : Theme.of(context).hoverColor),
                 ),
               ),
             ),
@@ -321,7 +324,7 @@ class _CalendarChoiceState extends State<CalendarChoice> {
         Row(
           children: <Widget>[
             _toggleBtn(false),
-            Spacer(),
+            Expanded(child:Center(child:Text("연도 선택"))),
             _toggleBtn(true),
           ],
         ),
@@ -350,10 +353,10 @@ class _CalendarChoiceState extends State<CalendarChoice> {
                     // switch back to months view
                     setState(() => currentView = CalendarViews.months);
                   },
-                  title: Text(
+                  title: Center(child: Text(
                     '$thisYear',
-                    style: TextStyle(fontSize: 18, color: (thisYear == currentDateTime!.year) ? Colors.yellow : Colors.black),
-                  ),
+                    style: TextStyle(fontSize: 18, color: (thisYear == currentDateTime!.year) ? Theme.of(context).primaryColor : Theme.of(context).hoverColor),
+                  )),
                 );
               }),
         ),

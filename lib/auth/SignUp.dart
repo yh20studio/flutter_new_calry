@@ -30,61 +30,102 @@ class _SignUpstate extends State<SignUp> {
         appBar: AppBar(
           title: Text(
             "Calry 가입하기",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Theme.of(context).hoverColor),
           ),
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Theme.of(context).hoverColor),
           elevation: 0.0,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).dialogBackgroundColor
         ),
         body: SingleChildScrollView(
             child: Container(
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    borderPaddingTitleContainerWidget(
-                        title: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text("이메일", style: Theme.of(context).textTheme.headline2),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "E-mail",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                        widget: authTestInputForm(controller: _emailController, width: _width, context: context),
-                        context: context),
-                    SizedBox(
-                      height: 15,
+                      ],
                     ),
-                    borderPaddingTitleContainerWidget(
-                        title: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text("비밀번호", style: Theme.of(context).textTheme.headline2),
-                        ),
-                        widget: authTestInputForm(controller: _passwordController, width: _width, context: context),
-                        context: context),
                     SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
-                    borderPaddingTitleContainerWidget(
-                        title: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text("비밀번호 확인", style: Theme.of(context).textTheme.headline2),
-                        ),
-                        widget: authTestInputForm(controller: _passwordConfirmController, width: _width, context: context),
-                        context: context),
-                    SizedBox(
-                      height: 15,
+                    overlayContainerWidget(
+                      context: context,
+                      widget: authTestInputForm(controller: _emailController, width: _width, context: context),
                     ),
-                    borderPaddingTitleContainerWidget(
-                        title: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text("이름", style: Theme.of(context).textTheme.headline2),
-                        ),
-                        widget: authTestInputForm(controller: _nameController, width: _width, context: context),
-                        context: context),
                     SizedBox(
-                      height: 15,
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "비밀번호",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    overlayContainerWidget(
+                      context: context,
+                      widget: authTestInputForm(controller: _passwordController, width: _width, context: context),
+                    ),
+
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "비밀번호 확인",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    overlayContainerWidget(
+                      context: context,
+                      widget: authTestInputForm(controller: _passwordConfirmController, width: _width, context: context),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "이름",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    overlayContainerWidget(
+                      context: context,
+                      widget: authTestInputForm(controller: _nameController, width: _width, context: context),
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     TextButton(
                         child: Text(
                           "가입하기",
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Theme.of(context).hoverColor),
                         ),
                         onPressed: _httpPostSignUp),
                   ],
@@ -98,9 +139,10 @@ class _SignUpstate extends State<SignUp> {
         Container(
           width: width * 0.8,
           alignment: Alignment.center,
+          padding: EdgeInsets.all(5),
           decoration: BoxDecoration(color: Colors.transparent),
           child: TextFormField(
-            style: TextStyle(fontSize: 30, color: Colors.black),
+            style: TextStyle(fontSize: 30, color:Theme.of(context).hoverColor),
             keyboardType: TextInputType.multiline,
             obscureText: controller == _passwordController
                 ? true

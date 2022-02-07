@@ -1,6 +1,7 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-import '../../widgets/TimeWidget.dart';
+import '../widgets/TimeWidget.dart';
+import '../widgets/ContainerWidget.dart';
 
 class TimeTwoChoice extends StatefulWidget {
   TimeTwoChoice({Key? key, this.startTime, this.endTime, this.onStartTimeChanged, this.onEndTimeChanged}) : super(key: key);
@@ -56,6 +57,16 @@ class _TimeTwoChoiceState extends State<TimeTwoChoice> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+    Container(
+    padding: EdgeInsets.all(10),
+    child:Row(children: [
+          Text("시간 선택", style: TextStyle(color: Theme.of(context).hoverColor),),
+        ],),
+    ),
+    Container(
+    padding: EdgeInsets.only(left: 10, right: 10),
+    child:
+        overlayContainerWidget(context: context, widget:
         Container(
           padding: EdgeInsets.all(20),
           child: Row(
@@ -63,14 +74,13 @@ class _TimeTwoChoiceState extends State<TimeTwoChoice> {
             children: [
               Expanded(
                   child: Container(
-                      color: mode == "start" ? Colors.purple.withOpacity(0.2) : Colors.transparent,
+                      color: mode == "start" ? Theme.of(context).primaryColor.withOpacity(0.2) : Colors.transparent,
                       child: TextButton(
                           onPressed: () {
                             setState(() {
                               mode = "jump";
                               double startTimeToDouble = toDouble(startTime!);
                               double endTimeToDouble = toDouble(endTime!);
-
                               if (startTimeToDouble > endTimeToDouble) {
                                 startTime = endTime!;
                                 startMinuteIndex = startTime!.minute;
@@ -84,15 +94,7 @@ class _TimeTwoChoiceState extends State<TimeTwoChoice> {
                               mode = "start";
                             });
                           },
-                          child: Column(
-                            children: [
-                              Text("시작"),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              meridiemHourMinuteTimeWidget(timeOfDay: startTime, context: context),
-                            ],
-                          )))),
+                          child: meridiemHourMinuteTimeWidget(timeOfDay: startTime, context: context)))),
               Expanded(
                   child: Container(
                 color: mode == "start" ? Colors.transparent : Colors.purple.withOpacity(0.2),
@@ -117,18 +119,13 @@ class _TimeTwoChoiceState extends State<TimeTwoChoice> {
                         mode = "end";
                       });
                     },
-                    child: Column(
-                      children: [
-                        Text("종료"),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        meridiemHourMinuteTimeWidget(timeOfDay: endTime, context: context),
-                      ],
-                    )),
+                    child: meridiemHourMinuteTimeWidget(timeOfDay: endTime, context: context),),
               ))
             ],
           ),
+        ))),
+        SizedBox(
+          height: 20,
         ),
         Neumorphic(
             style: NeumorphicStyle(

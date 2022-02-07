@@ -6,6 +6,7 @@ import '../domain/focusTodos/FocusTodos.dart';
 import '../domain/schedules/Schedules.dart';
 import '../list/schedules/SchedulesList.dart';
 import '../widgets/DateWidget.dart';
+import '../widgets/ContainerWidget.dart';
 import '../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart';
 import '../controller/schedules/SchedulesController.dart';
 import '../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
@@ -35,13 +36,14 @@ class _RoutineHomestate extends State<RoutineHome> {
     return Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
         appBar: AppBar(
-          title: monthDayWeekdayDateWidget(datetime: DateTime.now(), context: context),
-          backgroundColor: Colors.white,
+          title: appBarMonthDayWeekdayDateWidget(
+              datetime: DateTime.now(), context: context),
+          backgroundColor: Theme.of(context).dialogBackgroundColor,
           elevation: 0.0,
         ),
         body: SingleChildScrollView(
           child: Container(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,8 +62,10 @@ class _RoutineHomestate extends State<RoutineHome> {
                           return TodayRoutinesGroupsHome(
                             todayRoutinesGroups: todayRoutinesGroups,
                             onRefreshChanged: (onRefreshChanged) {},
-                            onTodayRoutinesGroupsChanged: (onTodayRoutinesGroupsChanged) {
-                              todayRoutinesGroups = onTodayRoutinesGroupsChanged;
+                            onTodayRoutinesGroupsChanged:
+                                (onTodayRoutinesGroupsChanged) {
+                              todayRoutinesGroups =
+                                  onTodayRoutinesGroupsChanged;
                             },
                           );
                         }
@@ -111,17 +115,17 @@ class _RoutineHomestate extends State<RoutineHome> {
         ));
   }
 
-  Future<TodayRoutinesGroups> futureGetTodayRoutinesGroups() async{
+  Future<TodayRoutinesGroups> futureGetTodayRoutinesGroups() async {
     String jwt = await getJwt(context);
     return getTodayRoutinesGroups(jwt, DateTime.now());
   }
 
-  Future<List<FocusTodos>> futureGetFocusTodos() async{
+  Future<List<FocusTodos>> futureGetFocusTodos() async {
     String jwt = await getJwt(context);
     return getFocusTodos(jwt);
   }
 
-  Future<List<Schedules>> futureGetDaySchedules() async{
+  Future<List<Schedules>> futureGetDaySchedules() async {
     String jwt = await getJwt(context);
     return getDaySchedules(jwt);
   }

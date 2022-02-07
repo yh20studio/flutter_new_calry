@@ -36,47 +36,93 @@ class _RoutinesMemosDetailstate extends State<RoutinesMemosDetail> {
             child: Container(
                 child: Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-            TextButton(child: Text("저장"), onPressed: () => _awaitReturnValueFromRoutinesMemosUpdate()),
-          ],
-        ),
-        monthDayDateWidget(datetime: routinesMemos!.created_date, context: context),
-        SizedBox(
-          height: 30,
-        ),
-        borderPaddingContainerWidget(widget: textInputForm(controller: _memoController, title: '내용', width: _width, context: context), context: context),
-        SizedBox(
-          height: 30,
-        ),
+        Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close,
+                        color: Theme.of(context).backgroundColor)),
+                Expanded(
+                    child: Center(
+                        child: Text("메모 편집",
+                            style: TextStyle(
+                                color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
+                TextButton(
+                    onPressed: () => _awaitReturnValueFromRoutinesMemosUpdate(),
+                    child: Text("저장",
+                        style: TextStyle(
+                            color: Theme.of(context).backgroundColor))),
+              ],
+            )),
         SizedBox(
           height: 20,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            TextButton(
-              child: Text(
-                "삭제",
-                style: TextStyle(color: Colors.red),
-              ),
-              onPressed: _httpDeleteRoutinesMemos,
-            ),
-          ],
-        )
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Date",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+                monthDayDateWidget(
+                    datetime: routinesMemos!.created_date, context: context)
+              ],
+            )),
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Memo",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            )),
+        SizedBox(height: 10,),
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: borderPaddingContainerWidget(
+                widget: textInputSimpleForm(
+                    controller: _memoController,
+                    context: context),
+                context: context)),
+        SizedBox(
+          height: 30,
+        ),
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                TextButton(
+                  child: Text(
+                    "삭제",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                  onPressed: _httpDeleteRoutinesMemos,
+                ),
+              ],
+            ))
       ],
     ))));
   }
 
   void _httpDeleteRoutinesMemos() async {
     try {
-      var httpResult = await deleteRoutinesMemos(await getJwt(context), routinesMemos!);
+      var httpResult =
+          await deleteRoutinesMemos(await getJwt(context), routinesMemos!);
       print((httpResult));
       Navigator.pop(context, [httpResult, null]);
     } on Exception catch (exception) {
@@ -85,9 +131,11 @@ class _RoutinesMemosDetailstate extends State<RoutinesMemosDetail> {
   }
 
   void _awaitReturnValueFromRoutinesMemosUpdate() async {
-    RoutinesMemos newRoutinesMemos = RoutinesMemos(id: routinesMemos!.id, content: _memoController.text);
+    RoutinesMemos newRoutinesMemos =
+        RoutinesMemos(id: routinesMemos!.id, content: _memoController.text);
     try {
-      var httpResult = await updateRoutinesMemos(await getJwt(context), newRoutinesMemos);
+      var httpResult =
+          await updateRoutinesMemos(await getJwt(context), newRoutinesMemos);
       Navigator.pop(context, ["update", httpResult]);
     } on Exception catch (exception) {
       print(exception);

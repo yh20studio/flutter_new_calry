@@ -32,36 +32,64 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: _httpDeleteFocusTodos,
+                  child: Text(
+                    "삭제",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                Expanded(
+                    child: Center(
+                        child: Text("할일 편집",
+                            style: TextStyle(
+                                color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
+                TextButton(
+                  onPressed: () => _httpSuccessFocusTodos,
+                  child: Text("완료", style: TextStyle(
+                      color: Theme.of(context).backgroundColor)),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
           children: [
-            TextButton(
-              onPressed: _httpDeleteFocusTodos,
+            Expanded(
               child: Text(
-                "삭제",
-                style: TextStyle(color: Colors.red),
+                "Todo",
+                style: TextStyle(fontWeight: FontWeight.w700),
               ),
-            ),
-            TextButton(
-              onPressed: _httpSuccessFocusTodos,
-              child: Text("할일 완료"),
             ),
           ],
         )),
         SizedBox(
           height: 10,
         ),
-        borderPaddingContainerWidget(
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
           context: context,
-          widget: textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
-        ),
+          widget: textInputSimpleForm(
+              controller: _contentController, context: context),
+        )),
         SizedBox(
           height: 10,
         ),
-        TextButton(
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:TextButton(
           onPressed: _httpUpdateFocusTodos,
           child: Text("수정"),
-        ),
+        )),
       ],
     )));
   }
@@ -75,7 +103,8 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
     );
 
     try {
-      var httpResult = await updateFocusTodos(await getJwt(context), focusTodos);
+      var httpResult =
+          await updateFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, ["update", httpResult]);
     } on Exception catch (exception) {
       alertDialog(context, exception.toString());
@@ -83,10 +112,15 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
   }
 
   void _httpSuccessFocusTodos() async {
-    FocusTodos focusTodos = FocusTodos(id: widget.focusTodos!.id, content: _contentController.text, success: true, successDateTime: DateTime.now());
+    FocusTodos focusTodos = FocusTodos(
+        id: widget.focusTodos!.id,
+        content: _contentController.text,
+        success: true,
+        successDateTime: DateTime.now());
 
     try {
-      var httpResult = await successFocusTodos(await getJwt(context), focusTodos);
+      var httpResult =
+          await successFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, ["delete", httpResult]);
     } on Exception catch (exception) {
       alertDialog(context, exception.toString());
@@ -102,7 +136,8 @@ class _FocusTodosDetailstate extends State<FocusTodosDetail> {
     );
 
     try {
-      var httpResult = await deleteFocusTodos(await getJwt(context), focusTodos);
+      var httpResult =
+          await deleteFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, ["${httpResult}", focusTodos]);
     } on Exception catch (exception) {
       alertDialog(context, exception.toString());

@@ -34,27 +34,59 @@ class _RoutinesGroupsUnionsInputstate extends State<RoutinesGroupsUnionsInput> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: Theme.of(context).backgroundColor,)),
+                Expanded(
+                    child: Center(child:Text(
+                      "루틴 그룹 생성",
+                      style: TextStyle(
+                          color: Theme.of(context).backgroundColor,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    )),
+                TextButton(
+                  onPressed: _httpPostRoutinesGroups,
+                  child: Text("저장",
+                      style: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                      )),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
           children: [
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
-            TextButton(
-              onPressed: _httpPostRoutinesGroups,
-              child: Text("저장"),
+            Expanded(
+              child: Text(
+                "Title",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         )),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
-        borderPaddingContainerWidget(
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
           context: context,
-          widget: textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        ),
+          widget: textInputSimpleForm(controller: _titleController, context: context),
+        )),
         SizedBox(
           height: 30,
         ),
-        Row(
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
           children: [
             Expanded(
               child: Text(
@@ -64,17 +96,24 @@ class _RoutinesGroupsUnionsInputstate extends State<RoutinesGroupsUnionsInput> {
             ),
             TextButton(onPressed: _awaitReturnValueFromRoutinesListForRoutinesGroups, child: Text("추가")),
           ],
-        ),
+        )),
         SizedBox(
           height: 10,
         ),
         Container(
-            child: Wrap(
-                spacing: 8.0, // gap between adjacent chips
-                runSpacing: 4.0, // gap between lines
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayContainerWidget(
+          context: context,
+          widget: Container(
+              padding: EdgeInsets.only(top:5, bottom:5, left: 10, right:10),
+              child: selectRoutinesList.length == 0
+                  ? Container(
+                padding: EdgeInsets.all(20),
+                child: Center(child:Text("루틴을 추가해 보세요!"),))
+              :Wrap(
                 children: List.generate(
                     selectRoutinesList.length, (i) => listViewRoutines(index: i, routines: selectRoutinesList[i], width: _width, context: context)).toList()))
-      ],
+        ))],
     )));
   }
 
@@ -84,17 +123,10 @@ class _RoutinesGroupsUnionsInputstate extends State<RoutinesGroupsUnionsInput> {
       children: [
         Expanded(
             child: Container(
-                padding: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
+                padding: EdgeInsets.only(top: 10, bottom: 10),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Row(
                     children: [
-                      Icon(
-                        Icons.circle,
-                        size: 10,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
                       Text(routines.title!),
                     ],
                   ),

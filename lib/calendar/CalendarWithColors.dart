@@ -4,7 +4,9 @@ import 'Calendar.dart';
 import '../domain/todayRoutinesGroups/TodayRoutinesGroups.dart';
 
 class CalendarWithColors extends StatefulWidget {
-  CalendarWithColors({Key? key, this.selectedDateTime, this.todayRoutinesGroupsMap}) : super(key: key);
+  CalendarWithColors(
+      {Key? key, this.selectedDateTime, this.todayRoutinesGroupsMap})
+      : super(key: key);
   final DateTime? selectedDateTime;
   final Map<String, TodayRoutinesGroups>? todayRoutinesGroupsMap;
 
@@ -23,10 +25,25 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
 
   List<Calendar>? sequentialDates;
   int? midYear;
+
   // final List<String> weekDays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
   final List<String> weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+
   // final List<String> monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  final List<String> monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+  final List<String> monthNames = [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월'
+  ];
 
   //PageView
   final PageController pageController = new PageController(initialPage: 4242);
@@ -42,8 +59,10 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
   void initState() {
     super.initState();
 
-    currentDateTime = DateTime(widget.selectedDateTime!.year, widget.selectedDateTime!.month);
-    selectedDateTime = DateTime(widget.selectedDateTime!.year, widget.selectedDateTime!.month, widget.selectedDateTime!.day);
+    currentDateTime =
+        DateTime(widget.selectedDateTime!.year, widget.selectedDateTime!.month);
+    selectedDateTime = DateTime(widget.selectedDateTime!.year,
+        widget.selectedDateTime!.month, widget.selectedDateTime!.day);
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       setState(() => _getCalendar());
@@ -52,7 +71,9 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
 
   // get calendar for current month
   void _getCalendar() {
-    sequentialDates = CustomCalendar().getMonthCalendar(currentDateTime!.month, currentDateTime!.year, startWeekDay: StartWeekDay.sunday);
+    sequentialDates = CustomCalendar().getMonthCalendar(
+        currentDateTime!.month, currentDateTime!.year,
+        startWeekDay: StartWeekDay.sunday);
   }
 
   @override
@@ -89,7 +110,10 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
                     },
                     child: Text(
                       '${currentDateTime!.year}년 ${monthNames[currentDateTime!.month - 1]}',
-                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          color: Theme.of(context).hoverColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600),
                     ),
                   ),
                 ),
@@ -108,7 +132,9 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
                       setState(() => _getNextMonth());
                     } else if (currentView == CalendarViews.year) {
                       setState(() {
-                        midYear = (midYear == null) ? currentDateTime!.year + 9 : midYear! + 9;
+                        midYear = (midYear == null)
+                            ? currentDateTime!.year + 9
+                            : midYear! + 9;
                       });
                     }
                   }
@@ -118,7 +144,9 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
                       setState(() => _getPrevMonth());
                     } else if (currentView == CalendarViews.year) {
                       setState(() {
-                        midYear = (midYear == null) ? currentDateTime!.year - 9 : midYear! - 9;
+                        midYear = (midYear == null)
+                            ? currentDateTime!.year - 9
+                            : midYear! - 9;
                       });
                     }
                   }
@@ -140,7 +168,10 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
                           Container(
                             width: 20,
                             height: 20,
-                            decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10)), color: colorSampleMap[colorKeys[index]]),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                color: colorSampleMap[colorKeys[index]]),
                           ),
                           Text(": ${colorKeys[index]}")
                         ],
@@ -159,9 +190,11 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
           setState(() => (next) ? _getNextMonth() : _getPrevMonth());
         } else if (currentView == CalendarViews.year) {
           if (next) {
-            midYear = (midYear == null) ? currentDateTime!.year + 9 : midYear! + 9;
+            midYear =
+                (midYear == null) ? currentDateTime!.year + 9 : midYear! + 9;
           } else {
-            midYear = (midYear == null) ? currentDateTime!.year - 9 : midYear! - 9;
+            midYear =
+                (midYear == null) ? currentDateTime!.year - 9 : midYear! - 9;
           }
           setState(() {});
         }
@@ -171,7 +204,7 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
         height: 50,
         child: Icon(
           (next) ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-          color: Colors.black,
+          color: Theme.of(context).hoverColor,
         ),
       ),
     );
@@ -203,22 +236,33 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
     return Center(
         child: Text(
       weekDays[index],
-      style: TextStyle(color: index == 0 ? Colors.red : Colors.black, fontSize: 14),
+      style: TextStyle(
+          color: index == 0 ? Colors.red : Theme.of(context).hoverColor,
+          fontSize: 14),
     ));
   }
 
   // calendar element
   Widget _calendarDates(Calendar calendarDate) {
-    String stringDate = "${calendarDate.date!.year}-${calendarDate.date!.month}-${calendarDate.date!.day}";
+    String stringDate =
+        "${calendarDate.date!.year}-${calendarDate.date!.month}-${calendarDate.date!.day}";
     return widget.todayRoutinesGroupsMap!.containsKey(stringDate)
         ? Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: widget.todayRoutinesGroupsMap![stringDate]!.success! / widget.todayRoutinesGroupsMap![stringDate]!.fail! == 1
+                color: widget.todayRoutinesGroupsMap![stringDate]!.success! /
+                            widget.todayRoutinesGroupsMap![stringDate]!.fail! ==
+                        1
                     ? colorSampleMap["완벽"]
-                    : widget.todayRoutinesGroupsMap![stringDate]!.success! / widget.todayRoutinesGroupsMap![stringDate]!.fail! >= 0.6
+                    : widget.todayRoutinesGroupsMap![stringDate]!.success! /
+                                widget.todayRoutinesGroupsMap![stringDate]!
+                                    .fail! >=
+                            0.6
                         ? colorSampleMap["좋음"]
-                        : widget.todayRoutinesGroupsMap![stringDate]!.success! / widget.todayRoutinesGroupsMap![stringDate]!.fail! > 0
+                        : widget.todayRoutinesGroupsMap![stringDate]!.success! /
+                                    widget.todayRoutinesGroupsMap![stringDate]!
+                                        .fail! >
+                                0
                             ? colorSampleMap["보통"]
                             : Colors.transparent),
             margin: EdgeInsets.all(5),
@@ -229,10 +273,10 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
                 color: (calendarDate.thisMonth)
                     ? (calendarDate.date!.weekday == DateTime.sunday)
                         ? Colors.red
-                        : Colors.black
+                        : Theme.of(context).hoverColor
                     : (calendarDate.date!.weekday == DateTime.sunday)
                         ? Colors.red.withOpacity(0.5)
-                        : Colors.black.withOpacity(0.5),
+                        : Theme.of(context).hoverColor.withOpacity(0.5),
               ),
             )),
           )
@@ -243,10 +287,10 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
               color: (calendarDate.thisMonth)
                   ? (calendarDate.date!.weekday == DateTime.sunday)
                       ? Colors.red
-                      : Colors.black
+                      : Theme.of(context).hoverColor
                   : (calendarDate.date!.weekday == DateTime.sunday)
                       ? Colors.red.withOpacity(0.5)
-                      : Colors.black.withOpacity(0.5),
+                      : Theme.of(context).hoverColor.withOpacity(0.5),
             ),
           ));
   }
@@ -256,7 +300,8 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
     if (currentDateTime!.month == 12) {
       currentDateTime = DateTime(currentDateTime!.year + 1, 1);
     } else {
-      currentDateTime = DateTime(currentDateTime!.year, currentDateTime!.month + 1);
+      currentDateTime =
+          DateTime(currentDateTime!.year, currentDateTime!.month + 1);
     }
     _getCalendar();
   }
@@ -266,7 +311,8 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
     if (currentDateTime!.month == 1) {
       currentDateTime = DateTime(currentDateTime!.year - 1, 12);
     } else {
-      currentDateTime = DateTime(currentDateTime!.year, currentDateTime!.month - 1);
+      currentDateTime =
+          DateTime(currentDateTime!.year, currentDateTime!.month - 1);
     }
     _getCalendar();
   }
@@ -291,7 +337,7 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
           ),
         ),
         Divider(
-          color: Colors.black,
+          color: Theme.of(context).hoverColor,
         ),
         Expanded(
           child: ListView.builder(
@@ -308,7 +354,12 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
               title: Center(
                 child: Text(
                   monthNames[index],
-                  style: TextStyle(fontSize: 18, color: (index == currentDateTime!.month - 1) ? Colors.yellow : Colors.black),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: (index == currentDateTime!.month - 1)
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).hoverColor,
+                  ),
                 ),
               ),
             ),
@@ -325,42 +376,48 @@ class _CalendarWithColorsState extends State<CalendarWithColors> {
         Row(
           children: <Widget>[
             _toggleBtn(false),
-            Spacer(),
+            Expanded(child: Center(child: Text("연도 선택"))),
             _toggleBtn(true),
           ],
         ),
         Expanded(
-          child: GridView.builder(
-              shrinkWrap: true,
-              itemCount: 9,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-              ),
-              itemBuilder: (context, index) {
-                int thisYear;
-                if (index < 4) {
-                  thisYear = midYear - (4 - index);
-                } else if (index > 4) {
-                  thisYear = midYear + (index - 4);
-                } else {
-                  thisYear = midYear;
-                }
-                return ListTile(
-                  onTap: () {
-                    // change year of currentDateTime
-                    currentDateTime = DateTime(thisYear, currentDateTime!.month);
-                    _getCalendar();
-                    // switch back to months view
-                    setState(() => currentView = CalendarViews.months);
-                  },
-                  title: Text(
-                    '$thisYear',
-                    style: TextStyle(fontSize: 18, color: (thisYear == currentDateTime!.year) ? Colors.yellow : Colors.black),
-                  ),
-                );
-              }),
-        ),
+            child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: 9,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                itemBuilder: (context, index) {
+                  int thisYear;
+                  if (index < 4) {
+                    thisYear = midYear - (4 - index);
+                  } else if (index > 4) {
+                    thisYear = midYear + (index - 4);
+                  } else {
+                    thisYear = midYear;
+                  }
+                  return ListTile(
+                    onTap: () {
+                      // change year of currentDateTime
+                      currentDateTime =
+                          DateTime(thisYear, currentDateTime!.month);
+                      _getCalendar();
+                      // switch back to months view
+                      setState(() => currentView = CalendarViews.months);
+                    },
+                    title: Center(
+                        child: Text(
+                      '$thisYear',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: (thisYear == currentDateTime!.year)
+                            ? Theme.of(context).primaryColor
+                            : Theme.of(context).hoverColor,
+                      ),
+                    )),
+                  );
+                })),
       ],
     );
   }

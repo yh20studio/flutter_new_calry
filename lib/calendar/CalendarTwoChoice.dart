@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 
 import 'Calendar.dart';
 import '../widgets/DateWidget.dart';
+import '../widgets/ContainerWidget.dart';
 
 class CalendarTwoChoice extends StatefulWidget {
-  CalendarTwoChoice({Key? key, this.startDateTime, this.endDateTime, this.onStartDateTimeChanged, this.onEndDateTimeChanged}) : super(key: key);
+  CalendarTwoChoice(
+      {Key? key,
+      this.startDateTime,
+      this.endDateTime,
+      this.onStartDateTimeChanged,
+      this.onEndDateTimeChanged})
+      : super(key: key);
   final DateTime? startDateTime;
   final DateTime? endDateTime;
   final ValueChanged<DateTime>? onStartDateTimeChanged;
@@ -26,10 +33,25 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
 
   List<Calendar>? sequentialDates;
   int? midYear;
+
   // final List<String> weekDays = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
   final List<String> weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+
   // final List<String> monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  final List<String> monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+  final List<String> monthNames = [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월'
+  ];
 
   //PageView
   final PageController pageController = new PageController(initialPage: 4242);
@@ -37,9 +59,12 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
   @override
   void initState() {
     super.initState();
-    currentDateTime = DateTime(widget.startDateTime!.year, widget.startDateTime!.month);
-    startDateTime = DateTime(widget.startDateTime!.year, widget.startDateTime!.month, widget.startDateTime!.day);
-    endDateTime = DateTime(widget.endDateTime!.year, widget.endDateTime!.month, widget.endDateTime!.day);
+    currentDateTime =
+        DateTime(widget.startDateTime!.year, widget.startDateTime!.month);
+    startDateTime = DateTime(widget.startDateTime!.year,
+        widget.startDateTime!.month, widget.startDateTime!.day);
+    endDateTime = DateTime(widget.endDateTime!.year, widget.endDateTime!.month,
+        widget.endDateTime!.day);
     widget.onStartDateTimeChanged!(startDateTime!);
     widget.onEndDateTimeChanged!(endDateTime!);
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
@@ -49,20 +74,26 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
 
   // get calendar for current month
   void _getCalendar() {
-    sequentialDates = CustomCalendar().getMonthCalendar(currentDateTime!.month, currentDateTime!.year, startWeekDay: StartWeekDay.sunday);
+    sequentialDates = CustomCalendar().getMonthCalendar(
+        currentDateTime!.month, currentDateTime!.year,
+        startWeekDay: StartWeekDay.sunday);
   }
 
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Container(
-            padding: EdgeInsets.only(right: 24, left: 24, top: 16, bottom: 16),
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: (currentView == CalendarViews.dates)
-                ? _datesView()
-                : (currentView == CalendarViews.months)
-                    ? _showMonthsList()
-                    : _yearsView(midYear ?? currentDateTime!.year)));
+        child: SingleChildScrollView(
+            child: Column(children: [
+      Container(
+          color: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(right: 24, left: 24, top: 24),
+          height: MediaQuery.of(context).size.height * 0.6,
+          child: (currentView == CalendarViews.dates)
+              ? _datesView()
+              : (currentView == CalendarViews.months)
+                  ? _showMonthsList()
+                  : Center(child: _yearsView(midYear ?? currentDateTime!.year)))
+    ])));
   }
 
   Widget _datesView() {
@@ -70,35 +101,56 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
-                child: Opacity(
-              opacity: startSelect ? 0.5 : 1,
-              child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      startSelect = false;
-                      endSelect = true;
-                    });
-                  },
-                  child: summaryDateWidget(title: "시작", datetime: startDateTime, context: context)),
-            )),
-            Center(child: Text(" ~ ")),
-            Expanded(
-              child: Opacity(
-                  opacity: startSelect ? 1 : 0.5,
+              child: Text(
+                "Duration",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        overlayContainerWidget(
+            context: context,
+            widget: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: Opacity(
+                  opacity: startSelect ? 0.5 : 1,
                   child: TextButton(
                       onPressed: () {
                         setState(() {
-                          endSelect = false;
-                          startSelect = true;
+                          startSelect = false;
+                          endSelect = true;
                         });
                       },
-                      child: summaryDateWidget(title: "종료", datetime: endDateTime, context: context))),
-            )
-          ],
-        ),
+                      child: summaryDateWidget(
+                          title: "시작",
+                          datetime: startDateTime,
+                          context: context)),
+                )),
+                Center(child: Text(" ~ ")),
+                Expanded(
+                  child: Opacity(
+                      opacity: startSelect ? 1 : 0.5,
+                      child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              endSelect = false;
+                              startSelect = true;
+                            });
+                          },
+                          child: summaryDateWidget(
+                              title: "종료",
+                              datetime: endDateTime,
+                              context: context))),
+                )
+              ],
+            )),
         SizedBox(
           height: 10,
         ),
@@ -116,16 +168,13 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
                 },
                 child: Text(
                   '${currentDateTime!.year}년 ${monthNames[currentDateTime!.month - 1]}',
-                  style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                 ),
               ),
             ),
             _toggleBtn(false),
             _toggleBtn(true),
           ],
-        ),
-        SizedBox(
-          height: 5,
         ),
         SizedBox(
           height: 5,
@@ -141,7 +190,9 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
                       setState(() => _getNextMonth());
                     } else if (currentView == CalendarViews.year) {
                       setState(() {
-                        midYear = (midYear == null) ? currentDateTime!.year + 9 : midYear! + 9;
+                        midYear = (midYear == null)
+                            ? currentDateTime!.year + 9
+                            : midYear! + 9;
                       });
                     }
                   }
@@ -151,13 +202,16 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
                       setState(() => _getPrevMonth());
                     } else if (currentView == CalendarViews.year) {
                       setState(() {
-                        midYear = (midYear == null) ? currentDateTime!.year - 9 : midYear! - 9;
+                        midYear = (midYear == null)
+                            ? currentDateTime!.year - 9
+                            : midYear! - 9;
                       });
                     }
                   }
                 },
                 itemBuilder: (context, index) {
-                  return _calendarBody();
+                  return overlayContainerWidget(
+                      widget: _calendarBody(), context: context);
                 }))
         // child: GestureDetector(
         //     onHorizontalDragUpdate: (details) {
@@ -193,9 +247,11 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
           setState(() => (next) ? _getNextMonth() : _getPrevMonth());
         } else if (currentView == CalendarViews.year) {
           if (next) {
-            midYear = (midYear == null) ? currentDateTime!.year + 9 : midYear! + 9;
+            midYear =
+                (midYear == null) ? currentDateTime!.year + 9 : midYear! + 9;
           } else {
-            midYear = (midYear == null) ? currentDateTime!.year - 9 : midYear! - 9;
+            midYear =
+                (midYear == null) ? currentDateTime!.year - 9 : midYear! - 9;
           }
           setState(() {});
         }
@@ -203,10 +259,8 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
       child: Container(
         width: 50,
         height: 50,
-        child: Icon(
-          (next) ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
-          color: Colors.black,
-        ),
+        child: Icon((next) ? Icons.arrow_forward_ios : Icons.arrow_back_ios,
+            color: Theme.of(context).hoverColor),
       ),
     );
   }
@@ -226,11 +280,14 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
       ),
       itemBuilder: (context, index) {
         if (index < 7) return _weekDayTitle(index);
-        if (sequentialDates![index - 7].date == startDateTime && sequentialDates![index - 7].date != endDateTime)
+        if (sequentialDates![index - 7].date == startDateTime &&
+            sequentialDates![index - 7].date != endDateTime)
           return _selector(sequentialDates![index - 7], 0);
-        if (sequentialDates![index - 7].date != startDateTime && sequentialDates![index - 7].date == endDateTime)
+        if (sequentialDates![index - 7].date != startDateTime &&
+            sequentialDates![index - 7].date == endDateTime)
           return _selector(sequentialDates![index - 7], 1);
-        if (sequentialDates![index - 7].date == startDateTime && sequentialDates![index - 7].date == endDateTime)
+        if (sequentialDates![index - 7].date == startDateTime &&
+            sequentialDates![index - 7].date == endDateTime)
           return _selector(sequentialDates![index - 7], 2);
 
         return _calendarDates(sequentialDates![index - 7]);
@@ -243,7 +300,9 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
     return Center(
         child: Text(
       weekDays[index],
-      style: TextStyle(color: index == 0 ? Colors.red : Colors.black, fontSize: 14),
+      style: TextStyle(
+          color: index == 0 ? Colors.red : Theme.of(context).hoverColor,
+          fontSize: 14),
     ));
   }
 
@@ -289,14 +348,13 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
           child: Text(
         '${calendarDate.date!.day}',
         style: TextStyle(
-          color: (calendarDate.thisMonth)
-              ? (calendarDate.date!.weekday == DateTime.sunday)
-                  ? Colors.red
-                  : Colors.black
-              : (calendarDate.date!.weekday == DateTime.sunday)
-                  ? Colors.red.withOpacity(0.5)
-                  : Colors.black.withOpacity(0.5),
-        ),
+            color: (calendarDate.thisMonth)
+                ? (calendarDate.date!.weekday == DateTime.sunday)
+                    ? Colors.red
+                    : Theme.of(context).hoverColor
+                : (calendarDate.date!.weekday == DateTime.sunday)
+                    ? Colors.red.withOpacity(0.5)
+                    : Theme.of(context).hoverColor.withOpacity(0.5)),
       )),
     );
   }
@@ -336,17 +394,23 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
             type != 1
                 ? Text(
                     "[",
-                    style: TextStyle(color: Colors.purple, fontSize: 24, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700),
                   )
                 : SizedBox(),
             Text(
               '${calendarDate.date!.day}',
-              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+              style: TextStyle(fontWeight: FontWeight.w600),
             ),
             type != 0
                 ? Text(
                     "]",
-                    style: TextStyle(color: Colors.orange, fontSize: 24, fontWeight: FontWeight.w700),
+                    style: TextStyle(
+                        color: Colors.orange,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700),
                   )
                 : SizedBox(),
             // Text(
@@ -368,7 +432,8 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
     if (currentDateTime!.month == 12) {
       currentDateTime = DateTime(currentDateTime!.year + 1, 1);
     } else {
-      currentDateTime = DateTime(currentDateTime!.year, currentDateTime!.month + 1);
+      currentDateTime =
+          DateTime(currentDateTime!.year, currentDateTime!.month + 1);
     }
     _getCalendar();
   }
@@ -378,7 +443,8 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
     if (currentDateTime!.month == 1) {
       currentDateTime = DateTime(currentDateTime!.year - 1, 12);
     } else {
-      currentDateTime = DateTime(currentDateTime!.year, currentDateTime!.month - 1);
+      currentDateTime =
+          DateTime(currentDateTime!.year, currentDateTime!.month - 1);
     }
     _getCalendar();
   }
@@ -403,7 +469,7 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
           ),
         ),
         Divider(
-          color: Colors.black,
+          color: Theme.of(context).hoverColor,
         ),
         Expanded(
           child: ListView.builder(
@@ -420,7 +486,11 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
               title: Center(
                 child: Text(
                   monthNames[index],
-                  style: TextStyle(fontSize: 18, color: (index == currentDateTime!.month - 1) ? Colors.yellow : Colors.black),
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: (index == currentDateTime!.month - 1)
+                          ? Theme.of(context).primaryColor
+                          : Theme.of(context).hoverColor),
                 ),
               ),
             ),
@@ -433,46 +503,52 @@ class _CalendarTwoChoiceState extends State<CalendarTwoChoice> {
   // years list views
   Widget _yearsView(int midYear) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Row(
           children: <Widget>[
             _toggleBtn(false),
-            Spacer(),
+            Expanded(child: Center(child: Text("연도 선택"))),
             _toggleBtn(true),
           ],
         ),
         Expanded(
-          child: GridView.builder(
-              shrinkWrap: true,
-              itemCount: 9,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-              ),
-              itemBuilder: (context, index) {
-                int thisYear;
-                if (index < 4) {
-                  thisYear = midYear - (4 - index);
-                } else if (index > 4) {
-                  thisYear = midYear + (index - 4);
-                } else {
-                  thisYear = midYear;
-                }
-                return ListTile(
-                  onTap: () {
-                    // change year of currentDateTime
-                    currentDateTime = DateTime(thisYear, currentDateTime!.month);
-                    _getCalendar();
-                    // switch back to months view
-                    setState(() => currentView = CalendarViews.months);
-                  },
-                  title: Text(
-                    '$thisYear',
-                    style: TextStyle(fontSize: 18, color: (thisYear == currentDateTime!.year) ? Colors.yellow : Colors.black),
-                  ),
-                );
-              }),
-        ),
+            child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: 9,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                ),
+                itemBuilder: (context, index) {
+                  int thisYear;
+                  if (index < 4) {
+                    thisYear = midYear - (4 - index);
+                  } else if (index > 4) {
+                    thisYear = midYear + (index - 4);
+                  } else {
+                    thisYear = midYear;
+                  }
+                  return ListTile(
+                    onTap: () {
+                      // change year of currentDateTime
+                      currentDateTime =
+                          DateTime(thisYear, currentDateTime!.month);
+                      _getCalendar();
+                      // switch back to months view
+                      setState(() => currentView = CalendarViews.months);
+                    },
+                    title: Center(
+                        child: Text(
+                      '$thisYear',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: (thisYear == currentDateTime!.year)
+                              ? Theme.of(context).primaryColor
+                              : Theme.of(context).hoverColor),
+                    )),
+                  );
+                })),
       ],
     );
   }

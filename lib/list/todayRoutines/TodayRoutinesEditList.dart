@@ -7,10 +7,16 @@ import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 import '../../domain/routines/Routines.dart';
 import '../../domain/todayRoutines/TodayRoutines.dart';
 import '../../widgets/MultiLineTextForListItemWidget.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class TodayRoutinesEditList extends StatefulWidget {
   TodayRoutinesEditList(
-      {Key? key, this.todayRoutinesGroups, this.routinesGroupsUnionList, this.routinesList, this.onRefreshChanged, this.onTodayRoutinesGroupsChanged})
+      {Key? key,
+      this.todayRoutinesGroups,
+      this.routinesGroupsUnionList,
+      this.routinesList,
+      this.onRefreshChanged,
+      this.onTodayRoutinesGroupsChanged})
       : super(key: key);
 
   final TodayRoutinesGroups? todayRoutinesGroups;
@@ -27,6 +33,7 @@ class _TodayRoutinesEditListstate extends State<TodayRoutinesEditList> {
   TodayRoutinesGroups? todayRoutinesGroups;
   List<Routines>? routinesList;
   List<RoutinesGroupsUnions>? routinesGroupsUnionList;
+
   @override
   void initState() {
     super.initState();
@@ -48,22 +55,44 @@ class _TodayRoutinesEditListstate extends State<TodayRoutinesEditList> {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
-            Expanded(child: Center(child: Text("오늘 진행할 루틴"))),
-            IconButton(onPressed: () => _awaitReturnValueFromTodayRoutinesInput(), icon: Icon(Icons.add)),
+            IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.close, color: Theme.of(context).hoverColor)),
+            Expanded(child: Center(child: Text("오늘 진행할 루틴", style: TextStyle(fontWeight: FontWeight.w700),))),
+            IconButton(
+                onPressed: () => _awaitReturnValueFromTodayRoutinesInput(),
+                icon: Icon(
+                  Icons.add,
+                  color: Theme.of(context).hoverColor,
+                )),
           ],
         )),
         SizedBox(
           height: 10,
         ),
-        Container(
-            padding: EdgeInsets.only(right: 10, left: 10),
-            child: Wrap(
-                spacing: 8.0, // gap between adjacent chips
-                runSpacing: 4.0, // gap between lines
-                children: List.generate(todayRoutinesGroups == null ? 0 : todayRoutinesGroups!.todayRoutinesList!.length,
-                        (i) => listViewTodayRoutines(index: i, todayRoutines: todayRoutinesGroups!.todayRoutinesList![i], width: _width, context: context))
-                    .toList())),
+        overlayContainerWidget(
+            widget: Container(
+                padding:
+                    EdgeInsets.only(top: 10, bottom: 10, right: 10, left: 10),
+                child: todayRoutinesGroups!.todayRoutinesList!.length == 0
+                    ? Container(
+                        padding: EdgeInsets.all(10),
+                        child: Center(
+                          child: Text("매일 진행하는 루틴을 추가해 보세요!"),
+                        ),
+                      )
+                    : Wrap(
+                        spacing: 8.0, // gap between adjacent chips
+                        runSpacing: 4.0, // gap between lines
+                        children: List.generate(
+                            todayRoutinesGroups!.todayRoutinesList!.length,
+                            (i) => listViewTodayRoutines(
+                                index: i,
+                                todayRoutines:
+                                    todayRoutinesGroups!.todayRoutinesList![i],
+                                width: _width,
+                                context: context)).toList())),
+            context: context),
         SizedBox(
           height: 30,
         ),
@@ -71,14 +100,23 @@ class _TodayRoutinesEditListstate extends State<TodayRoutinesEditList> {
     )));
   }
 
-  Widget listViewTodayRoutines({required int index, required TodayRoutines todayRoutines, required double width, required BuildContext context}) {
+  Widget listViewTodayRoutines(
+      {required int index,
+      required TodayRoutines todayRoutines,
+      required double width,
+      required BuildContext context}) {
     return InkWell(
-        onTap: () => _awaitReturnValueFromTodayRoutinesDetail(todayRoutines, index),
-        child: multiLineTextForListItemWidget(width: width, text: todayRoutines.routines!.title!, context: context));
+        onTap: () =>
+            _awaitReturnValueFromTodayRoutinesDetail(todayRoutines, index),
+        child: multiLineTextForListItemWidget(
+            width: width,
+            text: todayRoutines.routines!.title!,
+            context: context));
   }
 
   void _awaitReturnValueFromTodayRoutinesInput() async {
-    var awaitResult = await todayRoutinesInputModalBottomSheet(context, widget.todayRoutinesGroups, routinesGroupsUnionList, routinesList!);
+    var awaitResult = await todayRoutinesInputModalBottomSheet(context,
+        widget.todayRoutinesGroups, routinesGroupsUnionList, routinesList!);
     print(awaitResult);
     if (awaitResult != null) {
       setState(() {
@@ -98,8 +136,10 @@ class _TodayRoutinesEditListstate extends State<TodayRoutinesEditList> {
     }
   }
 
-  void _awaitReturnValueFromTodayRoutinesDetail(TodayRoutines todayRoutines, int index) async {
-    var awaitResult = await todayRoutinesDetailModalBottomSheet(todayRoutines, context);
+  void _awaitReturnValueFromTodayRoutinesDetail(
+      TodayRoutines todayRoutines, int index) async {
+    var awaitResult =
+        await todayRoutinesDetailModalBottomSheet(todayRoutines, context);
 
     if (awaitResult != null) {
       if (awaitResult[0] == "update") {

@@ -42,14 +42,14 @@ class _Loginstate extends State<Login> {
                 children: [
                   Text(
                     "Calry",
-                    style: TextStyle(color: Colors.black, fontWeight: FontWeight.w800, fontSize: 32),
+                    style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w800, fontSize: 32),
                   ),
                   SizedBox(
                     height: 50,
                   ),
                   Text(
                     "해당 서비스는 로그인이 필요합니다.",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Theme.of(context).hoverColor),
                   )
                 ],
               ),
@@ -59,23 +59,43 @@ class _Loginstate extends State<Login> {
                 padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    borderPaddingTitleContainerWidget(
-                        title: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text("이메일", style: Theme.of(context).textTheme.headline2),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "E-mail",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                        widget: authTestInputForm(controller: _emailController, width: _width, context: context),
-                        context: context),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    overlayContainerWidget(
+                      context: context,
+                      widget: authTestInputForm(controller: _emailController, width: _width, context: context),
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    borderPaddingTitleContainerWidget(
-                        title: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Text("비밀번호", style: Theme.of(context).textTheme.headline2),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "비밀번호",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
                         ),
-                        widget: authTestInputForm(controller: _passwordController, width: _width, context: context),
-                        context: context),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    overlayContainerWidget(
+                      context: context,
+                      widget: authTestInputForm(controller: _passwordController, width: _width, context: context),
+                    ),
                     SizedBox(
                       height: 30,
                     ),
@@ -88,13 +108,13 @@ class _Loginstate extends State<Login> {
                         TextButton(
                             child: Text(
                               "Sign Up",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: Theme.of(context).hoverColor),
                             ),
                             onPressed: _awaitFromSignUp),
                         TextButton(
                             child: Text(
                               "Login",
-                              style: TextStyle(color: Colors.black),
+                              style: TextStyle(color: Theme.of(context).hoverColor),
                             ),
                             onPressed: _httpPostLogin),
                       ],
@@ -108,11 +128,12 @@ class _Loginstate extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
+          padding: EdgeInsets.all(5),
           width: width * 0.8,
           alignment: Alignment.center,
           decoration: BoxDecoration(color: Colors.transparent),
           child: TextFormField(
-            style: TextStyle(fontSize: 30, color: Colors.black),
+            style: TextStyle(fontSize: 30, color: Theme.of(context).hoverColor),
             obscureText: controller == _passwordController ? true : false,
             keyboardType: TextInputType.emailAddress,
             controller: controller,
@@ -144,7 +165,7 @@ class _Loginstate extends State<Login> {
         final String encodedData = Labels.encode(labelResult);
         await prefs.setString('labels', encodedData);
         print("Login Success");
-        navigatorKey.currentState!.pushNamed('/');
+        Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
       } on Exception catch (exception) {
         print(exception);
         if (exception.toString() == "Exception: 가입되지 않은 이메일입니다.") {

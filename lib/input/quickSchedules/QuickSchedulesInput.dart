@@ -31,7 +31,7 @@ class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
 
   SharedPreferences? prefs;
 
-  bool isSetTime = false;
+  bool? isSetTime = false;
 
   @override
   void initState() {
@@ -58,13 +58,69 @@ class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close,
+                        color: Theme.of(context).backgroundColor)),
+                Expanded(
+                    child: Center(
+                        child: Text("반복 일정 추가",
+                            style: TextStyle(
+                                color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
+                TextButton(
+                  onPressed: () => _httpPostQuickSchedules,
+                  child: Text("저장",
+                      style:
+                      TextStyle(color: Theme.of(context).backgroundColor)),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
           children: [
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
-            TextButton(
-              onPressed: _httpPostQuickSchedules,
-              child: Text("저장"),
+            Expanded(
+              child: Text(
+                "시간",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            Switch(
+              value: isSetTime!,
+              onChanged: (value) {
+                setState(() {
+                  isSetTime = value;
+                });
+              },
+              activeTrackColor: Theme.of(context).primaryColor.withOpacity(0.8),
+              activeColor: Theme.of(context).primaryColor,
+            ),
+          ],
+        )),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:isSetTime! ? overlayPaddingContainerWidget(
+            context: context,
+            widget:timeInputForm(start: startTime!, end: endTime!, width: _width, context: context)) : SizedBox(),
+        ),
+          SizedBox(height: 20,),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "제목",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         )),
@@ -72,41 +128,54 @@ class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
           height: 10,
         ),
         Container(
-          padding: EdgeInsets.all(10),
-          child: Text("시간 설정", style: Theme.of(context).textTheme.headline2),
-        ),
-        Center(
-          child: Switch(
-            value: isSetTime,
-            onChanged: (value) {
-              setState(() {
-                isSetTime = value;
-                print(isSetTime);
-              });
-            },
-            activeTrackColor: Colors.yellow,
-            activeColor: Colors.orangeAccent,
-          ),
-        ),
-        isSetTime ? timeInputForm(start: startTime!, end: endTime!, width: _width, context: context) : SizedBox(),
-        SizedBox(
-          height: 20,
-        ),
-        borderPaddingContainerWidget(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
           context: context,
-          widget: textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        ),
+          widget: textInputSimpleForm(
+              controller: _titleController, context: context),
+        )),
         SizedBox(
           height: 20,
         ),
-        borderPaddingContainerWidget(
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "메모",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        )),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
           context: context,
-          widget: textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
-        ),
+          widget: textInputSimpleForm(
+              controller: _contentController, context: context),
+        )),
         SizedBox(
           height: 20,
         ),
-        labelsInputForm(labelsList: labelsList, width: _width, context: context),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "라벨",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            labelsInputForm(
+                labelsList: labelsList, width: _width, context: context),
+          ],
+        )),
       ],
     )));
   }
@@ -182,8 +251,8 @@ class _QuickSchedulesInputstate extends State<QuickSchedulesInput> {
 
   void _httpPostQuickSchedules() async {
     QuickSchedules quickSchedules = QuickSchedules(
-        startTime: isSetTime ? startTime : null,
-        endTime: isSetTime ? endTime : null,
+        startTime: isSetTime! ? startTime : null,
+        endTime: isSetTime! ? endTime : null,
         title: _titleController.text,
         content: _contentController.text,
         labels: labels);

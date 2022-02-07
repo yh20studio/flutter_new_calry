@@ -12,6 +12,7 @@ import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
 import '../../widgets/TimeWidget.dart';
 import '../../controller/schedules/SchedulesController.dart';
 import '../../controller/jwt/JwtController.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class SchedulesDetail extends StatefulWidget {
   SchedulesDetail({Key? key, this.schedules}) : super(key: key);
@@ -73,54 +74,154 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: _httpDeleteSchedules,
+                  child: Text(
+                    "삭제",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                Expanded(
+                    child: Center(
+                        child: Text("일정 편집",
+                            style: TextStyle(
+                                color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
+                TextButton(
+                    onPressed: () => _httpUpdateSchedules(),
+                    child: Text("저장",
+                        style: TextStyle(
+                            color: Theme.of(context).backgroundColor))),
+              ],
+            )),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
           children: [
-            TextButton(
-              onPressed: _httpDeleteSchedules,
+            Expanded(
               child: Text(
-                "삭제",
-                style: TextStyle(color: Colors.red),
+                "일정",
+                style: TextStyle(fontWeight: FontWeight.w700),
               ),
-            ),
-            TextButton(
-              onPressed: _httpUpdateSchedules,
-              child: Text("저장"),
             ),
           ],
         )),
         SizedBox(
           height: 10,
         ),
-        dateTimeInputForm(start: startDate!, end: endDate!, title: '일정', width: _width, context: context),
         Container(
-          padding: EdgeInsets.all(10),
-          child: Text("시간 설정", style: Theme.of(context).textTheme.headline2),
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
+          context: context,
+          widget:
+        dateTimeInputForm(start: startDate!, end: endDate!, width: _width, context: context),
+        )),
+          SizedBox(height: 20,),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "시간",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            Switch(
+              value: isSetTime!,
+              onChanged: (value) {
+                setState(() {
+                  isSetTime = value;
+                });
+              },
+              activeTrackColor: Theme.of(context).primaryColor.withOpacity(0.8),
+              activeColor: Theme.of(context).primaryColor,
+            ),
+          ],
+        )),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:isSetTime! ? overlayPaddingContainerWidget(
+            context: context,
+            widget:timeInputForm(start: startTime!, end: endTime!, width: _width, context: context)) : SizedBox(),
         ),
-        Center(
-          child: Switch(
-            value: isSetTime!,
-            onChanged: (value) {
-              setState(() {
-                isSetTime = value;
-              });
-            },
-            activeTrackColor: Colors.yellow,
-            activeColor: Colors.orangeAccent,
-          ),
-        ),
-        isSetTime! ? timeInputForm(start: startTime!, end: endTime!, width: _width, context: context) : SizedBox(),
-        textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
+          SizedBox(height: 20,),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "제목",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        )),
         SizedBox(
           height: 10,
         ),
-        labelsInputForm(labelsList: labelsList, width: _width, context: context),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
+          context: context,
+          widget: textInputSimpleForm(
+              controller: _titleController, context: context),
+        )),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "메모",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        )),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
+          context: context,
+          widget: textInputSimpleForm(
+              controller: _contentController, context: context),
+        )),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "라벨",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            labelsInputForm(
+                labelsList: labelsList, width: _width, context: context),
+          ],
+        )),
       ],
     )));
   }
 
-  Widget dateTimeInputForm({required DateTime start, required DateTime end, required String title, required double width, required BuildContext context}) {
+  Widget dateTimeInputForm({required DateTime start, required DateTime end, required double width, required BuildContext context}) {
     return InkWell(
         onTap: () {
           void _calendarModalBottomSheet() async {
@@ -136,13 +237,7 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
 
           _calendarModalBottomSheet();
         },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Text(title, style: Theme.of(context).textTheme.headline2),
-            ),
+        child:
             Container(
               padding: EdgeInsets.all(10),
               child: Row(
@@ -156,9 +251,8 @@ class _SchedulesDetailstate extends State<SchedulesDetail> {
                   monthDayWeekdayDateWidget(datetime: end, context: context),
                 ],
               ),
-            ),
-          ],
-        ));
+            )
+        );
   }
 
   Widget labelsInputForm({required List<Labels> labelsList, required double width, required BuildContext context}) {

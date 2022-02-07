@@ -34,22 +34,25 @@ class _FocusTodosListstate extends State<FocusTodosList> {
             child: Container(
                 child: Column(
       children: [
-        borderPaddingTitleContainerWidget(
-            title: Container(
-                padding: EdgeInsets.only(left: 10, right: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Center(
-                          child: Text(
-                        "집중해야 할일",
-                        style: TextStyle(fontWeight: FontWeight.w700),
-                      )),
-                    ),
-                    IconButton(onPressed: () => _awaitReturnValueFromFocusTodosInput(), icon: Icon(Icons.add)),
-                  ],
-                )),
+        Container(
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: Center(
+                      child: Text(
+                    "집중해야 할일",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  )),
+                ),
+                IconButton(
+                    onPressed: () => _awaitReturnValueFromFocusTodosInput(),
+                    icon: Icon(Icons.add)),
+              ],
+            )),
+        SizedBox(height: 5),
+        overlayContainerWidget(
             widget: widget.focusTodosList!.length == 0
                 ? Container(
                     padding: EdgeInsets.all(10),
@@ -62,23 +65,35 @@ class _FocusTodosListstate extends State<FocusTodosList> {
                     child: Wrap(
                         spacing: 8.0, // gap between adjacent chips
                         runSpacing: 4.0, // gap between lines
-                        children: List.generate(widget.focusTodosList!.length,
-                            (i) => listViewFocusTodos(index: i, focusTodos: widget.focusTodosList![i], width: _width, context: context)).toList())),
+                        children: List.generate(
+                            widget.focusTodosList!.length,
+                            (i) => listViewFocusTodos(
+                                index: i,
+                                focusTodos: widget.focusTodosList![i],
+                                width: _width,
+                                context: context)).toList())),
             context: context)
       ],
     ))));
   }
 
-  Widget listViewFocusTodos({required int index, required FocusTodos focusTodos, required double width, required BuildContext context}) {
+  Widget listViewFocusTodos(
+      {required int index,
+      required FocusTodos focusTodos,
+      required double width,
+      required BuildContext context}) {
     return InkWell(
         onTap: () {
           _awaitReturnValueFromFocusTodosDetail(focusTodos, index);
         },
-        child: multiLineTextForListItemWidget(width: width, text: focusTodos.content!, context: context));
+        child: multiLineTextForListItemWidget(
+            width: width, text: focusTodos.content!, context: context));
   }
 
-  void _awaitReturnValueFromFocusTodosDetail(FocusTodos focusTodos, int index) async {
-    var awaitResult = await focusTodosDetailModalBottomSheet(focusTodos, context);
+  void _awaitReturnValueFromFocusTodosDetail(
+      FocusTodos focusTodos, int index) async {
+    var awaitResult =
+        await focusTodosDetailModalBottomSheet(focusTodos, context);
 
     if (awaitResult != null) {
       if (awaitResult[0] == "update") {
@@ -94,7 +109,8 @@ class _FocusTodosListstate extends State<FocusTodosList> {
   }
 
   void _awaitReturnValueFromFocusTodosInput() async {
-    var awaitResult = await focusTodosInputModalBottomSheet(widget.date!, context);
+    var awaitResult =
+        await focusTodosInputModalBottomSheet(widget.date!, context);
     if (awaitResult != null) {
       setState(() {
         widget.focusTodosList!.add(awaitResult);

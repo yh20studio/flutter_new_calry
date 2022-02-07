@@ -13,7 +13,7 @@ Widget meridiemHourMinuteTimeWidget({required TimeOfDay? timeOfDay, required Bui
     timeOfDay.minute == 0
         ? "${meridiem} ${timeOfDay.hour < 12 ? timeOfDay.hour : timeOfDay.hour - 12}시"
         : "${meridiem} ${timeOfDay.hour < 12 ? timeOfDay.hour : timeOfDay.hour - 12}시 ${timeOfDay.minute}분",
-    style: TextStyle(color: Colors.black),
+    style: TextStyle(color: Theme.of(context).hoverColor),
   );
 }
 

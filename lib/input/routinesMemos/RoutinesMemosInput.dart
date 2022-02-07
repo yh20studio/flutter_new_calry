@@ -32,26 +32,44 @@ class _RoutinesMemosInputstate extends State<RoutinesMemosInput> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(Icons.close),
-            ),
-            TextButton(
-              onPressed: () => _httpPostMemos(),
-              child: Text("저장"),
-            ),
-          ],
-        )),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () => Navigator.pop(context),
+                  icon: Icon(Icons.close, color: Theme.of(context).backgroundColor)
+                ),
+                Expanded(child:Center(child:Text("메모 추가", style: TextStyle(color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
+                TextButton(
+                  onPressed: () => _httpPostMemos(),
+                  child: Text("저장", style: TextStyle(color: Theme.of(context).backgroundColor)
+                )),
+              ],
+            )),
         SizedBox(
           height: 20,
         ),
-        borderPaddingContainerWidget(
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Memo",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            )),
+        SizedBox(height: 10,),
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
           context: context,
-          widget: textInputForm(controller: _memoController, title: 'Memo', width: _width, context: context),
-        ),
+          widget: textInputSimpleForm(controller: _memoController, context: context),
+        )),
       ],
     )));
   }

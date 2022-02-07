@@ -9,10 +9,11 @@ timeTwoChoiceModalBottomSheet(TimeOfDay startTime, TimeOfDay endTime, BuildConte
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10.0),
     ),
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.of(context).backgroundColor,
     builder: (BuildContext context) {
       return SafeArea(
         child: Container(
+            padding: EdgeInsets.only(top:10, left: 10, right: 10),
             color: Colors.transparent,
             width: MediaQuery.of(context).size.width * 0.7 <= 300 ? MediaQuery.of(context).size.width * 0.7 : 300,
             child: ClipRRect(

@@ -65,7 +65,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
               ),
             )),
         elevation: 0.0,
-        backgroundColor: Colors.white);
+      backgroundColor: Theme.of(context).dialogBackgroundColor,);
     return Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
         appBar: PreferredSize(
@@ -74,6 +74,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
         ),
         body: Center(
             child: Container(
+              color: Theme.of(context).dialogBackgroundColor,
                 child: Column(
           children: [
             Container(
@@ -360,7 +361,7 @@ class _CalendarNewHomestate extends State<CalendarNewHome> {
       required List<QuickSchedules> quickSchedulesList,
       required BuildContext context}) {
     return Container(
-        decoration: BoxDecoration(border: Border(top: BorderSide(width: 0.5, color: Colors.black))),
+        decoration: BoxDecoration(border: Border(top: BorderSide(width: 0.5, color: Theme.of(context).hoverColor))),
         child: Column(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.min, children: [
           Expanded(
               child: Row(

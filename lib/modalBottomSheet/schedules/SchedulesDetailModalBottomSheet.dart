@@ -10,10 +10,9 @@ schedulesDetailModalBottomSheet(Schedules schedules, BuildContext context) async
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       builder: (BuildContext context) {
         return Container(
-            padding: EdgeInsets.all(20),
             color: Colors.transparent,
             height: MediaQuery.of(context).size.height * 0.8,
             width: MediaQuery.of(context).size.width * 0.7 <= 300 ? MediaQuery.of(context).size.width * 0.7 : 300,
@@ -24,6 +23,7 @@ schedulesDetailModalBottomSheet(Schedules schedules, BuildContext context) async
                   builder: (_, controller) {
                     return SafeArea(
                         child: SingleChildScrollView(
+                          physics: ClampingScrollPhysics(),
                             child: Wrap(
                       children: [
                         SchedulesDetail(

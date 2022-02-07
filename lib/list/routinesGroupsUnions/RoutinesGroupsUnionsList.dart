@@ -8,6 +8,7 @@ import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 import '../../domain/routinesGroups/RoutinesGroups.dart';
 import '../../domain/todayRoutines/TodayRoutines.dart';
 import '../../controller/jwt/JwtController.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class RoutinesGroupsUnionsList extends StatefulWidget {
   RoutinesGroupsUnionsList(
@@ -26,7 +27,8 @@ class RoutinesGroupsUnionsList extends StatefulWidget {
   final ValueChanged<TodayRoutinesGroups>? onTodayRoutinesGroupsChanged;
 
   @override
-  _RoutinesGroupsUnionsListstate createState() => _RoutinesGroupsUnionsListstate();
+  _RoutinesGroupsUnionsListstate createState() =>
+      _RoutinesGroupsUnionsListstate();
 }
 
 class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
@@ -57,56 +59,55 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
               style: TextStyle(fontWeight: FontWeight.w700),
             )),
             TextButton(
-              onPressed: () => _awaitReturnValueFromRoutinesGroupsUnionsEditList(),
+              onPressed: () =>
+                  _awaitReturnValueFromRoutinesGroupsUnionsEditList(),
               child: Text("편집"),
             ),
           ],
         )),
-        Divider(
-          height: 5,
-          color: Colors.black,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-            child: Wrap(
-                spacing: 8.0, // gap between adjacent chips
-                runSpacing: 4.0, // gap between lines
-                children: List.generate(routinesGroupsUnionsList!.length,
-                        (i) => listViewRoutinesGroupsUnion(index: i, routinesGroupsUnions: routinesGroupsUnionsList![i], width: _width, context: context))
-                    .toList()))
+        SizedBox(height: 10,),
+        overlayContainerWidget(
+            context: context,
+            widget: Container(
+              padding: EdgeInsets.only(left: 10, right:10),
+                child:Wrap(
+                children: List.generate(
+                    routinesGroupsUnionsList!.length,
+                    (i) => listViewRoutinesGroupsUnion(
+                        index: i,
+                        routinesGroupsUnions: routinesGroupsUnionsList![i],
+                        width: _width,
+                        context: context)).toList()))),
       ],
     )));
   }
 
   Widget listViewRoutinesGroupsUnion(
-      {required int index, required RoutinesGroupsUnions routinesGroupsUnions, required double width, required BuildContext context}) {
+      {required int index,
+      required RoutinesGroupsUnions routinesGroupsUnions,
+      required double width,
+      required BuildContext context}) {
     return Container(
       width: width,
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: EdgeInsets.only(bottom: 5, top: 5),
       child: Row(
         children: [
           Expanded(
               child: Row(
             children: [
-              Icon(
-                Icons.circle,
-                size: 10,
-              ),
-              SizedBox(
-                width: 10,
-              ),
               Expanded(child: Text(routinesGroupsUnions.title!)),
             ],
           )),
-          IconButton(onPressed: () => _httpPostTodayRoutinesList(routinesGroupsUnions), icon: Icon(Icons.add))
+          IconButton(
+              onPressed: () => _httpPostTodayRoutinesList(routinesGroupsUnions),
+              icon: Icon(Icons.add))
         ],
       ),
     );
   }
 
-  void _httpPostTodayRoutinesList(RoutinesGroupsUnions routinesGroupsUnions) async {
+  void _httpPostTodayRoutinesList(
+      RoutinesGroupsUnions routinesGroupsUnions) async {
     try {
       DateTime now = DateTime.now();
       List<TodayRoutines> todayRoutinesList = [];
@@ -118,8 +119,10 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
         );
         todayRoutinesList.add(todayRoutines);
       });
-      List<TodayRoutines> httpResult =
-          await postTodayRoutinesList(await getJwt(context), "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}", todayRoutinesList);
+      List<TodayRoutines> httpResult = await postTodayRoutinesList(
+          await getJwt(context),
+          "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
+          todayRoutinesList);
 
       setState(() {
         httpResult.forEach((element) {
@@ -137,11 +140,13 @@ class _RoutinesGroupsUnionsListstate extends State<RoutinesGroupsUnionsList> {
   }
 
   void _awaitReturnValueFromRoutinesGroupsUnionsEditList() async {
-    var awaitResult = await routinesGroupsUnionsEditListModalBottomSheet(context, routinesGroupsUnionsList!);
+    var awaitResult = await routinesGroupsUnionsEditListModalBottomSheet(
+        context, routinesGroupsUnionsList!);
 
     if (awaitResult != null) {
       if (awaitResult[0] == "update" || awaitResult[0] == "delete") {
-        TodayRoutinesGroups newTodayRoutinesGroups = await getTodayRoutinesGroups(await getJwt(context), DateTime.now());
+        TodayRoutinesGroups newTodayRoutinesGroups =
+            await getTodayRoutinesGroups(await getJwt(context), DateTime.now());
         setState(() {
           todayRoutinesGroups = newTodayRoutinesGroups;
           widget.onRefreshChanged!("refresh");

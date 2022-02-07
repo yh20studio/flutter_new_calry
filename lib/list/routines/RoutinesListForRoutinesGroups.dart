@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../modalBottomSheet/routines/RoutinesEditListModalBottomSheet.dart';
 import '../../domain/routines/Routines.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class RoutinesListForRoutinesGroups extends StatefulWidget {
   RoutinesListForRoutinesGroups({Key? key, this.routinesList}) : super(key: key);
@@ -29,29 +30,41 @@ class _RoutinesListForRoutinesGroupsstate extends State<RoutinesListForRoutinesG
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-                child: Text(
-              "그룹에 넣을 나의 루틴",
-              style: TextStyle(fontWeight: FontWeight.w700),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close, color: Theme.of(context).backgroundColor)),
+                Expanded(
+                    child: Center(child:Text(
+                      "나의 루틴",
+                      style: TextStyle(color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700),
+                    ))),
+                TextButton(
+                  onPressed: _awaitReturnValueFromRoutinesEditList,
+                  child: Text("편집",
+                      style: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                      )),
+                ),
+              ],
             )),
-            TextButton(
-              onPressed: () => _awaitReturnValueFromRoutinesEditList(),
-              child: Text("편집"),
-            ),
-          ],
-        )),
         SizedBox(
           height: 10,
         ),
         Container(
-            child: Wrap(
-                spacing: 8.0, // gap between adjacent chips
-                runSpacing: 4.0, // gap between lines
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayContainerWidget(
+          context: context,
+          widget: Container(
+              padding: EdgeInsets.only(top:5, bottom:5, left: 10, right:10),
+              child: Wrap(
                 children: List.generate(routinesList!.length, (i) => listViewRoutines(index: i, routines: routinesList![i], width: _width, context: context))
-                    .toList()))
+                    .toList())))
+        )
       ],
     )));
   }
@@ -61,17 +74,10 @@ class _RoutinesListForRoutinesGroupsstate extends State<RoutinesListForRoutinesG
         onTap: () => _selectRoutines(routines),
         child: Container(
             width: width,
-            padding: EdgeInsets.only(right: 20, left: 20, top: 10, bottom: 10),
+            padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.circle,
-                    size: 10,
-                  ),
-                  SizedBox(
-                    width: 5,
-                  ),
                   Expanded(
                     child: Text(routines.title!),
                   )

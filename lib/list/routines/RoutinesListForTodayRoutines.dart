@@ -8,6 +8,7 @@ import '../../controller/todayRoutinesGroups/TodayRoutinesGroupsController.dart'
 import '../../domain/routines/Routines.dart';
 import '../../domain/todayRoutines/TodayRoutines.dart';
 import '../../controller/jwt/JwtController.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class RoutinesListForTodayRoutines extends StatefulWidget {
   RoutinesListForTodayRoutines({Key? key, this.todayRoutinesGroups, this.routinesList, this.onRefreshChanged, this.onTodayRoutinesGroupsChanged})
@@ -55,19 +56,14 @@ class _RoutinesListForTodayRoutinesstate extends State<RoutinesListForTodayRouti
             ),
           ],
         )),
-        Divider(
-          height: 5,
-          color: Colors.black,
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Container(
-            child: Wrap(
-                spacing: 8.0, // gap between adjacent chips
-                runSpacing: 4.0, // gap between lines
+        SizedBox(height: 10,),
+        overlayContainerWidget(
+          context: context,
+          widget: Container(
+              padding: EdgeInsets.only(top:5, bottom:5, left: 10, right:10),
+              child: Wrap(
                 children: List.generate(routinesList!.length, (i) => listViewRoutines(index: i, routines: routinesList![i], width: _width, context: context))
-                    .toList()))
+                    .toList()))),
       ],
     )));
   }
@@ -82,13 +78,6 @@ class _RoutinesListForTodayRoutinesstate extends State<RoutinesListForTodayRouti
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.circle,
-                    size: 10,
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
                   Expanded(child: Text(routines.title!)),
                 ],
               ),
@@ -118,7 +107,6 @@ class _RoutinesListForTodayRoutinesstate extends State<RoutinesListForTodayRouti
 
   void _awaitReturnValueFromRoutinesEditList() async {
     var awaitResult = await routinesEditListModalBottomSheet(context, routinesList!);
-    print(awaitResult);
     if (awaitResult != null) {
       if (awaitResult[0] == "update" || awaitResult[0] == "delete") {
         TodayRoutinesGroups newTodayRoutinesGroups = await getTodayRoutinesGroups(await getJwt(context), DateTime.now());

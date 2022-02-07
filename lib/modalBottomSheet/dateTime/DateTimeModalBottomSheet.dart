@@ -11,9 +11,10 @@ Future<DateTime> dateTimeModalBottomSheet(DateTime datetime, BuildContext contex
   int day = datetime.day;
   var result = await showModalBottomSheet(
     context: context,
+    backgroundColor: Theme.of(context).backgroundColor,
     builder: (BuildContext context) {
       return Container(
-          color: Colors.white,
+          color: Colors.transparent,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
             child: Container(

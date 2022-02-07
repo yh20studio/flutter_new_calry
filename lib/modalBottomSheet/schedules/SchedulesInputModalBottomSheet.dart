@@ -9,13 +9,11 @@ schedulesInputModalBottomSheet(DateTime selectedDate, BuildContext context) asyn
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
-            return SafeArea(
-              child: Container(
-                  padding: EdgeInsets.all(20),
+            return Container(
                   color: Colors.transparent,
                   height: MediaQuery.of(context).size.height * 0.8,
                   width: MediaQuery.of(context).size.width * 0.7 <= 300 ? MediaQuery.of(context).size.width * 0.7 : 300,
@@ -24,15 +22,17 @@ schedulesInputModalBottomSheet(DateTime selectedDate, BuildContext context) asyn
                       child: DraggableScrollableSheet(
                           initialChildSize: 1,
                           builder: (_, controller) {
-                            return SingleChildScrollView(
+                            return SafeArea(
+                                child:SingleChildScrollView(
+                              physics: ClampingScrollPhysics(),
                                 child: Wrap(
                               children: [
                                 SchedulesInput(
                                   selectedDate: selectedDate,
                                 )
                               ],
-                            ));
-                          }))),
+                            )));
+                          })),
             );
           },
         );

@@ -10,10 +10,9 @@ focusTodosDetailModalBottomSheet(FocusTodos focusTodos, BuildContext context) as
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       builder: (BuildContext context) {
         return Container(
-            padding: EdgeInsets.all(20),
             color: Colors.transparent,
             height: MediaQuery.of(context).size.height * 0.4,
             width: MediaQuery.of(context).size.width * 0.7 <= 300 ? MediaQuery.of(context).size.width * 0.7 : 300,
@@ -22,15 +21,15 @@ focusTodosDetailModalBottomSheet(FocusTodos focusTodos, BuildContext context) as
               child: DraggableScrollableSheet(
                   initialChildSize: 1,
                   builder: (_, controller) {
-                    return SafeArea(
-                        child: SingleChildScrollView(
+                    return  SingleChildScrollView(
+                      physics: ClampingScrollPhysics(),
                             child: Wrap(
                       children: [
                         FocusTodosDetail(
                           focusTodos: focusTodos,
                         )
                       ],
-                    )));
+                    ));
                   }),
             ));
       });

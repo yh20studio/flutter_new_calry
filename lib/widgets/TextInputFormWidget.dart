@@ -13,7 +13,7 @@ Widget textInputForm({required TextEditingController controller, required String
         alignment: Alignment.center,
         decoration: BoxDecoration(color: Colors.transparent),
         child: TextFormField(
-          style: TextStyle(fontSize: 24, color: Colors.black),
+          style: TextStyle(fontSize: 24, color:Theme.of(context).hoverColor),
           keyboardType: TextInputType.multiline,
           maxLines: null,
           controller: controller,
@@ -33,8 +33,7 @@ Widget textInputSimpleForm({required TextEditingController controller, required 
         alignment: Alignment.center,
         decoration: BoxDecoration(color: Colors.transparent),
         child: TextFormField(
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 21, color: Colors.black),
+          style: TextStyle(fontSize: 21, color:Theme.of(context).hoverColor),
           keyboardType: TextInputType.multiline,
           maxLines: null,
           controller: controller,

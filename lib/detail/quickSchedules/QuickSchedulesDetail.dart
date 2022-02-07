@@ -12,6 +12,7 @@ import '../../modalBottomSheet/time/TimeModalBottomSheet.dart';
 import '../../controller/quickSchedules/QuickSchedulesController.dart';
 import '../../auth/Login.dart';
 import '../../controller/jwt/JwtController.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class QuickSchedulesDetail extends StatefulWidget {
   QuickSchedulesDetail({Key? key, this.quickSchedules}) : super(key: key);
@@ -32,7 +33,7 @@ class _QuickSchedulesDetailstate extends State<QuickSchedulesDetail> {
 
   SharedPreferences? prefs;
 
-  bool isSetTime = false;
+  bool? isSetTime = false;
 
   @override
   void initState() {
@@ -68,19 +69,102 @@ class _QuickSchedulesDetailstate extends State<QuickSchedulesDetail> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: _httpDeleteQuickSchedules,
+                  child: Text(
+                    "삭제",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                Expanded(
+                    child: Center(child:Text(
+                      "반복 일정 편집",
+                      style: TextStyle(
+                          color: Theme.of(context).backgroundColor,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    )),
+                TextButton(
+                  onPressed: _httpUpdateQuickSchedules,
+                  child: Text("저장",
+                      style: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                      )),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
           children: [
-            TextButton(
-              onPressed: _httpDeleteQuickSchedules,
+            Expanded(
               child: Text(
-                "삭제",
-                style: TextStyle(color: Colors.red),
+                "시간",
+                style: TextStyle(fontWeight: FontWeight.w700),
               ),
             ),
-            TextButton(
-              onPressed: _httpUpdateQuickSchedules,
-              child: Text("저장"),
+            Switch(
+              value: isSetTime!,
+              onChanged: (value) {
+                setState(() {
+                  isSetTime = value;
+                });
+              },
+              activeTrackColor: Theme.of(context).primaryColor.withOpacity(0.8),
+              activeColor: Theme.of(context).primaryColor,
+            ),
+          ],
+        )),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:isSetTime! ? overlayPaddingContainerWidget(
+            context: context,
+            widget:timeInputForm(start: startTime!, end: endTime!, width: _width, context: context)) : SizedBox(),
+        ),
+          SizedBox(height: 20,),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "제목",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
+          context: context,
+          widget: textInputSimpleForm(
+              controller: _titleController, context: context),
+        )),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "메모",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         )),
@@ -88,25 +172,29 @@ class _QuickSchedulesDetailstate extends State<QuickSchedulesDetail> {
           height: 10,
         ),
         Container(
-          padding: EdgeInsets.all(10),
-          child: Text("시간 설정", style: Theme.of(context).textTheme.headline2),
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
+          context: context,
+          widget: textInputSimpleForm(
+              controller: _contentController, context: context),
+        )),
+        SizedBox(
+          height: 20,
         ),
-        Center(
-          child: Switch(
-            value: isSetTime,
-            onChanged: (value) {
-              setState(() {
-                isSetTime = value;
-              });
-            },
-            activeTrackColor: Colors.yellow,
-            activeColor: Colors.orangeAccent,
-          ),
-        ),
-        isSetTime ? timeInputForm(start: startTime!, end: endTime!, width: _width, context: context) : SizedBox(),
-        textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
-        labelsInputForm(labelsList: labelsList, width: _width, context: context),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "라벨",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            labelsInputForm(
+                labelsList: labelsList, width: _width, context: context),
+          ],
+        )),
       ],
     )));
   }
@@ -183,8 +271,8 @@ class _QuickSchedulesDetailstate extends State<QuickSchedulesDetail> {
   void _httpUpdateQuickSchedules() async {
     QuickSchedules quickSchedules = QuickSchedules(
         id: widget.quickSchedules!.id,
-        startTime: isSetTime ? startTime : null,
-        endTime: isSetTime ? endTime : null,
+        startTime: isSetTime! ? startTime : null,
+        endTime: isSetTime! ? endTime : null,
         title: _titleController.text,
         content: _contentController.text,
         labels: labels);
@@ -201,8 +289,8 @@ class _QuickSchedulesDetailstate extends State<QuickSchedulesDetail> {
   void _httpDeleteQuickSchedules() async {
     QuickSchedules quickSchedules = QuickSchedules(
         id: widget.quickSchedules!.id,
-        startTime: isSetTime ? startTime : null,
-        endTime: isSetTime ? endTime : null,
+        startTime: isSetTime! ? startTime : null,
+        endTime: isSetTime! ? endTime : null,
         title: _titleController.text,
         content: _contentController.text,
         labels: labels);

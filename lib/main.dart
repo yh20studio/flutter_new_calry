@@ -4,6 +4,7 @@ import 'home/RoutineHome.dart';
 import 'home/CalendarNewHome.dart';
 import 'home/MyPageHome.dart';
 import 'auth/Login.dart';
+import 'functions.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 void main() {
@@ -29,15 +30,21 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       theme: ThemeData(
         brightness: Brightness.light,
+        backgroundColor: MyFunction.parseColor("#eceeef"),
         dialogBackgroundColor: Colors.white,
         scaffoldBackgroundColor: Colors.white,
-        bottomAppBarColor: Colors.white,
+        bottomAppBarColor: MyFunction.parseColor("#eceeef"),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.white,
+          backgroundColor: MyFunction.parseColor("#ffffff"),
+          unselectedIconTheme: IconThemeData(color: Colors.black),
+          selectedIconTheme: IconThemeData(color: Colors.black),
+          unselectedItemColor: Colors.black,
+          selectedItemColor: Colors.black,
         ),
-        primaryColor: Colors.blueAccent,
-        accentColor: Colors.white,
+        primaryColor: MyFunction.parseColor("#6200EE"),
         canvasColor: Colors.black,
+        dividerColor: Colors.black26,
+        hoverColor: Colors.black,
         fontFamily: 'font',
         textTheme: TextTheme(
           headline1: TextStyle(
@@ -69,16 +76,23 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.white,
-        bottomAppBarColor: Colors.black,
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: Colors.black),
-        backgroundColor: Colors.black,
+        bottomAppBarColor: MyFunction.parseColor("#121212"),
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            backgroundColor: MyFunction.parseColor("#121212"),
+            unselectedIconTheme: IconThemeData(color: Colors.white),
+            selectedIconTheme: IconThemeData(color: Colors.white),
+            unselectedItemColor: Colors.white,
+            selectedItemColor: Colors.white,
+        ),
+        backgroundColor: MyFunction.parseColor("#121212"),
+        dialogBackgroundColor: MyFunction.parseColor("#3C3C3C"),
         canvasColor: Colors.white,
+        dividerColor: Colors.white,
+        hoverColor: Colors.white,
         // 위젯을 위한 전경색상
-        primaryColor: Colors.black,
+        primaryColor: MyFunction.parseColor("#BB86FC"),
         // 사용자와 상호작용하는 앨리먼트들의 기본 색상
-        accentColor: Colors.white,
-        snackBarTheme: SnackBarThemeData(backgroundColor: Colors.black),
-
+        snackBarTheme: SnackBarThemeData(backgroundColor: MyFunction.parseColor("#121212"),),
         // 사용할 폰트
         fontFamily: 'font',
         textTheme: TextTheme(
@@ -107,8 +121,6 @@ class MyApp extends StatelessWidget {
           ),
           bodyText2: TextStyle(fontSize: 17.0, fontFamily: 'Sans serif'),
         ),
-
-        // additional settings go here
       )
     );
   }
@@ -144,7 +156,7 @@ class _IndexState extends State<Index> {
     double bodyHeight = _height - MediaQuery.of(context).padding.top - 80;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).bottomAppBarColor,
       bottomNavigationBar: SizedBox(
           height: 80,
           child: Center(
@@ -154,8 +166,6 @@ class _IndexState extends State<Index> {
                   key: key,
                   onTap: _onTap,
                   currentIndex: _currentIndex,
-                  selectedIconTheme: IconThemeData(color: Colors.black),
-                  unselectedIconTheme: IconThemeData(color: Colors.black),
                   showSelectedLabels: false,
                   showUnselectedLabels: false,
                   selectedFontSize: 0,

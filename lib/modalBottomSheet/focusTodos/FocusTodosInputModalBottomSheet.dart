@@ -9,13 +9,11 @@ focusTodosInputModalBottomSheet(DateTime selectedDate, BuildContext context) asy
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
-            return SafeArea(
-              child: Container(
-                  padding: EdgeInsets.all(20),
+            return Container(
                   color: Colors.transparent,
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: MediaQuery.of(context).size.width * 0.7 <= 300 ? MediaQuery.of(context).size.width * 0.7 : 300,
@@ -25,10 +23,11 @@ focusTodosInputModalBottomSheet(DateTime selectedDate, BuildContext context) asy
                           initialChildSize: 1,
                           builder: (_, controller) {
                             return SingleChildScrollView(
+                                physics: ClampingScrollPhysics(),
                                 child: Wrap(
                               children: [FocusTodosInput()],
                             ));
-                          }))),
+                          })),
             );
           },
         );

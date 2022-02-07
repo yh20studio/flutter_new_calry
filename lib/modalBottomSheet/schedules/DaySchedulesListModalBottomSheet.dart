@@ -8,14 +8,13 @@ import '../../list/quickSchedules/QuickSchedulesList.dart';
 daySchedulesListModalBottomSheet(DateTime date, List<Schedules> dayScheduleList, List<QuickSchedules> quickScheduleList, BuildContext context) async {
   String action = '';
   List<Schedules> scheduleListChange = [];
-
   await showModalBottomSheet<dynamic>(
       context: context,
       isScrollControlled: true,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
@@ -44,7 +43,7 @@ daySchedulesListModalBottomSheet(DateTime date, List<Schedules> dayScheduleList,
                               },
                             ),
                             Divider(
-                              color: Colors.black,
+                              color: Theme.of(context).hoverColor,
                               height: 1,
                             ),
                             SizedBox(

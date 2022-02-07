@@ -38,41 +38,88 @@ class _RoutinesDetailstate extends State<RoutinesDetail> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            TextButton(
-              onPressed: _httpDeleteRoutines,
-              child: Text(
-                "삭제",
-                style: TextStyle(color: Colors.red),
-              ),
-            ),
-            TextButton(
-              onPressed: _httpUpdateRoutines,
-              child: Text("저장"),
-            ),
-          ],
-        )),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: _httpDeleteRoutines,
+                  child: Text(
+                    "삭제",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+                Expanded(
+                    child: Center(child:Text(
+                      "루틴 편집",
+                      style: TextStyle(
+                          color: Theme.of(context).backgroundColor,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    )),
+                TextButton(
+                  onPressed: _httpUpdateRoutines,
+                  child: Text("저장",
+                      style: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                      )),
+                ),
+              ],
+            )),
         SizedBox(
           height: 10,
         ),
         SizedBox(
           height: 20,
         ),
-        borderPaddingContainerWidget(context: context, widget: textInputSimpleForm(controller: _titleController, context: context)),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "Title",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        )),
         SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(context: context, widget: textInputSimpleForm(controller: _titleController, context: context)),
+        ),
+          SizedBox(
           height: 20,
         ),
-        borderPaddingContainerWidget(
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "Duration",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        )),
+        SizedBox(
+          height: 10,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
             context: context,
-            widget: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              Text("시간"),
+            widget:
               durationInputForm(
                 timeDuration: routines!.timeDuration!,
                 context: context,
               )
-            ])),
+            )),
         SizedBox(
           height: 20,
         ),

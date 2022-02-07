@@ -4,7 +4,8 @@ import '../../widgets/TimeDurationWidget.dart';
 import '../../domain/timeDuration/TimeDuration.dart';
 
 class TimeDurationChoice extends StatefulWidget {
-  TimeDurationChoice({Key? key, this.duration, this.onDurationChanged}) : super(key: key);
+  TimeDurationChoice({Key? key, this.duration, this.onDurationChanged})
+      : super(key: key);
   final TimeDuration? duration;
   final ValueChanged<TimeDuration>? onDurationChanged;
 
@@ -32,9 +33,12 @@ class _TimeDurationChoiceState extends State<TimeDurationChoice> {
 
     duration = widget.duration!;
 
-    _hourController = FixedExtentScrollController(initialItem: duration!.hour! + 3000);
-    _minController = FixedExtentScrollController(initialItem: duration!.min! + 3000);
-    _secondController = FixedExtentScrollController(initialItem: duration!.sec! + 3000);
+    _hourController =
+        FixedExtentScrollController(initialItem: duration!.hour! + 3000);
+    _minController =
+        FixedExtentScrollController(initialItem: duration!.min! + 3000);
+    _secondController =
+        FixedExtentScrollController(initialItem: duration!.sec! + 3000);
 
     widget.onDurationChanged!(duration!);
   }
@@ -47,104 +51,128 @@ class _TimeDurationChoiceState extends State<TimeDurationChoice> {
           height: 15,
         ),
         Container(
-          padding: EdgeInsets.all(10),
-          child: Center(
-            child: Text("지속 시간 선택"),
-          ),
-        ),
-        timeDurationWidget(timeDuration: duration!, context: context),
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("Duration"),
+                timeDurationWidget(timeDuration: duration!, context: context),
+              ],
+            )),
         SizedBox(
           height: 15,
         ),
         Neumorphic(
             style: NeumorphicStyle(
-                boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(12)), depth: -3, lightSource: LightSource.topLeft, color: Colors.white54),
+                boxShape:
+                    NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
+                depth: -3,
+                lightSource: LightSource.topLeft,
+                color: Colors.white54),
             child: Container(
+                color: Theme.of(context).dialogBackgroundColor,
                 alignment: Alignment.center,
                 padding: EdgeInsets.all(20),
                 child: Container(
-                    child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                  Container(
-                    width: 50,
-                    height: 100,
-                    child: ListWheelScrollView(
-                      diameterRatio: 1.2,
-                      itemExtent: 35,
-                      controller: _hourController,
-                      physics: FixedExtentScrollPhysics(),
-                      onSelectedItemChanged: (i) {
-                        setState(() {
-                          duration!.hour = i % 12;
-                          widget.onDurationChanged!(duration!);
-                        });
-                      },
-                      children: List<Widget>.generate(
-                          6000,
-                          (index) => Container(
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                  child: Text(
-                                '${index % 12}',
-                                style: TextStyle(fontSize: 20, fontWeight: index % 12 == duration!.hour ? FontWeight.w700 : FontWeight.normal),
-                              )))),
-                    ),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 100,
-                    child: ListWheelScrollView(
-                      diameterRatio: 1.2,
-                      itemExtent: 35,
-                      controller: _minController,
-                      physics: FixedExtentScrollPhysics(),
-                      onSelectedItemChanged: (i) {
-                        setState(() {
-                          duration!.min = i % 60;
-                          widget.onDurationChanged!(duration!);
-                        });
-                      },
-                      children: List<Widget>.generate(
-                          6000,
-                          (index) => Container(
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                  child: Text('${index % 60}',
-                                      style: TextStyle(fontSize: 20, fontWeight: index % 60 == duration!.min ? FontWeight.w700 : FontWeight.normal))))),
-                    ),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 100,
-                    child: ListWheelScrollView(
-                      diameterRatio: 1.2,
-                      itemExtent: 35,
-                      controller: _secondController,
-                      physics: FixedExtentScrollPhysics(),
-                      onSelectedItemChanged: (i) {
-                        setState(() {
-                          duration!.sec = i % 60;
-                          widget.onDurationChanged!(duration!);
-                        });
-                      },
-                      children: List<Widget>.generate(
-                          6000,
-                          (index) => Container(
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                  child: Text('${index % 60}',
-                                      style: TextStyle(fontSize: 20, fontWeight: index % 60 == duration!.sec ? FontWeight.w700 : FontWeight.normal))))),
-                    ),
-                  ),
-                ])))),
+                    child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                      Container(
+                        width: 50,
+                        height: 100,
+                        child: ListWheelScrollView(
+                          diameterRatio: 1.2,
+                          itemExtent: 35,
+                          controller: _hourController,
+                          physics: FixedExtentScrollPhysics(),
+                          onSelectedItemChanged: (i) {
+                            setState(() {
+                              duration!.hour = i % 12;
+                              widget.onDurationChanged!(duration!);
+                            });
+                          },
+                          children: List<Widget>.generate(
+                              6000,
+                              (index) => Container(
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    '${index % 12}',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: index % 12 == duration!.hour
+                                            ? FontWeight.w700
+                                            : FontWeight.normal),
+                                  )))),
+                        ),
+                      ),
+                      Container(
+                        width: 50,
+                        height: 100,
+                        child: ListWheelScrollView(
+                          diameterRatio: 1.2,
+                          itemExtent: 35,
+                          controller: _minController,
+                          physics: FixedExtentScrollPhysics(),
+                          onSelectedItemChanged: (i) {
+                            setState(() {
+                              duration!.min = i % 60;
+                              widget.onDurationChanged!(duration!);
+                            });
+                          },
+                          children: List<Widget>.generate(
+                              6000,
+                              (index) => Container(
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                      child: Text('${index % 60}',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight:
+                                                  index % 60 == duration!.min
+                                                      ? FontWeight.w700
+                                                      : FontWeight.normal))))),
+                        ),
+                      ),
+                      Container(
+                        width: 50,
+                        height: 100,
+                        child: ListWheelScrollView(
+                          diameterRatio: 1.2,
+                          itemExtent: 35,
+                          controller: _secondController,
+                          physics: FixedExtentScrollPhysics(),
+                          onSelectedItemChanged: (i) {
+                            setState(() {
+                              duration!.sec = i % 60;
+                              widget.onDurationChanged!(duration!);
+                            });
+                          },
+                          children: List<Widget>.generate(
+                              6000,
+                              (index) => Container(
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                      child: Text('${index % 60}',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight:
+                                                  index % 60 == duration!.sec
+                                                      ? FontWeight.w700
+                                                      : FontWeight.normal))))),
+                        ),
+                      ),
+                    ])))),
         Container(
           height: 20,
         )

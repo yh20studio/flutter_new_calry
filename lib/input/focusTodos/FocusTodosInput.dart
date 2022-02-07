@@ -31,29 +31,60 @@ class _FocusTodosInputstate extends State<FocusTodosInput> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
-            TextButton(
-              onPressed: _httpPostFocusTodos,
-              child: Text("저장"),
-            ),
-          ],
-        )),
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close,
+                        color: Theme.of(context).backgroundColor)),
+                Expanded(
+                    child: Center(
+                        child: Text("할일 추가",
+                            style: TextStyle(
+                                color: Theme.of(context).backgroundColor, fontWeight: FontWeight.w700)))),
+                TextButton(
+                  onPressed: () => _httpPostFocusTodos,
+                  child: Text("저장",
+                      style:
+                          TextStyle(color: Theme.of(context).backgroundColor)),
+                ),
+              ],
+            )),
         SizedBox(
           height: 20,
         ),
-        borderPaddingContainerWidget(
-          context: context,
-          widget: textInputForm(controller: _contentController, title: 'Content', width: _width, context: context),
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Todo",
+                    style: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: 10,
         ),
+        Container(
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: overlayPaddingContainerWidget(
+              context: context,
+              widget: textInputSimpleForm(
+                  controller: _contentController, context: context),
+            )),
       ],
     )));
   }
 
   void _httpPostFocusTodos() async {
-    FocusTodos focusTodos = FocusTodos(content: _contentController.text, success: false);
+    FocusTodos focusTodos =
+        FocusTodos(content: _contentController.text, success: false);
     try {
       var httpResult = await postFocusTodos(await getJwt(context), focusTodos);
       Navigator.pop(context, httpResult);

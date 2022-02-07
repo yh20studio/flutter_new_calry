@@ -5,9 +5,16 @@ import '../../widgets/DateWidget.dart';
 import '../../functions.dart';
 import '../../modalBottomSheet/schedules/SchedulesInputModalBottomSheet.dart';
 import '../../modalBottomSheet/schedules/SchedulesDetailModalBottomSheet.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class DaySchedulesList extends StatefulWidget {
-  DaySchedulesList({Key? key, this.date, this.dayScheduleList, this.onRefreshChanged, this.onScheduleChanged}) : super(key: key);
+  DaySchedulesList(
+      {Key? key,
+      this.date,
+      this.dayScheduleList,
+      this.onRefreshChanged,
+      this.onScheduleChanged})
+      : super(key: key);
 
   final DateTime? date;
   final List<Schedules>? dayScheduleList;
@@ -36,25 +43,42 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
             child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
-            Expanded(child: Center(child: monthDayWeekdayDateWidget(datetime: widget.date, context: context))),
-            IconButton(onPressed: () => _awaitReturnValueFromSchedulesInput(), icon: Icon(Icons.add)),
+            IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.close)),
+            Expanded(
+                child: Center(
+                    child: monthDayWeekdayDateWidget(
+                        datetime: widget.date, context: context))),
+            IconButton(
+                onPressed: () => _awaitReturnValueFromSchedulesInput(),
+                icon: Icon(Icons.add)),
           ],
         )),
         SizedBox(
           height: 30,
         ),
-        widget.dayScheduleList!.length == 0
-            ? Center(
-                child: Text("추가한 일정이 없습니다."),
-              )
-            : Container(
-                padding: EdgeInsets.only(top: 5, bottom: 5),
-                child: Wrap(
-                    spacing: 8.0, // gap between adjacent chips
-                    runSpacing: 4.0, // gap between lines
-                    children: List.generate(widget.dayScheduleList!.length,
-                        (i) => listViewDaySchedules(index: i, schedules: widget.dayScheduleList![i], width: _width, context: context)).toList())),
+        overlayContainerWidget(
+          context: context,
+          widget: widget.dayScheduleList!.length == 0
+              ? Container(
+              padding:EdgeInsets.all(20),
+              child:Center(
+                  child: Text("추가한 일정이 없습니다."),
+                ))
+              : Container(
+                  padding: EdgeInsets.only(top: 5, bottom: 5),
+                  child: Wrap(
+                      spacing: 8.0, // gap between adjacent chips
+                      runSpacing: 4.0, // gap between lines
+                      children: List.generate(
+                          widget.dayScheduleList!.length,
+                          (i) => listViewDaySchedules(
+                              index: i,
+                              schedules: widget.dayScheduleList![i],
+                              width: _width,
+                              context: context)).toList())),
+        ),
         SizedBox(
           height: 30,
         ),
@@ -62,7 +86,11 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
     )));
   }
 
-  Widget listViewDaySchedules({required int index, required Schedules schedules, required double width, required BuildContext context}) {
+  Widget listViewDaySchedules(
+      {required int index,
+      required Schedules schedules,
+      required double width,
+      required BuildContext context}) {
     return InkWell(
         onTap: () => _awaitReturnValueFromScheduleDetail(schedules, index),
         child: Container(
@@ -71,7 +99,8 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(
                 Icons.circle,
-                color: MyFunction.parseColor(schedules.labels!.label_colors!.code!),
+                color: MyFunction.parseColor(
+                    schedules.labels!.label_colors!.code!),
               ),
               SizedBox(
                 width: 10,
@@ -81,7 +110,8 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
   }
 
   void _awaitReturnValueFromSchedulesInput() async {
-    var awaitResult = await schedulesInputModalBottomSheet(widget.date!, context);
+    var awaitResult =
+        await schedulesInputModalBottomSheet(widget.date!, context);
     if (awaitResult != null) {
       setState(() {
         widget.dayScheduleList!.add(awaitResult);
@@ -91,7 +121,8 @@ class _DaySchedulesListstate extends State<DaySchedulesList> {
     }
   }
 
-  void _awaitReturnValueFromScheduleDetail(Schedules schedules, int index) async {
+  void _awaitReturnValueFromScheduleDetail(
+      Schedules schedules, int index) async {
     var awaitResult = await schedulesDetailModalBottomSheet(schedules, context);
 
     if (awaitResult != null) {

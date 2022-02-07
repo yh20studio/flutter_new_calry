@@ -1,25 +1,42 @@
 import 'package:flutter/material.dart';
 
+import 'ContainerWidget.dart';
+
 final List<String> weekDays = ['일', '월', '화', '수', '목', '금', '토'];
 
-Widget monthDayWeekdayDateWidget({required DateTime? datetime, required BuildContext context}) {
+Widget appBarMonthDayWeekdayDateWidget(
+    {required DateTime? datetime, required BuildContext context}) {
+  int weekday;
+  datetime!.weekday == 7 ? weekday = 0 : weekday = datetime.weekday;
+  return Text(
+    "${datetime.month}월 ${datetime.day}일 ${weekDays[weekday]}",
+    style: TextStyle(
+      color: Theme.of(context).primaryColor,
+    ),
+  );
+}
+
+Widget monthDayWeekdayDateWidget(
+    {required DateTime? datetime, required BuildContext context}) {
   int weekday;
   datetime!.weekday == 7 ? weekday = 0 : weekday = datetime.weekday;
 
   return Text(
     "${datetime.month}월 ${datetime.day}일 ${weekDays[weekday]}",
-    style: TextStyle(color: Colors.black),
+      style: TextStyle(fontWeight: FontWeight.w700)
   );
 }
 
-Widget yearMonthDateWidget({required DateTime? datetime, required BuildContext context}) {
+Widget yearMonthDateWidget(
+    {required DateTime? datetime, required BuildContext context}) {
   return Text(
     "${datetime!.year}년 ${datetime.month}월",
     style: TextStyle(color: Colors.black),
   );
 }
 
-Widget summaryHeaderDateWidget({required DateTime? datetime, required BuildContext context}) {
+Widget summaryHeaderDateWidget(
+    {required DateTime? datetime, required BuildContext context}) {
   return Stack(
     children: [
       Container(
@@ -28,15 +45,15 @@ Widget summaryHeaderDateWidget({required DateTime? datetime, required BuildConte
         children: [
           Icon(
             Icons.arrow_drop_down_rounded,
-            color: Colors.black,
+            color: Theme.of(context).hoverColor,
           ),
           Text(
             "${datetime!.year}년 ",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Theme.of(context).hoverColor,),
           ),
           Text(
             "${datetime.month}월 ",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color:Theme.of(context).hoverColor,),
           ),
         ],
       )),
@@ -44,51 +61,53 @@ Widget summaryHeaderDateWidget({required DateTime? datetime, required BuildConte
   );
 }
 
-Widget summaryDateWidget({required String? title, required DateTime? datetime, required BuildContext context}) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.end,
-    children: [
-      Text("${title}"),
-      SizedBox(
-        height: 5,
-      ),
-      Container(
-          padding: EdgeInsets.all(5),
-          color: title == "시작" ? Colors.purple.withOpacity(0.5) : Colors.orange.withOpacity(0.5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+Widget summaryDateWidget(
+    {required String? title,
+    required DateTime? datetime,
+    required BuildContext context}) {
+  return Container(
+      padding: EdgeInsets.all(10),
+      color: title == "시작"
+          ? Theme.of(context).primaryColor.withOpacity(0.5)
+          : Colors.orange.withOpacity(0.5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    "${datetime!.year}년",
-                    style: TextStyle(color: Colors.black38),
-                  ),
-                  Text(
-                    "${datetime.month}월",
-                    style: TextStyle(color: Colors.black38),
-                  )
-                ],
+              Text(
+                "${datetime!.year}년",
+                style: TextStyle(color: Colors.black38),
               ),
               Text(
-                " ${datetime.day}일",
-                style: TextStyle(color: Colors.black, fontSize: 24),
-              ),
+                "${datetime.month}월",
+                style: TextStyle(color: Colors.black38),
+              )
             ],
-          ))
-    ],
-  );
+          ),
+          Text(
+            " ${datetime.day}일",
+            style: TextStyle(color: Colors.black, fontSize: 24),
+          ),
+        ],
+      ));
 }
 
-Widget monthDayDateWidget({required DateTime? datetime, required BuildContext context}) {
+Widget monthDayDateWidget(
+    {required DateTime? datetime, required BuildContext context}) {
   return Text(
     "${datetime!.month}월 ${datetime.day}일",
-    style: TextStyle(color: Colors.black),
   );
 }
 
-Widget dayDateWidget({required DateTime? datetime, required bool holiday, required BuildContext context}) {
-  return Text("${datetime!.day}", style: TextStyle(color: holiday ? Colors.red : Colors.black, fontSize: Theme.of(context).textTheme.subtitle1!.fontSize));
+Widget dayDateWidget(
+    {required DateTime? datetime,
+    required bool holiday,
+    required BuildContext context}) {
+  return Text("${datetime!.day}",
+      style: TextStyle(
+          color: holiday ? Colors.red : Theme.of(context).hoverColor,
+          fontSize: Theme.of(context).textTheme.subtitle1!.fontSize));
 }

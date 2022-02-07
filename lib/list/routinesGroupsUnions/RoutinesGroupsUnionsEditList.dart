@@ -4,6 +4,7 @@ import '../../modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsInputMod
 import '../../modalBottomSheet/routinesGroupsUnions/RoutinesGroupsUnionsDetailModalBottomSheet.dart';
 import '../../domain/routinesGroupsUnions/RoutinesGroupsUnions.dart';
 import '../../widgets/MultiLineTextForListItemWidget.dart';
+import '../../widgets/ContainerWidget.dart';
 
 class RoutinesGroupsUnionsEditList extends StatefulWidget {
   RoutinesGroupsUnionsEditList({Key? key, this.routinesGroupsUnionList, this.onRefreshChanged, this.onRoutinesGroupsUnionChanged}) : super(key: key);
@@ -36,21 +37,24 @@ class _RoutinesGroupsUnionsEditListstate extends State<RoutinesGroupsUnionsEditL
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
-            Expanded(child: Center(child: Text("나의 루틴그룹"))),
+            Expanded(child: Center(child: Text("나의 루틴그룹", style: TextStyle(fontWeight: FontWeight.w700)))),
             IconButton(onPressed: () => _awaitReturnValueFromRoutinesGroupsUnionsInput(), icon: Icon(Icons.add)),
           ],
         )),
         SizedBox(
           height: 10,
         ),
+        overlayContainerWidget(
+          context: context,
+          widget:
         Container(
-            padding: EdgeInsets.only(right: 10, left: 10),
+            padding: EdgeInsets.all(10),
             child: Wrap(
                 spacing: 8.0, // gap between adjacent chips
                 runSpacing: 4.0, // gap between lines
                 children: List.generate(widget.routinesGroupsUnionList!.length,
                         (i) => listViewRoutinesGroupsUnion(index: i, routinesGroupsUnions: widget.routinesGroupsUnionList![i], width: _width, context: context))
-                    .toList())),
+                    .toList()))),
       ],
     )));
   }

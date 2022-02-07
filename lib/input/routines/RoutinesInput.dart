@@ -34,30 +34,79 @@ class _RoutinesInputstate extends State<RoutinesInput> {
             child: Column(
       children: [
         Container(
+            padding: EdgeInsets.all(10),
+            color: Theme.of(context).primaryColor,
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close, color: Theme.of(context).backgroundColor,)),
+                Expanded(
+                    child: Center(child:Text(
+                      "루틴 생성",
+                      style: TextStyle(
+                          color: Theme.of(context).backgroundColor,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    )),
+                TextButton(
+                  onPressed: _httpPostRoutines,
+                  child: Text("저장",
+                      style: TextStyle(
+                        color: Theme.of(context).backgroundColor,
+                      )),
+                ),
+              ],
+            )),
+        SizedBox(
+          height: 20,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
           children: [
-            IconButton(onPressed: () => Navigator.pop(context), icon: Icon(Icons.close)),
-            TextButton(
-              onPressed: _httpPostRoutines,
-              child: Text("저장"),
+            Expanded(
+              child: Text(
+                "Title",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
             ),
           ],
         )),
         SizedBox(
-          height: 20,
+          height: 10,
         ),
-        borderPaddingContainerWidget(
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
           context: context,
-          widget: textInputForm(controller: _titleController, title: 'Title', width: _width, context: context),
-        ),
+          widget: textInputSimpleForm(
+              controller: _titleController, context: context),
+        )),
         SizedBox(
           height: 20,
         ),
-        borderPaddingContainerWidget(
-          context: context,
-          widget: durationInputForm(timeDuration: timeDuration, title: 'Duration', width: _width, context: context),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:Row(
+          children: [
+            Expanded(
+              child: Text(
+                "Duration",
+                style: TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        )),
+        SizedBox(
+          height: 10,
         ),
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child:overlayPaddingContainerWidget(
+          context: context,
+          widget: durationInputForm(
+              timeDuration: timeDuration, width: _width, context: context),
+        )),
         SizedBox(
           height: 30,
         ),
@@ -65,35 +114,33 @@ class _RoutinesInputstate extends State<RoutinesInput> {
     )));
   }
 
-  Widget durationInputForm({required TimeDuration timeDuration, required String title, required double width, required BuildContext context}) {
+  Widget durationInputForm(
+      {required TimeDuration timeDuration,
+      required double width,
+      required BuildContext context}) {
     return InkWell(
-        onTap: () {
-          void _timeDurationChoiceModalBottomSheet() async {
-            var dialogResult = await timeDurationChoiceModalBottomSheet(timeDuration, context);
-            setState(() {
-              print(timeDuration.hour);
-              timeDuration = dialogResult;
-            });
-          }
+      onTap: () {
+        void _timeDurationChoiceModalBottomSheet() async {
+          var dialogResult =
+              await timeDurationChoiceModalBottomSheet(timeDuration, context);
+          setState(() {
+            print(timeDuration.hour);
+            timeDuration = dialogResult;
+          });
+        }
 
-          _timeDurationChoiceModalBottomSheet();
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(10),
-              child: Text(title, style: Theme.of(context).textTheme.headline2),
-            ),
-            timeDurationWidget(timeDuration: timeDuration, context: context),
-          ],
-        ));
+        _timeDurationChoiceModalBottomSheet();
+      },
+      child: timeDurationWidget(timeDuration: timeDuration, context: context),
+    );
   }
 
   void _httpPostRoutines() async {
     Routines routines = Routines(
       title: _titleController.text,
-      duration: (timeDuration.hour!) * 3600 + (timeDuration.min!) * 60 + (timeDuration.sec!),
+      duration: (timeDuration.hour!) * 3600 +
+          (timeDuration.min!) * 60 +
+          (timeDuration.sec!),
     );
     var httpResult = await postRoutines(await getJwt(context), routines);
     Navigator.pop(context, httpResult);

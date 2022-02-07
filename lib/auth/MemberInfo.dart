@@ -5,13 +5,13 @@ import '../dialog/TwoChoiceDialog.dart';
 import '../widgets/ContainerWidget.dart';
 import '../controller/member/MemberController.dart';
 import '../domain/member/Member.dart';
-import '../main.dart';
 import '../controller/jwt/JwtController.dart';
 
 class MemberInfo extends StatefulWidget {
   MemberInfo({Key? key, this.member}) : super(key: key);
 
   final Member? member;
+
   @override
   _MemberInfostate createState() => _MemberInfostate();
 }
@@ -30,13 +30,13 @@ class _MemberInfostate extends State<MemberInfo> {
     return Scaffold(
         backgroundColor: Theme.of(context).bottomAppBarColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).dialogBackgroundColor,
           title: Text(
             "로그인 정보",
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Theme.of(context).hoverColor),
           ),
           elevation: 0.0,
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Theme.of(context).hoverColor),
         ),
         body: SingleChildScrollView(
             child: Container(
@@ -44,19 +44,43 @@ class _MemberInfostate extends State<MemberInfo> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("이메일"),
-                    SizedBox(
-                      height: 5,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "E-mail",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
                     ),
-                    borderPaddingContainerWidget(widget: Text(member!.email!), context: context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    overlayPaddingContainerWidget(
+                      context: context,
+                      widget: Text(member!.email!),
+                    ),
                     SizedBox(
                       height: 20,
                     ),
-                    Text("이름"),
-                    SizedBox(
-                      height: 5,
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            "이름",
+                            style: TextStyle(fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
                     ),
-                    borderPaddingContainerWidget(widget: Text(member!.name!), context: context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    overlayPaddingContainerWidget(
+                      context: context,
+                      widget: Text(member!.name!),
+                    ),
                     SizedBox(
                       height: 20,
                     ),
@@ -83,16 +107,21 @@ class _MemberInfostate extends State<MemberInfo> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         try {
-          var httpResult = await postLogout(await getJwt(context), prefs.getString('accessToken'), prefs.getInt('accessTokenExpiresIn'));
+          var httpResult = await postLogout(
+              await getJwt(context),
+              prefs.getString('accessToken'),
+              prefs.getInt('accessTokenExpiresIn'));
           prefs.remove('accessToken');
           prefs.remove('accessTokenExpiresIn');
           print("reLogin!");
-          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/login', (route) => false);
         } catch (e) {
           prefs.remove('accessToken');
           prefs.remove('accessTokenExpiresIn');
           print("reLogin!");
-          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/login', (route) => false);
         }
       }
     }
